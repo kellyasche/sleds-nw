@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Summary – Pathways taken after high school - Northeast</title>
+<title>Pathways After High School – Northwest Minnesota – Pathways taken after high school - Northwest</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -78,7 +78,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Pathways taken after high school - Northeast</span>
+    <span class="navbar-title">Pathways taken after high school - Northwest</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -99,7 +99,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-data-prep-and-summaries">    
         <li>
-    <a class="dropdown-item" href="./k12enrollment.html">
+    <a class="dropdown-item" href="./k12enrollment.qmd">
  <span class="dropdown-text">K12Enrollment</span></a>
   </li>  
         <li>
@@ -135,8 +135,61 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">National Student Clearinghouse - Enrollment</span></a>
   </li>  
         <li>
+    <a class="dropdown-item" href="./nsccompletions.qmd">
+ <span class="dropdown-text">National Student Clearinghouse - Completions</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="./employment.qmd">
  <span class="dropdown-text">Employment</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./emp_states_each_year.qmd">
+ <span class="dropdown-text">Employment states each year</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./unemployment.qmd">
+ <span class="dropdown-text">Unemployment</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./avgwages.qmd">
+ <span class="dropdown-text">Average wages</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-analysis" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-fa-gear" role="img">
+</i> 
+ <span class="menu-text">Analysis</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-analysis">    
+        <li>
+    <a class="dropdown-item" href="./analysis_mca.qmd">
+ <span class="dropdown-text">Multiple Correspondence Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./analysis_dep_var_states.qmd">
+ <span class="dropdown-text">Dependent Variable States</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./analysis_local_employment_ct.qmd">
+ <span class="dropdown-text">Local Employment Cross-tabs</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./analysis_post_secondary_pathways_ct.qmd">
+ <span class="dropdown-text">Post-secondary pathways cross-tabs</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./analysis_local_employment_CART.qmd">
+ <span class="dropdown-text">Local Employment CART Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./analysis_post_secondary_paths_CART.qmd">
+ <span class="dropdown-text">Post-secondary pathways CART</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./analysis_non_post_secondary_graduates.qmd">
+ <span class="dropdown-text">Non-college graduates</span></a>
   </li>  
     </ul>
   </li>
@@ -151,15 +204,34 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#pathways-to-meaningful-regional-employment-in-northwest-minnesota" id="toc-pathways-to-meaningful-regional-employment-in-northwest-minnesota" class="nav-link active" data-scroll-target="#pathways-to-meaningful-regional-employment-in-northwest-minnesota">Pathways to Meaningful Regional Employment in Northwest Minnesota</a>
+  <ul class="collapse">
+  <li><a href="#purpose-of-the-research" id="toc-purpose-of-the-research" class="nav-link" data-scroll-target="#purpose-of-the-research">Purpose of the Research</a></li>
+  </ul></li>
+  <li><a href="#grand-summary" id="toc-grand-summary" class="nav-link" data-scroll-target="#grand-summary">Grand Summary</a></li>
+  <li><a href="#summaries-of-each-analysis" id="toc-summaries-of-each-analysis" class="nav-link" data-scroll-target="#summaries-of-each-analysis">Summaries of each analysis</a>
+  <ul class="collapse">
+  <li><a href="#relationships---employment" id="toc-relationships---employment" class="nav-link" data-scroll-target="#relationships---employment">Relationships - Employment</a></li>
+  <li><a href="#relationships---post-secondary" id="toc-relationships---post-secondary" class="nav-link" data-scroll-target="#relationships---post-secondary">Relationships - Post-secondary</a></li>
+  <li><a href="#prediction---employment-cart" id="toc-prediction---employment-cart" class="nav-link" data-scroll-target="#prediction---employment-cart">Prediction - Employment CART</a></li>
+  <li><a href="#prediction---post-secondary" id="toc-prediction---post-secondary" class="nav-link" data-scroll-target="#prediction---post-secondary">Prediction - post-secondary</a></li>
+  <li><a href="#relationships---non-college-grads" id="toc-relationships---non-college-grads" class="nav-link" data-scroll-target="#relationships---non-college-grads">Relationships - non-college grads</a></li>
+  <li><a href="#prediction---non-college-grads" id="toc-prediction---non-college-grads" class="nav-link" data-scroll-target="#prediction---non-college-grads">Prediction - non-college grads</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Summary</h1>
+<h1 class="title">Pathways After High School – Northwest Minnesota</h1>
 </div>
 
 
@@ -176,8 +248,54 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="pathways-to-meaningful-regional-employment-in-northwest-minnesota" class="level1">
+<h1>Pathways to Meaningful Regional Employment in Northwest Minnesota</h1>
+<section id="purpose-of-the-research" class="level2">
+<h2 class="anchored" data-anchor-id="purpose-of-the-research">Purpose of the Research</h2>
+<p>This research examined which factors most strongly influence whether individuals achieve <strong>meaningful employment within Northwestern Minnesota’s region (EDR 1, 2 &amp; 4)</strong> after high school. Using both <strong>contingency table analysis (effect sizes, trends over 1, 5, and 10 years)</strong> and <strong>CART modeling</strong>, the goal was to identify which variables most reliably anchor individuals in the regional workforce versus those that push them toward statewide mobility, disconnection, or outmigration.</p>
+<p>A special focus was also placed on <strong>non-college graduates</strong>, who represent a substantial share of the region’s young adults and are at higher risk of disconnection from the labor force. Understanding their pathways provides additional insights into how to build a stronger, more inclusive regional workforce.</p>
+<p>The findings provide a roadmap for education and workforce policy, showing how <strong>demographics, high school context, accomplishments, and postsecondary experiences</strong> interact to shape local labor market attachment.</p>
+<hr>
+</section>
+</section>
+<section id="grand-summary" class="level1">
+<h1>Grand Summary</h1>
+<p>[here]</p>
+</section>
+<section id="summaries-of-each-analysis" class="level1">
+<h1>Summaries of each analysis</h1>
+<section id="relationships---employment" class="level2">
+<h2 class="anchored" data-anchor-id="relationships---employment">Relationships - Employment</h2>
+<p>[Here]</p>
+<p><br></p>
+</section>
+<section id="relationships---post-secondary" class="level2">
+<h2 class="anchored" data-anchor-id="relationships---post-secondary">Relationships - Post-secondary</h2>
+<p>[Here]</p>
+<p><br></p>
+</section>
+<section id="prediction---employment-cart" class="level2">
+<h2 class="anchored" data-anchor-id="prediction---employment-cart">Prediction - Employment CART</h2>
+<p>[Here]</p>
+<p><br></p>
+</section>
+<section id="prediction---post-secondary" class="level2">
+<h2 class="anchored" data-anchor-id="prediction---post-secondary">Prediction - post-secondary</h2>
+<p>[Here]</p>
+<p><br></p>
+</section>
+<section id="relationships---non-college-grads" class="level2">
+<h2 class="anchored" data-anchor-id="relationships---non-college-grads">Relationships - non-college grads</h2>
+<p>[Here]</p>
+<p><br></p>
+</section>
+<section id="prediction---non-college-grads" class="level2">
+<h2 class="anchored" data-anchor-id="prediction---non-college-grads">Prediction - non-college grads</h2>
+<p>[Here]</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
