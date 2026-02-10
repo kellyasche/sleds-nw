@@ -1498,6 +1498,30 @@ We are going to analyze the following variables;
 
 ## Summary of all high school accomplishment variables
 
+Across the nine high school accomplishment and academic variables examined—**PSEO participation, ACT participation, ACT composite score, AP exam participation, SAT participation, MCA Reading, MCA Science, MCA Math, CTE achievement, and total CTE courses taken**—there are statistically significant relationships with post-graduation workforce outcomes in Northwest Minnesota. While all variables are associated with differences in pathways, the **strength, persistence, and substantive meaning of these relationships vary considerably**, particularly with respect to **access to meaningful regional employment** versus postsecondary continuation and geographic mobility.
+
+**Relative Strength of Relationships**
+
+Among high school accomplishment variables, **PSEO participation and ACT-related measures** show the **strongest overall differentiation**, particularly in the first year after graduation. PSEO participation exhibits a **large association** with early outcomes, strongly distinguishing graduates who continue into postsecondary education from those who enter the workforce. This association attenuates substantially by five years and is modest by ten years, indicating that PSEO primarily shapes **early pathway sorting** rather than long-term workforce attachment. Similarly, **ACT participation and ACT composite scores** demonstrate strong academic differentiation, with higher-achieving students disproportionately represented in postsecondary pathways and in meaningful employment outside the region.
+
+**MCA Reading, Science, and Math** scores show **consistent academic differentiation** across pathways, though with smaller effect sizes than ACT measures. Across all three subjects, graduates in **meaningful regional employment** tend to score lower than peers who pursue postsecondary education or who later hold meaningful employment elsewhere in Minnesota, while often resembling those in **not-meaningful employment**. These differences persist at 1, 5, and 10 years, indicating stable alignment between academic achievement and employment quality and location, rather than convergence over time.
+
+In contrast, **CTE-related measures**—both **CTE achievement status** and **total CTE courses taken**—show a different pattern. While effect sizes are generally small, CTE variables display **consistent and persistent associations with meaningful regional employment** across all three timeframes. Graduates with deeper CTE engagement are more likely to enter the regional workforce early and to remain attached over time, even as differences in postsecondary participation and geographic mobility remain evident.
+
+**Cross-Cutting Patterns in Workforce Outcomes**
+
+Several consistent patterns emerge across high school accomplishment variables. Academic signaling measures (ACT, AP, MCA scores, SAT participation) are most strongly associated with **postsecondary attendance, employment outside the region, and higher geographic mobility**, particularly in the early years after graduation. Graduates with stronger academic credentials are less likely to enter meaningful regional employment immediately and more likely to delay workforce entry or exit the region altogether.
+
+By contrast, **CTE participation and intensity** are more closely aligned with **regional workforce attachment**, particularly access to **meaningful employment within the region**. This attachment persists over time and does not attenuate in the same way as PSEO-related differences. However, CTE-aligned pathways also show continued exposure to **not-meaningful employment**, underscoring a recurring tension between regional retention and employment quality.
+
+Across nearly all accomplishment variables, **meaningful regional employment occupies a middle position**—less academically selective than pathways leading to postsecondary education or meaningful employment elsewhere in Minnesota, but distinct from pathways characterized by weaker labor force attachment or lower-quality employment. This pattern reinforces the importance of examining both **employment quality and location** simultaneously.
+
+**Bringing the High School Accomplishments Together**
+
+Taken together, these findings indicate that high school accomplishments shape post-graduation workforce pathways in **distinct and complementary ways**. Academic achievement and college-oriented signals are most strongly associated with **postsecondary continuation and mobility**, while CTE engagement is more closely associated with **early and sustained regional workforce attachment**. Most relationships are **small to moderate in magnitude**, but they are **consistent and persistent**, especially for outcomes related to meaningful regional employment.
+
+The accomplishments analysis highlights a core structural challenge for Northwest Minnesota: the students most likely to remain in the regional workforce are not those with the strongest academic credentials, while those with higher academic achievement are more likely to pursue opportunities elsewhere. Addressing regional workforce needs therefore requires strategies that **expand access to high-quality regional jobs**, strengthen connections between academic and technical pathways, and reduce the trade-off between **retention and employment quality** that emerges across high school accomplishment measures.
+
 <br>
 
 ## `pseo.participant`
@@ -1862,6 +1886,31 @@ data <- meaningful.emp.northwest %>%
 
 ## `ap.exam`
 
+**Key Findings**
+
+There is a statistically significant relationship between AP exam participation and post-graduation workforce outcomes at all three timeframes:
+
+-   **1 year after graduation:** χ²(4) = 3,057.83, Cramer’s V = 0.223, *p* \< .001, *N* = 61,485\
+-   **5 years after graduation:** χ²(4) = 1,137.17, Cramer’s V = 0.158, *p* \< .001, *N* = 45,359\
+-   **10 years after graduation:** χ²(4) = 349.12, Cramer’s V = 0.117, *p* \< .001, *N* = 25,464
+
+The relationship is **moderate one year after graduation**, weakens by five years, and is **modest by ten years**, indicating early pathway divergence that narrows over time but does not fully disappear.
+
+**Interpretation Over Time**
+
+**1 Year After Graduation:**\
+One year after graduation, AP exam participation is associated with **large differences in early pathways**, particularly with respect to **postsecondary enrollment** and **entry into the regional workforce**. AP participants are far more likely to be **attending postsecondary education** (76.1% vs. 46.5%) and substantially less likely to be engaged in **meaningful regional employment** (6.2% vs. 14.5%). They are also less likely to be in **not-meaningful employment** or to have **no Minnesota employment record**. These patterns indicate that AP participation is closely aligned with delayed workforce entry and education-oriented pathways, while non-participants are more likely to enter the regional workforce immediately, including into meaningful regional roles.
+
+**5 Years After Graduation:**\
+By five years after graduation, differences narrow but remain evident. Individuals without AP exam participation are more likely to be engaged in **meaningful regional employment** (25.1% vs. 15.0%), while AP participants are more likely to hold **meaningful employment elsewhere in Minnesota** (15.1% vs. 10.2%) or to remain connected to postsecondary education. Rates of **no Minnesota employment record** remain higher among non-participants. At this stage, AP participation is less about whether individuals are employed and more about **where employment occurs** and its alignment with education-driven mobility.
+
+**10 Years After Graduation:**\
+Ten years after graduation, the association further attenuates but persists. Individuals without AP exam participation continue to show higher rates of **meaningful regional employment** (25.7% vs. 17.0%). AP participants are more likely to hold **meaningful employment elsewhere in Minnesota** (21.9% vs. 13.4%), while rates of **no Minnesota employment record** are high for both groups, slightly higher among AP participants. Differences at this point are primarily **geographic**, reflecting long-term employment location rather than overall workforce attachment.
+
+**Conclusion**
+
+AP exam participation is **moderately associated with early post-graduation pathway sorting**, particularly delayed entry into the regional workforce and higher engagement in postsecondary education. Over time, differences in **meaningful regional employment** narrow but remain evident, with AP participants more likely to work elsewhere in Minnesota and non-participants more likely to remain attached to the regional workforce. Overall, AP participation shapes **when and where** individuals engage with the workforce, rather than producing large or persistent differences in long-term access to meaningful regional employment.
+
 ### **Key Findings**
 
 ::: panel-tabset
@@ -1921,48 +1970,30 @@ data <- meaningful.emp.northwest %>%
 
 ### **Key Findings**
 
-MCA Reading scores are **strongly associated** with post-graduation outcomes:
+**Key Findings**
 
--   **1 year after graduation**: F = **3405.65**, p \< .001
--   **5 years after graduation**: F = **395.20**, p \< .001
--   **10 years after graduation**: F = **812.59**, p \< .001
+There is a statistically significant relationship between MCA Reading scores and post-graduation workforce outcomes at all three timeframes:
 
-The association is strongest in the **first year**, weakens by 5 years, but remains highly significant even after 10 years.
+-   **1 year after graduation:** F(4, 57,170) = 1,503.0, *p* \< .001\
+-   **5 years after graduation:** F(4, 40,672) = 194.3, *p* \< .001\
+-   **10 years after graduation:** F(3, 23,168) = 414.2, *p* \< .001
 
-### **Interpretation Over Time**
+Across all three timepoints, mean MCA Reading scores differ meaningfully by workforce outcome category. Compared to many other high school accomplishments, MCA Reading shows **clear and persistent differentiation** across post-graduation pathways.
 
-**1 Year After Graduation**
+**Interpretation Over Time**
 
--   Postsecondary students: **3.60** average MCA-R
--   Meaningful regional employment: **3.26**
--   Meaningful MN employment: **3.29**
--   Not meaningful, not attending PS: **3.00**
--   Disconnected: **2.90**
+**1 Year After Graduation:**\
+One year after graduation, MCA Reading scores are **strongly differentiated across early post-graduation pathways**, particularly between postsecondary-oriented outcomes and workforce entry. Individuals who are **attending postsecondary education** have substantially higher MCA Reading scores than those engaged in **meaningful regional employment**. Individuals in **meaningful regional employment**, **not-meaningful employment**, and those with **no Minnesota employment record** cluster at lower reading levels, with relatively small differences among these workforce-oriented pathways. These patterns indicate that early entry into the regional workforce—whether meaningful or not—is associated with lower reading achievement relative to postsecondary pathways.
 
-Higher reading scores are most strongly associated with postsecondary enrollment, while **lower scores are tied to regional employment and disconnection**.
+**5 Years After Graduation:**\
+By five years after graduation, distinctions by MCA Reading score remain pronounced but become more nuanced. Individuals holding **meaningful employment elsewhere in Minnesota** and those **attending postsecondary education** have higher reading scores than those in **meaningful regional employment**. However, meaningful regional employment occupies an intermediate position, with higher scores than individuals in **not-meaningful employment** and **no Minnesota employment record**. At this stage, reading achievement is associated not only with workforce participation but also with **employment quality and geographic mobility**.
 
-**5 Years After Graduation**
+**10 Years After Graduation:**\
+Ten years after graduation, MCA Reading differences persist and shift in structure. Individuals in **meaningful employment elsewhere in Minnesota** continue to show the highest reading scores, followed by those with **no Minnesota employment record**. Individuals engaged in **meaningful regional employment** have lower average reading scores than these groups but are statistically indistinguishable from those in **not-meaningful employment**. These results suggest that long-term regional workforce attachment is most common among individuals with lower reading achievement, while higher-reading individuals are more likely to work outside the region or exit Minnesota employment records.
 
--   Postsecondary: **3.61**
--   Meaningful MN employment: **3.52**
--   Meaningful regional employment: **3.35**
--   Not meaningful: **3.37**
--   Disconnected: **3.49**
+**Conclusion**
 
-Students with higher scores remain more engaged in postsecondary or in meaningful employment outside the region. Those with **lower scores are more likely to be in regional employment or in not-meaningful work**.
-
-**10 Years After Graduation**
-
--   Meaningful MN employment: **3.4**
--   Meaningful regional employment: **3.04**
--   Not meaningful: **3.06**
--   Disconnected: **3.45**
-
-By 10 years, the divide is clear: **graduates with higher reading scores are more likely to hold meaningful employment outside the region**, while those with lower scores are more concentrated in regional employment or less meaningful roles.
-
-### **Conclusion**
-
-MCA Reading performance is a **persistent predictor of post-graduation outcomes**. Higher scores consistently lead to **postsecondary enrollment and meaningful employment outside the region**, while lower scores are linked to **regional workforce participation and elevated risks of disconnection or not-meaningful work**. This highlights reading proficiency as an important indicator of both **educational attainment and long-term geographic mobility**.
+MCA Reading achievement is **one of the more strongly differentiating academic accomplishments** associated with post-graduation workforce pathways. Higher reading proficiency is consistently associated with postsecondary participation and with meaningful employment outside the Northwest region. In contrast, **meaningful regional employment is concentrated among individuals with comparatively lower reading scores**, a pattern that persists over time. These findings reinforce a recurring theme across the accomplishments analysis:
 
 ::: panel-tabset
 ### One year after graduating
@@ -2138,48 +2169,28 @@ data <- meaningful.emp.northwest %>%
 
 ### **Key Findings**
 
-MCA Science scores are **strongly associated** with post-graduation outcomes:
+There are statistically significant differences in MCA Science scores across post-graduation workforce pathways at all three time points, including differences associated with access to **meaningful regional employment**:
 
--   **1 year after graduation**: F = **2162.51**, p \< .001
--   **5 years after graduation**: F = **440.14**, p \< .001
--   **10 years after graduation**: F = **181.42**, p \< .001
+-   **1 year after graduation:** F(4, 34,592) = 229.3, *p* \< .001\
+-   **5 years after graduation:** F(4, 34,592) = 229.3, *p* \< .001\
+-   **10 years after graduation:** F(3, 15,500) = 88.7, *p* \< .001
 
-The association is strongest in the **first year**, but remains statistically significant across all timeframes.
+Across all three intervals, MCA Science scores vary systematically by pathway. Although effect sizes are not reported, the persistence of statistically significant differences over time indicates stable academic differentiation across employment outcomes.
 
-### **Interpretation Over Time**
+**Interpretation Over Time**
 
-**1 Year After Graduation**
+**1 Year After Graduation:**\
+One year after graduation, MCA Science scores differ clearly by post-graduation pathway. Graduates in **meaningful regional employment** have lower average MCA Science scores than those in **meaningful employment elsewhere in Minnesota** and those **attending postsecondary education**, indicating academic differentiation between regional workforce attachment and pathways associated with continued education or broader labor markets. At the same time, MCA Science scores for those in **meaningful regional employment** do not differ meaningfully from those in **not-meaningful employment and not attending postsecondary education**, suggesting that early regional attachment often occurs among graduates with similar science achievement levels to those entering lower-quality local employment. Graduates with **no Minnesota employment record** have higher average MCA Science scores than those in meaningful regional employment, reflecting early geographic mobility among higher-achieving students.
 
--   Postsecondary students: **2.89** average MCA-S
--   Meaningful regional employment: **2.40**
--   Meaningful MN employment: **2.39**
--   Not meaningful, not attending PS: **2.33**
--   Disconnected: **2.35**
+**5 Years After Graduation:**\
+Five years after graduation, the pattern remains largely unchanged. MCA Science scores for individuals in **meaningful regional employment** continue to be lower than those for graduates in **meaningful employment elsewhere in Minnesota** and those **attending postsecondary education**, while remaining similar to those in **not-meaningful employment and not attending postsecondary education**. Differences between **meaningful regional employment** and **no Minnesota employment record** persist, indicating that science achievement remains associated with mobility and employment quality rather than converging as careers progress.
 
-Higher science scores are closely tied to postsecondary enrollment, while **lower scores are linked to early regional employment, not-meaningful work, or disconnection**.
+**10 Years After Graduation:**\
+Ten years after graduation, MCA Science score differences across pathways persist, though the number of pathways narrows. Graduates in **meaningful regional employment** continue to have lower average scores than those in **meaningful employment elsewhere in Minnesota** and those with **no Minnesota employment record**, while showing no meaningful difference from those in **not-meaningful employment and not attending postsecondary education**. These sustained differences suggest long-term alignment between science achievement, employment quality, and geographic attachment rather than short-term sorting effects.
 
-**5 Years After Graduation**
+**Conclusion**
 
--   Postsecondary: **2.87**
--   Meaningful MN employment: **2.73**
--   Meaningful regional employment: **2.51**
--   Not meaningful: **2.47**
--   Disconnected: **2.69**
-
-By this stage, higher scores remain associated with continued postsecondary enrollment and employment outside the region. Lower scorers are more likely to be in **regional employment or not-meaningful work**.
-
-**10 Years After Graduation**
-
--   Meaningful MN employment: **2.66**
--   Meaningful regional employment: **2.42**
--   Not meaningful: **2.41**
--   Disconnected: **2.65**
-
-A decade later, the divide persists: **graduates with higher science scores are more likely to hold meaningful employment outside the region**, while those with lower scores are more likely to stay in the regional workforce or in not-meaningful roles.
-
-### **Conclusion**
-
-MCA Science scores are a **strong and persistent predictor** of post-graduation outcomes. Higher scores consistently lead to **postsecondary enrollment and meaningful employment beyond the region**, while lower scores are associated with **regional workforce participation and elevated risks of not-meaningful work or disconnection**. This underscores science proficiency as a marker of both **educational attainment and long-term labor market mobility**.
+MCA Science achievement is consistently **associated with differences in workforce pathways** in Northwest Minnesota across 1, 5, and 10 years after graduation. Graduates in **meaningful regional employment** tend to have lower science achievement than peers who access meaningful employment elsewhere in Minnesota or who exhibit higher geographic mobility, while closely resembling those engaged in lower-quality local employment. The persistence of these differences over time suggests that MCA Science functions as a stable indicator of academic differentiation related to employment quality and mobility, rather than a transient early-career pattern.
 
 ::: panel-tabset
 ### One year after graduating
@@ -2233,6 +2244,58 @@ summary(summary)
 
 TukeyHSD(summary)
 
+```
+
+### Five years after graduating
+
+```{r}
+data <- meaningful.emp.northwest %>%
+  select(grad.year.5, MCA.S) %>%
+  filter(grad.year.5 != "After 2023") %>%
+  drop_na() %>%
+  group_by(grad.year.5) %>%
+  mutate(q1 = quantile(MCA.S, .25),
+         q3 = quantile(MCA.S, .75),
+         iqr = IQR(MCA.S),
+         low.outlier = q1 - 1.5*iqr,
+         high.outlier = q3 + 1.5*iqr) %>%
+  filter(MCA.S > low.outlier,
+         MCA.S < high.outlier) %>%
+  ungroup()
+
+labels <- data %>%
+  group_by(grad.year.5) %>%
+  summarize(Min = quantile(MCA.S, .0),
+            Q1 = quantile(MCA.S, .25),
+            Median = median(MCA.S),
+            Q3 = quantile(MCA.S, .75),
+            Max = quantile(MCA.S, 1),
+            Mean = mean(MCA.S)) %>%
+  ungroup()
+
+plot <- ggplot(data, aes(grad.year.5, MCA.S, fill = grad.year.5, group = grad.year.5)) +
+  geom_boxplot_interactive() +
+  geom_label(data = labels, aes(x = grad.year.5, y = 5, label = paste("Min: ", comma(Min, accuracy = .1), "\nQ1: ", comma(Q1, accuracy = .1), "\nMedian: ", comma(Median, accuracy = .1), "\nQ3: ", comma(Q3, accuracy = .1), "\nMax: ", comma(Max, accuracy = ), "\nMean: ", comma(Mean, accuracy = .1))), color = "white") +
+  labs(x="", y = "", color="", title = "Boxplots of MCA-Science score by employment state")+
+  scale_y_continuous(labels=scales::comma,
+                     limits = c(0, 6))+
+  scale_fill_manual(values = brewer.pal(n = 6, "RdYlBu")) +
+  theme_bar+
+  theme(legend.position = "none",
+        text = element_text(size = 18),
+        axis.text.x = element_text(angle = 25, hjust = .9))
+
+
+girafe(ggobj = plot, width_svg = 10, height_svg = 10) %>%
+  girafe_options(opts_selection(type = "none"),
+                 opts_sizing(rescale = FALSE)) 
+
+
+summary <- aov(MCA.S ~ grad.year.5, data = data)
+
+summary(summary)
+
+TukeyHSD(summary)
 ```
 
 ### Ten years after graduating
@@ -2302,48 +2365,28 @@ data <- meaningful.emp.northwest %>%
 
 ### **Key Findings**
 
-MCA Math scores are **very strongly associated** with post-graduation outcomes:
+There are statistically significant differences in MCA Math scores across post-graduation workforce pathways at all three time points, including differences associated with access to **meaningful regional employment**:
 
--   **1 year after graduation**: F = **4955.39**, p \< .001
--   **5 years after graduation**: F = **1487.88**, p \< .001
--   **10 years after graduation**: F = **316.96**, p \< .001
+-   **1 year after graduation:** F(4, 56,670) = 2011.0, *p* \< .001\
+-   **5 years after graduation:** F(4, 42,367) = 682.8, *p* \< .001\
+-   **10 years after graduation:** F(3, 24,301) = 134.8, *p* \< .001
 
-The association is strongest in the **first year**, and while it weakens over time, it remains highly significant even after 10 years.
+Across all three intervals, MCA Math scores vary systematically by pathway. Although effect sizes are not reported, the persistence of statistically significant differences over time indicates stable academic differentiation across employment outcomes.
 
-### **Interpretation Over Time**
+**Interpretation Over Time**
 
-**1 Year After Graduation**
+**1 Year After Graduation:**\
+One year after graduation, MCA Math scores differ sharply across pathways. Graduates in **meaningful regional employment** have substantially lower average math scores than those **attending postsecondary education**, indicating clear academic differentiation between early regional workforce attachment and continued education pathways. MCA Math scores for those in **meaningful regional employment** are slightly higher than those in **not-meaningful employment and not attending postsecondary education** and higher than those with **no Minnesota employment record**, suggesting that early regional attachment reflects a middle academic position rather than the lowest achievement levels. There is no meaningful difference in MCA Math scores between **meaningful regional employment** and **meaningful employment elsewhere in Minnesota** at this early stage.
 
--   Postsecondary students: **3.40** average MCA-M
--   Meaningful MN employment: **2.75**
--   Meaningful regional employment: **2.74**
--   Not meaningful, not attending PS: **2.60**
--   Disconnected (no MN record): **2.52**
+**5 Years After Graduation:**\
+By five years after graduation, academic differentiation by pathway becomes more pronounced. Graduates in **meaningful regional employment** have lower MCA Math scores than those in both **meaningful employment elsewhere in Minnesota** and those **attending postsecondary education**, indicating increasing separation between regional attachment and pathways associated with higher academic preparation. Differences between **meaningful regional employment** and **not-meaningful employment and not attending postsecondary education** remain modest but statistically significant, while individuals with **no Minnesota employment record** show slightly higher average math scores than those working meaningfully within the region. These patterns suggest growing alignment between math achievement, employment quality, and geographic mobility.
 
-Students with higher math scores overwhelmingly attend postsecondary, while those with lower scores are more likely to enter the regional workforce or face disconnection. This shows that **math proficiency is a strong gateway into higher education, while lower scores push students toward the local labor market**.
+**10 Years After Graduation:**\
+Ten years after graduation, differences in MCA Math scores across pathways persist. Graduates in **meaningful regional employment** continue to have lower average math scores than those in **meaningful employment elsewhere in Minnesota** and those with **no Minnesota employment record**, while showing no meaningful difference from individuals in **not-meaningful employment and not attending postsecondary education**. This pattern indicates long-term stability in how math achievement aligns with employment quality and location, rather than convergence over time.
 
-**5 Years After Graduation**
+**Conclusion**
 
--   Postsecondary students: **3.35**
--   Meaningful MN employment: **3.29**
--   Meaningful regional employment: **2.76**
--   Not meaningful: **2.68**
--   Disconnected: **2.90**
-
-The divide continues: higher scorers remain more likely in postsecondary or employed outside the region, while lower scorers are tied to regional employment or not-meaningful work. Regional employment remains concentrated among students with lower math scores.
-
-**10 Years After Graduation**
-
--   Meaningful MN employment: **2.78**
--   Disconnected: **2.74**
--   Meaningful regional employment: **2.44**
--   Not meaningful: **2.43**
-
-Even a decade later, **regional employment is associated with the lowest math scores**, while graduates with stronger scores are more likely to hold meaningful employment outside the region. This highlights the long-term sorting effect of math proficiency on geographic and labor market outcomes.
-
-### **Conclusion**
-
-MCA Math scores are a **powerful and lasting predictor** of post-graduation pathways. Higher scores consistently lead to **postsecondary enrollment and meaningful employment beyond Southern Minnesota**, while lower scores anchor students more strongly in the **regional workforce** or expose them to risks of disconnection. This underscores math proficiency as a critical determinant of both **educational mobility and regional labor market retention**.
+MCA Math achievement is consistently **associated with differences in workforce pathways** in Northwest Minnesota across 1, 5, and 10 years after graduation. Graduates in **meaningful regional employment** tend to occupy a middle position academically: lower math achievement than peers who access meaningful employment elsewhere in Minnesota or who demonstrate greater geographic mobility, but generally higher achievement than those concentrated in lower-quality local employment early on. The persistence of these differences over time suggests that MCA Math functions as a stable marker of academic differentiation linked to employment quality and mobility, rather than a short-term sorting effect immediately after high school.
 
 ::: panel-tabset
 ### One year after graduating
@@ -2519,31 +2562,28 @@ data <- meaningful.emp.northwest %>%
 
 ### **Key Findings**
 
-There is a statistically significant relationship between CTE achievement and post-graduation outcomes across all three timeframes:
+There is a statistically significant relationship between CTE achievement and post-graduation workforce pathways at all three time points:
 
--   1 year after graduation: χ²(8) = **2127.12**, Cramer’s V = **0.096**, p \< .001, N = 115,038
--   5 years after graduation: χ²(8) = **1638.52**, Cramer’s V = **0.099**, p \< .001, N = 83,979
--   10 years after graduation: χ²(8) = **738.71**, Cramer’s V = **0.089**, p \< .001, N = 46,883
+-   **1 year after graduation:** χ²(8) = 570.24, Cramer’s V = 0.068, *p* \< .001, *N* = 61,485\
+-   **5 years after graduation:** χ²(8) = 608.04, Cramer’s V = 0.082, *p* \< .001, *N* = 45,359\
+-   **10 years after graduation:** χ²(8) = 188.85, Cramer’s V = 0.061, *p* \< .001, *N* = 25,464
 
-The strength of association is **small but consistent**, with the largest differences evident in **regional employment outcomes**.
+Across all three intervals, the association is **small in magnitude**, strengthening modestly at five years before weakening slightly by ten years, while remaining statistically significant throughout.
 
-### **Interpretation Over Time**
+**Interpretation Over Time**
 
-**1 Year After Graduation**
+**1 Year After Graduation:**\
+One year after graduation, CTE achievement is associated with clear differences in early pathways, particularly access to **meaningful regional employment**. Graduates who were **CTE Concentrators or Completers** are substantially more likely to be working in **meaningful employment within the region** (15.7%) than **CTE Participants** (11.8%) and those with **no CTE experience** (8.5%), indicating stronger early regional workforce attachment among students with deeper CTE engagement. At the same time, graduates with no CTE experience are most likely to be **attending postsecondary education** (55.8%), while CTE Concentrators/Completers are more concentrated in **not-meaningful employment and not attending postsecondary education** (19.8%). These patterns suggest early trade-offs between regional workforce entry and postsecondary continuation by CTE pathway.
 
-CTE Concentrators/Completors are more likely to hold meaningful regional employment (18.3%) compared to Participants (12.9%) and No CTE students (8.7%). Postsecondary enrollment is highest among No CTE students (59.9%), while disconnection is lowest among Participants (8.5%). This suggests that **CTE concentrators are more connected to the regional workforce early on**, while No CTE peers lean toward postsecondary.
+**5 Years After Graduation:**\
+Five years after graduation, differences by CTE achievement persist and become more pronounced for regional employment. **Meaningful regional employment** is most common among **CTE Concentrators or Completers** (27.7%), followed by **CTE Participants** (22.2%) and those with **no CTE experience** (16.5%). This indicates sustained regional attachment among individuals with stronger CTE backgrounds. However, individuals with no CTE experience are more likely to hold **meaningful employment elsewhere in Minnesota** and to be **attending postsecondary education**, reflecting greater geographic and occupational mobility. Rates of **not-meaningful employment** are similar across groups, while **no Minnesota employment records** remain most prevalent among those without CTE experience.
 
-**5 Years After Graduation**
+**10 Years After Graduation:**\
+Ten years after graduation, rates of **meaningful regional employment** remain highest among **CTE Concentrators or Completers** (27.2%), compared with **CTE Participants** (23.6%) and those with **no CTE experience** (18.5%), indicating long-term regional attachment associated with deeper CTE engagement. At the same time, graduates without CTE experience are most likely to have **no Minnesota employment record** (48.6%), suggesting higher long-term geographic mobility. Differences in **not-meaningful employment** are minimal across groups, while **meaningful employment elsewhere in Minnesota** remains somewhat more common among those without CTE experience.
 
-The advantage for CTE concentrators grows. They are far more likely to be in meaningful regional employment (33.1%) compared to Participants (27.6%) and No CTE (19.6%). Postsecondary enrollment is still higher among No CTE students (21.6%), while disconnection is higher for No CTE (24.5%) than for Concentrators (18.2%). By this point, **CTE concentrators are clearly more anchored in the regional workforce**.
+**Conclusion**
 
-**10 Years After Graduation**
-
-CTE concentrators maintain the strongest ties to meaningful regional employment (34.9%), followed by Participants (30.5%) and No CTE (22.2%). Conversely, No CTE students are most likely to lack a Minnesota employment record (39.3% vs. 29.6% for Concentrators). This shows that **CTE concentration continues to predict stronger regional workforce retention a decade out**.
-
-### **Conclusion**
-
-CTE achievement is a **reliable predictor of regional employment outcomes**. Concentrators/Completors consistently show the **highest rates of meaningful regional employment**, both early and long term, while No CTE students are more likely to attend postsecondary but also more likely to be disconnected in the long run. These findings highlight the role of **CTE pathways in fostering long-term integration into the Southern Minnesota regional workforce**.
+CTE achievement is consistently **associated with differences in workforce pathways** in Northwest Minnesota, particularly in relation to **meaningful regional employment**. Graduates with deeper CTE engagement are more likely to enter the regional workforce early and to remain regionally attached over time, while graduates without CTE experience are more likely to pursue postsecondary education and to exhibit greater geographic mobility. Although the overall association is small in magnitude, the persistence of these patterns across 1, 5, and 10 years highlights CTE’s role in shaping **regional attachment and employment location**, rather than employment quality alone.
 
 ::: panel-tabset
 ### One year after graduating
@@ -2602,48 +2642,28 @@ data <- meaningful.emp.northwest %>%
 
 ### **Key Findings**
 
-The number of CTE courses taken in high school is **significantly associated** with post-graduation outcomes:
+There are statistically significant differences in the total number of CTE courses taken across post-graduation workforce pathways at all three time points, including differences associated with access to **meaningful regional employment**:
 
--   **1 year after graduation**: F = **1292.16**, p \< .001
--   **5 years after graduation**: F = **613.11**, p \< .001
--   **10 years after graduation**: F = **335.88**, p \< .001
+-   **1 year after graduation:** F(4, 59,477) = 482.7, *p* \< .001\
+-   **5 years after graduation:** F(4, 43,661) = 364.8, *p* \< .001\
+-   **10 years after graduation:** F(3, 24,763) = 130.8, *p* \< .001
 
-The association is very strong in the **first year**, and while it weakens over time, it remains statistically significant even after 10 years.
+Across all three intervals, individuals in **meaningful regional employment** have taken more CTE courses, on average, than those in other post-graduation pathways. Although effect sizes are not reported, the consistency and magnitude of mean differences across pathways indicate stable and meaningful academic differentiation related to CTE course-taking intensity.
 
-### **Interpretation Over Time**
+**Interpretation Over Time**
 
-**1 Year After Graduation**
+**1 Year After Graduation:**\
+One year after graduation, total CTE course-taking differs sharply by pathway. Graduates in **meaningful regional employment** have completed substantially more CTE courses than those **attending postsecondary education**, those with **no Minnesota employment record**, and those in **not-meaningful employment and not attending postsecondary education**. Differences between **meaningful regional employment** and **meaningful employment elsewhere in Minnesota** are smaller but statistically significant, indicating that deeper CTE engagement is more closely aligned with early regional workforce attachment than with broader labor market participation. These patterns suggest that intensive CTE course-taking is associated with earlier entry into the regional workforce rather than delayed transitions through postsecondary education.
 
--   Meaningful regional employment: **4.90** average CTE courses
--   Meaningful MN employment: **4.01**
--   Not meaningful: **3.97**
--   No MN employment record: **3.65**
--   Postsecondary: **3.17**
+**5 Years After Graduation:**\
+By five years after graduation, the same ordering persists and becomes more pronounced. Individuals in **meaningful regional employment** continue to have the highest average number of CTE courses taken, exceeding those in **meaningful employment elsewhere in Minnesota**, **attending postsecondary education**, and those with **no Minnesota employment record**. Differences between **meaningful regional employment** and **not-meaningful employment and not attending postsecondary education** remain sizable, indicating that higher CTE course exposure is not simply associated with workforce entry, but specifically with access to more stable, meaningful employment within the region. This pattern reinforces the role of CTE intensity in long-term regional attachment.
 
-Students with more CTE courses are far more likely to enter **meaningful regional employment**, while those with fewer courses are more likely to pursue postsecondary.
+**10 Years After Graduation:**\
+Ten years after graduation, differences in total CTE courses taken remain statistically significant across pathways. Graduates in **meaningful regional employment** continue to have taken more CTE courses, on average, than those in **meaningful employment elsewhere in Minnesota**, those in **not-meaningful employment**, and those with **no Minnesota employment record**. While gaps narrow slightly relative to earlier years, the persistence of these differences indicates that intensive CTE participation remains associated with long-term regional workforce attachment rather than converging across pathways over time.
 
-**5 Years After Graduation**
+**Conclusion**
 
--   Meaningful regional employment: **4.13**
--   Not meaningful: **3.73**
--   Meaningful MN employment: **3.29**
--   No MN employment record: **3.05**
--   Postsecondary: **2.92**
-
-The same pattern holds: **regional employment is tied to more CTE coursework**, while postsecondary and disconnected students took fewer courses.
-
-**10 Years After Graduation**
-
--   Meaningful regional employment: **3.88**
--   Not meaningful: **3.33**
--   Meaningful MN employment: **3.07**
--   No MN employment record: **2.92**
-
-A decade later, those with the most CTE coursework remain the most likely to be in meaningful regional employment. Lower course counts are associated with disconnection or not-meaningful work.
-
-### **Conclusion**
-
-The number of CTE courses taken is a **powerful predictor of long-term regional employment**. Students who take more CTE courses are consistently more likely to secure and sustain **meaningful employment in Southern Minnesota**, while those who take fewer courses are more likely to pursue postsecondary, be disconnected, or work outside the region. This underscores **CTE coursework volume as a key factor in regional workforce integration**.
+The total number of CTE courses taken is consistently **associated with differences in workforce pathways** in Northwest Minnesota across 1, 5, and 10 years after graduation. Graduates with higher levels of CTE course-taking are more likely to enter and remain in **meaningful employment within the region**, while those with fewer CTE courses are more likely to pursue postsecondary education, work outside the region, or exhibit greater geographic mobility. The durability of these patterns over time suggests that CTE course intensity is closely aligned with **regional attachment and employment location**, complementing findings from CTE participation and achievement measures.
 
 ::: panel-tabset
 ### One year after graduating
@@ -2827,53 +2847,27 @@ We will analyze the following variables;
 
 <br>
 
-## Summary of all postsecondary experience variables
+## Summary of all post-secondary variables
 
-**Strength of Association (Cramer's V by Year)**
+Across the five post-secondary variables examined—**postsecondary attendance, postsecondary completion, institution sector, highest credential attained, and postsecondary graduation location**—there are statistically significant relationships with post-graduation workforce outcomes in Northwest Minnesota. While all variables are associated with differences in pathways, the **strength, persistence, and substantive meaning of these relationships vary**, particularly with respect to **access to meaningful regional employment**, employment quality, and geographic mobility.
 
-| Variable | Year 1 V | Year 5 V | Year 10 V | Peak Strength | Pattern of Change |
-|------------|:----------:|:----------:|:----------:|------------|------------|
-| **Attended.ps** | 0.285 | 0.164 | 0.095 | Moderate (Year 1) | Declines steadily |
-| **Ps.grad** | 0.176 | 0.119 | 0.120 | Moderate (Year 1) | Weakens, stabilizes by 10 yrs |
-| **Ps.grad.InstitutionSector** | 0.176 | 0.141 | 0.116 | Moderate (Year 1) | Gradual decline |
-| **Highest.cred.level** | 0.172 | 0.138 | 0.112 | Moderate (Year 1) | Gradual decline |
-| **Ps.grad.location** | 0.164 | 0.208 | 0.172 | Moderate (Year 5) | Strongest at 5 yrs |
+**Relative Strength of Relationships**
 
-------------------------------------------------------------------------
+Among post-secondary variables, **postsecondary attendance and postsecondary graduation location** show the **strongest overall differentiation** across workforce outcomes. Postsecondary attendance exhibits a **large association one year after graduation**, reflecting strong early sorting between workforce entry and continued education. This relationship attenuates substantially by five and ten years, indicating that attendance primarily shapes **early pathway timing** rather than long-term employment attachment. In contrast, **postsecondary graduation location** shows a **small-to-moderate but highly persistent association**, with differences becoming more pronounced over time. Graduates who complete postsecondary education **within the region or within the Northwest EDR** are consistently more likely to engage in **meaningful regional employment**, while those graduating **elsewhere in Minnesota** or **outside the state** are more likely to access employment outside the region or to exit Minnesota employment records.
 
-**Key Patterns & Comparative Insights**
+**Postsecondary completion, institution sector, and highest credential attained** show **moderate and enduring associations** with workforce pathways that reflect differences in employment quality and geographic mobility. Completion of a postsecondary credential is associated with higher rates of **meaningful employment** overall, particularly outside the region, while individuals without a credential are more likely to enter the workforce earlier but face higher exposure to **not-meaningful employment** and workforce disconnection. Institution sector further differentiates these outcomes, with **2-year public colleges** showing the strongest and most consistent alignment with **meaningful regional employment**, and **4-year public universities** more strongly associated with mobility and employment outside the region. Highest credential level reinforces this pattern, with **sub-baccalaureate credentials** most closely aligned with regional workforce attachment and **bachelor’s degrees or higher** associated with sustained geographic mobility.
 
-1.  **Attendance vs. Non-Attendance**
-    -   Attending PS is one of the strongest predictors of outcomes.
-    -   Attendees show higher **meaningful regional employment** in the early years (42.8% vs. 22.2%) and maintain an advantage even 10 years later.
-    -   Non-attendees face much higher disconnection and not-meaningful work.
-2.  **Graduation Outcomes**
-    -   Completing PS nearly doubles the likelihood of early meaningful regional employment (49.4% vs. 26.1%).
-    -   Over time, graduates maintain stronger statewide outcomes while regional employment converges with non-graduates.
-    -   Non-completers consistently face higher disconnection.
-3.  **Institution Sector**
-    -   **Public 2-year graduates** are the strongest anchors to the regional workforce, maintaining the highest rates of meaningful regional employment across all years (55.1% at 1 year, 44.0% at 10 years).
-    -   **Public 4-year graduates** are less tied regionally but have greater statewide mobility.
-    -   Non-graduates and non-attendees face persistently weaker outcomes.
-4.  **Credential Level**
-    -   **Associate and sub-Associate credentials** lead to the highest regional employment across all years.
-    -   **Bachelor’s and higher degrees** reduce regional retention but increase meaningful employment elsewhere in Minnesota.
-    -   **No-college and non-completers** are disadvantaged, with consistently higher disconnection.
-5.  **Location of Postsecondary Graduation**
-    -   Graduating from a **Southern Minnesota institution (same EDR or region)** is one of the strongest predictors of regional workforce retention.
-    -   Graduates from **outside the region (MN or out-of-state)** show weaker ties to regional employment and higher disconnection, especially out-of-state graduates.
+**Cross-Cutting Patterns in Workforce Outcomes**
 
-------------------------------------------------------------------------
+Several consistent patterns emerge across post-secondary variables. Early workforce entry and **meaningful regional employment** are most common among graduates whose postsecondary experiences are **geographically and structurally aligned with the region**, including those who attend or complete **2-year programs** and those who earn credentials **within the region or Northwest EDR**. In contrast, postsecondary pathways oriented toward **4-year institutions, higher credentials, or out-of-region completion** are associated with delayed workforce entry and greater long-term mobility.
 
-### **Conclusion**
+Across multiple variables, a recurring tension emerges between **regional retention and employment quality**. Pathways that retain graduates within the region—particularly non-completion or sub-baccalaureate routes—also show higher concentrations of **not-meaningful employment**, while pathways associated with higher credentials and out-of-region education are linked to higher-quality employment but lower regional attachment. This pattern mirrors findings from the high school accomplishments analysis and highlights the importance of examining employment quality alongside location.
 
-Postsecondary experiences are among the **most powerful predictors of long-term workforce pathways**.
+**Bringing the Post-Secondary Variables Together**
 
--   **Regional employment is strongest for Associate/sub-Associate degree holders, public 2-year graduates, and those who complete PS in Southern Minnesota.**
--   **Mobility beyond the region is strongest for Bachelor’s and higher degree holders, and for graduates of institutions outside Southern Minnesota.**
--   **Non-attendance and non-completion carry lasting risks of disconnection and not-meaningful work.**
+Taken together, these findings indicate that postsecondary pathways play a central role in shaping workforce outcomes in Northwest Minnesota, particularly through their influence on **timing of workforce entry, employment quality, and geographic mobility**. Relationships are generally **small to moderate in magnitude**, but they are **consistent and persistent**, especially for outcomes related to meaningful regional employment.
 
-Together, these findings show that **the type, level, and location of postsecondary experience critically shape whether graduates build careers within Southern Minnesota or move beyond the region**.
+Postsecondary education functions less as a uniform driver of workforce participation and more as a **sorting mechanism** that channels graduates toward distinct combinations of employment quality and location. Strengthening regional workforce outcomes will therefore require strategies that better align postsecondary pathways—especially completion, credential type, and location—with **high-quality employment opportunities within the region**, reducing the trade-offs between mobility, credential attainment, and regional retention.
 
 <br>
 
@@ -2881,31 +2875,28 @@ Together, these findings show that **the type, level, and location of postsecond
 
 ### **Key Findings**
 
-There is a statistically significant relationship between postsecondary attendance and post-graduation outcomes in all three timeframes:
+There is a statistically significant relationship between postsecondary attendance and post-graduation workforce pathways at all three time points:
 
--   1 year after graduation: χ²(3) = **4248.90**, Cramer’s V = **0.285**, p \< .001, N = 52,474
--   5 years after graduation: χ²(3) = **1832.01**, Cramer’s V = **0.164**, p \< .001, N = 68,422
--   10 years after graduation: χ²(3) = **425.90**, Cramer’s V = **0.095**, p \< .001, N = 46,882
+-   **1 year after graduation:** χ²(3) = 1666.35, Cramer’s V = 0.237, *p* \< .001, *N* = 29,767\
+-   **5 years after graduation:** χ²(3) = 608.90, Cramer’s V = 0.128, *p* \< .001, *N* = 37,305\
+-   **10 years after graduation:** χ²(3) = 184.66, Cramer’s V = 0.085, *p* \< .001, *N* = 25,463
 
-The strength of association is **moderate in the first year** and declines over time, though it remains significant even after 10 years.
+The association is **largest one year after graduation** and **attenuates over time**, though it remains statistically significant at five and ten years.
 
-### **Interpretation Over Time**
+**Interpretation Over Time**
 
-**1 Year After Graduation**
+**1 Year After Graduation:**\
+One year after graduation, postsecondary attendance is strongly associated with early workforce pathways, including access to **meaningful regional employment**. Graduates who **did not attend postsecondary education** are more likely to be engaged in **meaningful employment within the region** (20.6%) than those who attended postsecondary education (37.2% attending ps vs. 20.6% no ps reflects a much stronger pull toward education among attendees). At the same time, non-attendees are far more likely to be concentrated in **not-meaningful employment and not attending postsecondary education** (41.2%) and to have **no Minnesota employment record** (33.7%). In contrast, graduates who attended postsecondary education are substantially more likely to delay workforce entry or to transition out of Minnesota employment records early. These patterns indicate strong early sorting by postsecondary attendance, with meaningful regional employment more common among those who do not enroll immediately after high school.
 
-Postsecondary attendees are much more likely to be in meaningful regional employment (42.8% vs. 22.2%) and meaningful MN employment (13.8% vs. 7.6%). They are far less likely to be disconnected (12.2% vs. 29.5%) or in not-meaningful work (31.2% vs. 40.7%). This shows that **attending PS provides a strong early advantage in both regional and statewide meaningful employment while reducing disconnection**.
+**5 Years After Graduation:**\
+By five years after graduation, differences by postsecondary attendance narrow but remain clear. Rates of **meaningful regional employment** increase for both groups and are slightly higher among those who attended postsecondary education (29.7%) than those who did not (25.5%), reflecting delayed but eventual workforce entry among attendees. However, individuals who attended postsecondary education are much more likely to hold **meaningful employment elsewhere in Minnesota** (16.0% vs. 8.3%), while non-attendees remain more concentrated in **not-meaningful employment** and **no Minnesota employment record**. This suggests that postsecondary attendance is increasingly associated with **employment quality and geographic mobility**, rather than regional attachment alone.
 
-**5 Years After Graduation**
+**10 Years After Graduation:**\
+Ten years after graduation, rates of **meaningful regional employment converge** across postsecondary attendance groups, with approximately one-quarter of graduates in both groups working in meaningful jobs within the region. Despite this convergence, differences persist in other pathways. Graduates who attended postsecondary education are more likely to be engaged in **meaningful employment elsewhere in Minnesota** (16.6% vs. 9.9%), while those who did not attend postsecondary education are more likely to be disconnected from Minnesota employment records (46.5% vs. 43.2%). These patterns indicate that postsecondary attendance continues to be associated with **mobility and employment quality**, even when regional employment rates appear similar.
 
-The gap remains: attendees have higher rates of meaningful regional employment (35.5% vs. 28.1%) and meaningful MN employment (22.7% vs. 13.4%). They are less likely to be disconnected (21.4% vs. 33.7%) or in not-meaningful work (20.4% vs. 24.8%). By this stage, **attendees consolidate stronger labor market outcomes, both regionally and statewide**.
+**Conclusion**
 
-**10 Years After Graduation**
-
-Attendees retain an edge in meaningful regional employment (30.1% vs. 28.3%) and a wider advantage in meaningful MN employment (23.0% vs. 15.0%). Non-attendees remain more likely to be disconnected (38.9% vs. 31.7%) and in not-meaningful work (17.8% vs. 15.2%). This demonstrates that **postsecondary attendance continues to protect against long-term disconnection while supporting meaningful employment, especially outside the region**.
-
-### **Conclusion**
-
-Attending postsecondary is a **strong predictor of workforce success**. It substantially improves early chances of meaningful regional and statewide employment and reduces disconnection risks. While the association weakens over time, attendees remain more likely to achieve positive outcomes a decade later. **Postsecondary attendance strengthens regional workforce participation and expands broader statewide opportunities.**
+Postsecondary attendance is consistently **associated with differences in workforce pathways** in Northwest Minnesota, particularly in the early years after graduation. Graduates who do not attend postsecondary education are more likely to enter the regional workforce earlier, including **meaningful regional employment**, but also face higher exposure to **not-meaningful employment and employment instability**. In contrast, graduates who attend postsecondary education are more likely to delay workforce entry and, over time, to access **higher-quality employment and greater geographic mobility**. Although differences in meaningful regional employment narrow by ten years, postsecondary attendance remains an important marker of **employment quality and location**, rather than simple workforce participation.
 
 ::: panel-tabset
 ### One year after graduating
@@ -2968,31 +2959,28 @@ data <- meaningful.emp.northwest %>%
 
 ### **Key Findings**
 
-There is a statistically significant relationship between postsecondary graduation and post-graduation outcomes across all three timeframes:
+There is a statistically significant relationship between postsecondary completion status and post-graduation workforce pathways at all three time points:
 
--   1 year after graduation: χ²(6) = **3269.16**, Cramer’s V = **0.176**, p \< .001, N = 52,474
--   5 years after graduation: χ²(6) = **1942.68**, Cramer’s V = **0.119**, p \< .001, N = 68,422
--   10 years after graduation: χ²(3) = **671.74**, Cramer’s V = **0.120**, p \< .001, N = 46,882
+-   **1 year after graduation:** χ²(6) = 1497.25, Cramer’s V = 0.159, *p* \< .001, *N* = 29,767\
+-   **5 years after graduation:** χ²(6) = 1058.22, Cramer’s V = 0.119, *p* \< .001, *N* = 37,305\
+-   **10 years after graduation:** χ²(3) = 431.09, Cramer’s V = 0.130, *p* \< .001, *N* = 25,463
 
-The strength of association is **moderate in the first year** and weakens somewhat but remains significant through 10 years.
+The association is **moderate one year after graduation** and remains **small to small-to-moderate** at five and ten years, indicating persistent differences in workforce pathways by postsecondary completion status.
 
-### **Interpretation Over Time**
+**Interpretation Over Time**
 
-**1 Year After Graduation**
+**1 Year After Graduation:**\
+One year after graduation, postsecondary completion status is clearly associated with early workforce pathways, including access to **meaningful regional employment**. Graduates who have **completed a postsecondary credential** show the highest rates of **meaningful regional employment** (45.1%), compared with those who are **still attending postsecondary education** (37.5%) and those who **did not complete a credential** (23.1%). At the same time, individuals without a completed credential are substantially more likely to be in **not-meaningful employment and not attending postsecondary education** (41.1%) and to have **no Minnesota employment record** (30.6%). These patterns indicate strong early differentiation by completion status, with credential completion associated with both earlier workforce entry and higher-quality employment.
 
-Graduates are most likely to be in meaningful regional employment (49.4%), compared to non-graduates (26.1%). They are also less likely to be disconnected (10.5% vs. 25.3%). Both graduates and non-graduates show similar rates of not-meaningful work (24.8% vs. 40.0%). This shows that **completing PS provides a major early advantage in regional employment and protects against disconnection**.
+**5 Years After Graduation:**\
+By five years after graduation, differences by postsecondary completion narrow but remain evident. Rates of **meaningful regional employment** are similar for those who completed a credential (31.0%) and those still attending postsecondary education (36.9%), and lower among those without a credential (26.3%). Graduates with completed credentials are substantially more likely to hold **meaningful employment elsewhere in Minnesota** (19.0%), suggesting greater geographic and occupational mobility. In contrast, individuals without a credential remain more concentrated in **not-meaningful employment** and **no Minnesota employment record**, indicating continued disparities in employment quality and stability.
 
-**5 Years After Graduation**
+**10 Years After Graduation:**\
+Ten years after graduation, rates of **meaningful regional employment converge** across completion groups, with approximately one-quarter of graduates in each category working in meaningful jobs within the region. Despite this convergence, important differences persist. Graduates who completed a postsecondary credential are far more likely to hold **meaningful employment elsewhere in Minnesota** (19.0%) than those without a credential (10.6%), while individuals without a credential are more likely to be disconnected from Minnesota employment records (45.8% vs. 42.4%). These patterns suggest that postsecondary completion continues to be associated with **employment quality and mobility**, even when regional employment rates appear similar.
 
-Graduates remain more likely to hold meaningful regional employment (35.1% vs. 31.7%) and are substantially more likely to work meaningfully elsewhere in Minnesota (26.1% vs. 14.9%). They are less likely to be disconnected (21.5% vs. 28.1%) or in not-meaningful work (17.3% vs. 25.3%). By this stage, **graduates balance strong regional employment with broader statewide opportunities**.
+**Conclusion**
 
-**10 Years After Graduation**
-
-Regional employment is similar between graduates (28.8%) and non-graduates (30.6%), but graduates are far more likely to hold meaningful MN employment outside the region (25.3% vs. 16.6%). They are less likely to be in not-meaningful work (13.0% vs. 18.7%) and slightly less likely to be disconnected (32.8% vs. 34.0%). A decade later, **PS graduation signals greater access to statewide opportunities, while regional employment levels converge**.
-
-### **Conclusion**
-
-Postsecondary graduation is a **key factor in early and medium-term workforce success**. It nearly doubles the likelihood of meaningful regional employment one year after graduation and provides lasting advantages in statewide opportunities while reducing disconnection. Over time, the gap in regional employment narrows, but graduates continue to hold a **distinct advantage in broader labor markets beyond Southern Minnesota**.
+Postsecondary completion status is consistently **associated with differences in workforce pathways** in Northwest Minnesota. Graduates who complete a postsecondary credential are more likely to access **higher-quality employment** and to exhibit greater **geographic mobility**, while those without a credential are more likely to enter the regional workforce earlier but face higher exposure to **not-meaningful employment and employment instability**. Although differences in meaningful regional employment narrow over time, postsecondary completion remains an important marker of **long-term employment quality and location**, rather than simple workforce participation.
 
 ::: panel-tabset
 ### One year after graduating
@@ -3054,37 +3042,28 @@ data <- meaningful.emp.northwest %>%
 
 ### **Key Findings**
 
-There is a statistically significant relationship between postsecondary graduation sector and post-graduation outcomes in all three timeframes:
+There is a statistically significant relationship between postsecondary institution sector and post-graduation workforce pathways at all three time points:
 
--   1 year after graduation: χ²(12) = **4601.95**, Cramer’s V = **0.176**, p \< .001, N = 49,690
--   5 years after graduation: χ²(12) = **4013.51**, Cramer’s V = **0.141**, p \< .001, N = 67,658
--   10 years after graduation: χ²(12) = **1893.92**, Cramer’s V = **0.116**, p \< .001, N = 46,882
+-   **1 year after graduation:** χ²(12) = 2074.65, Cramer’s V = 0.156, *p* \< .001, *N* = 28,323\
+-   **5 years after graduation:** χ²(12) = 1942.02, Cramer’s V = 0.168, *p* \< .001, *N* = 23,008\
+-   **10 years after graduation:** χ²(8) = 456.83, Cramer’s V = 0.134, *p* \< .001, *N* = 12,801
 
-The strength of association is **moderate in year 1**, and weakens but remains significant through 10 years.
+Across all three intervals, the association is **small to small-to-moderate in magnitude** and remains stable over time, indicating persistent differences in workforce pathways by postsecondary institution sector.
 
-### **Interpretation Over Time**
+**Interpretation Over Time**
 
-**1 Year After Graduation**
+**1 Year After Graduation:**\
+One year after graduation, institution sector is clearly associated with early workforce pathways, including access to **meaningful regional employment**. Graduates from **2-year public colleges** show the highest rates of **meaningful employment within the region** (48.6%), followed by graduates of **4-year public universities** (52.7% among completers) and those from **other institution types** (31.2%). In contrast, individuals who **did not complete a credential** or **never attended postsecondary education** are less likely to hold meaningful regional employment and are far more concentrated in **not-meaningful employment** or **no Minnesota employment record**. Graduates of 4-year institutions are more likely to be engaged in **postsecondary continuation** or to transition into employment outside the region, reflecting early geographic and occupational mobility.
 
-Public 2-year graduates are the most likely to be in meaningful regional employment (55.1%), closely followed by public 4-year graduates (52.4%). Those who did not graduate PS have much lower rates (36.9%), while individuals who never attended PS are lowest (22.2%) and face the highest disconnection (29.5%). This shows that **completing PS — especially at public institutions — provides a major early boost to regional employment**.
+**5 Years After Graduation:**\
+By five years after graduation, differences by institution sector persist and become more clearly differentiated by employment quality and location. Graduates of **2-year public colleges** remain the most likely to be engaged in **meaningful regional employment** (35.7%), indicating strong alignment between two-year pathways and regional workforce attachment. Graduates of **4-year public universities** are more likely to hold **meaningful employment elsewhere in Minnesota** or to still be **attending postsecondary education**, suggesting delayed workforce entry paired with higher mobility. Individuals associated with **other institution types** show more mixed outcomes, while those still attending postsecondary education remain less connected to the workforce overall.
 
-**5 Years After Graduation**
+**10 Years After Graduation:**\
+Ten years after graduation, rates of **meaningful regional employment** remain highest among graduates of **2-year public colleges** (35.1%), compared with graduates of **4-year public universities** (20.0%) and **other institution types** (18.4%). Graduates from 4-year institutions are substantially more likely to hold **meaningful employment elsewhere in Minnesota** (21.6%) and to have **no Minnesota employment record**, reflecting sustained geographic mobility. Differences in **not-meaningful employment** are smaller across sectors, indicating some convergence in employment quality, even as location patterns remain distinct.
 
-The regional employment edge remains strongest for public 2-year graduates (50.7%), while public 4-year and “other” graduates are less tied to the region (29–29.5%) but more likely to hold meaningful employment elsewhere in Minnesota (around 29%). Non-graduates (35.9%) and non-attendees (28.1%) lag behind. By this stage, **2-year graduates anchor the regional workforce, while 4-year graduates shift toward statewide opportunities**.
+**Conclusion**
 
-**10 Years After Graduation**
-
-Public 2-year graduates continue to dominate regional employment (44.0%). Public 4-year graduates show lower regional ties (24.8%) but higher statewide employment (27.8%). Non-graduates (32.8%) are more likely to be working regionally than 4-year graduates, but with higher not-meaningful work (19.5%). Non-attendees remain the weakest group, with high disconnection (38.9%). Over the long term, **2-year graduates remain the backbone of regional workforce retention, while 4-year graduates increasingly move beyond the region**.
-
-### **Conclusion**
-
-Postsecondary graduation sector is an important predictor of employment pathways:
-
--   **Public 2-year graduates** are most strongly tied to meaningful regional employment across all years.
--   **Public 4-year graduates** show less regional retention but stronger statewide employment.
--   **Non-graduates and non-attendees** consistently face weaker outcomes, including higher disconnection.
-
-This highlights the **key role of public 2-year institutions in sustaining Southern Minnesota’s regional workforce**, while 4-year institutions expand access to statewide opportunities.
+Postsecondary institution sector is consistently **associated with differences in workforce pathways** in Northwest Minnesota. Graduates of **2-year public colleges** show the strongest and most persistent connection to **meaningful regional employment**, highlighting their central role in supporting the regional workforce. In contrast, graduates of **4-year public universities** are more likely to pursue pathways characterized by **mobility and employment outside the region**, while individuals who do not complete or do not attend postsecondary education face higher exposure to **not-meaningful employment and workforce disconnection**. Although the overall strength of association is modest, the persistence of these patterns over time underscores the importance of institution type in shaping how postsecondary education aligns with **regional workforce attachment and employment location**.
 
 ::: panel-tabset
 ### One year after graduating
@@ -3149,37 +3128,28 @@ data <- meaningful.emp.northwest %>%
 
 ### **Key Findings**
 
-There is a statistically significant relationship between highest credential level and post-graduation outcomes across all three timeframes:
+There is a statistically significant relationship between highest postsecondary credential attained and post-graduation workforce pathways at all three time points:
 
--   1 year after graduation: χ²(12) = **4421.65**, Cramer’s V = **0.172**, p \< .001, N = 49,690
--   5 years after graduation: χ²(12) = **3885.72**, Cramer’s V = **0.138**, p \< .001, N = 67,658
--   10 years after graduation: χ²(12) = **1763.84**, Cramer’s V = **0.112**, p \< .001, N = 46,882
+-   **1 year after graduation:** χ²(12) = 1925.72, Cramer’s V = 0.151, *p* \< .001, *N* = 28,323\
+-   **5 years after graduation:** χ²(12) = 1784.00, Cramer’s V = 0.127, *p* \< .001, *N* = 36,978\
+-   **10 years after graduation:** χ²(12) = 853.80, Cramer’s V = 0.106, *p* \< .001, *N* = 25,463
 
-The strength of association is **moderate in year 1** and weakens over time, though it remains significant.
+The association is **small-to-moderate one year after graduation** and **attenuates over time**, remaining statistically significant at five and ten years.
 
-### **Interpretation Over Time**
+**Interpretation Over Time**
 
-**1 Year After Graduation**
+**1 Year After Graduation:**\
+One year after graduation, highest credential level is strongly associated with early workforce pathways, including access to **meaningful regional employment**. Graduates with **sub-baccalaureate credentials**—particularly those with **less than an associate degree** or an **associate degree**—show the highest rates of **meaningful employment within the region** (approximately 45–50%), indicating strong early regional workforce attachment among credentialed sub-baccalaureate pathways. In contrast, graduates with **no college** experience or **some college but no credential** are far more likely to be concentrated in **not-meaningful employment** and to have **no Minnesota employment record**. Graduates with a **bachelor’s degree or higher** are less likely to be engaged in meaningful regional employment and more likely to be working elsewhere or transitioning out of Minnesota employment records, reflecting early mobility associated with higher credentials.
 
-Regional employment is highest among Associate degree holders (54.4%) and those with less than an Associate degree (50.4%). Bachelor’s graduates are slightly lower (45.4%), while those with no college have the lowest regional employment (22.2%) and the highest disconnection (29.5%). This shows that **sub-baccalaureate credentials are the strongest early anchor to the regional workforce**.
+**5 Years After Graduation:**\
+By five years after graduation, differences by credential level narrow but remain pronounced. **Meaningful regional employment** remains most common among graduates with **associate degrees** and **less-than-associate credentials** (both about 41%), while rates are lower among those with **bachelor’s degrees or higher** (24%). Graduates with bachelor’s degrees are substantially more likely to hold **meaningful employment elsewhere in Minnesota** (23.3%), indicating increasing geographic and occupational mobility over time. Individuals with **no college** or **some college** remain more concentrated in **no Minnesota employment record**, highlighting persistent disparities in workforce stability by credential attainment.
 
-**5 Years After Graduation**
+**10 Years After Graduation:**\
+Ten years after graduation, rates of **meaningful regional employment** converge somewhat across credential levels but remain highest among those with **sub-baccalaureate credentials**, particularly **less-than-associate** and **associate degrees**. Graduates with **bachelor’s degrees or higher** continue to show the lowest rates of meaningful regional employment and the highest rates of **meaningful employment elsewhere in Minnesota** (22%), reflecting long-term mobility patterns. Individuals without a completed credential remain most likely to have **no Minnesota employment record**, indicating sustained differences in employment attachment even a decade after graduation.
 
-Associate (49.1%) and less-than-Associate (45.6%) graduates continue to lead in regional employment. Bachelor’s graduates are less tied to the region (29.0%) but more likely to hold meaningful employment elsewhere in Minnesota (29.1%). No-college students remain the most disadvantaged (28.1% regional, 33.7% disconnected). By this point, **two-year and sub-Associate pathways dominate regional employment, while Bachelor’s pathways expand statewide**.
+**Conclusion**
 
-**10 Years After Graduation**
-
-Associate (42.2%) and less-than-Associate (38.3%) degree holders remain the most regionally employed. Bachelor’s graduates have much lower regional employment (24.0%) but higher statewide meaningful employment (27.6%). Non-completers (“Some college” 32.8%; “No college” 28.3%) fall between these groups but face higher disconnection. A decade later, **lower-level credentials sustain stronger regional workforce retention, while higher degrees lead to greater mobility beyond the region**.
-
-### **Conclusion**
-
-Highest credential level is a **clear predictor of workforce pathways**.
-
--   **Associate and sub-Associate credentials** anchor graduates to meaningful regional employment across all years.
--   **Bachelor’s and higher degrees** are less tied to the region but increase access to statewide opportunities.
--   **Non-completers and no-college graduates** face persistently worse outcomes, especially high disconnection.
-
-These findings highlight the **critical role of sub-baccalaureate credentials in sustaining Southern Minnesota’s regional workforce**, while higher degrees are linked to **statewide labor market mobility**.
+Highest postsecondary credential attained is consistently **associated with differences in workforce pathways** in Northwest Minnesota. Sub-baccalaureate credentials—especially associate degrees and less-than-associate awards—are most closely aligned with **early and sustained meaningful regional employment**, while bachelor’s degrees and higher are associated with **greater geographic mobility and employment outside the region**. Although the strength of association diminishes over time, credential level remains an important marker of **employment location, stability, and quality**, underscoring the central role of credential type—not just postsecondary participation—in shaping long-term workforce outcomes.
 
 ::: panel-tabset
 ### One year after graduating
@@ -3244,37 +3214,28 @@ data <- meaningful.emp.northwest %>%
 
 ### **Key Findings**
 
-There is a statistically significant relationship between where individuals graduated from postsecondary and their employment outcomes across all three timeframes:
+There is a statistically significant relationship between postsecondary graduation location and post-graduation workforce pathways at all three time points:
 
--   1 year after graduation: χ²(12) = **4031.97**, Cramer’s V = **0.164**, p \< .001, N = 49,690
--   5 years after graduation: χ²(12) = **8801.99**, Cramer’s V = **0.208**, p \< .001, N = 67,658
--   10 years after graduation: χ²(12) = **4161.83**, Cramer’s V = **0.172**, p \< .001, N = 46,882
+-   **1 year after graduation:** χ²(12) = 1695.29, Cramer’s V = 0.141, *p* \< .001, *N* = 28,322\
+-   **5 years after graduation:** χ²(12) = 3908.23, Cramer’s V = 0.188, *p* \< .001, *N* = 36,977\
+-   **10 years after graduation:** χ²(12) = 1791.44, Cramer’s V = 0.153, *p* \< .001, *N* = 25,462
 
-The strength of association is **moderate in year 1**, increases at year 5, and remains significant at year 10.
+The association is **small-to-moderate in magnitude**, strengthening at five years and remaining clearly evident at ten years, indicating persistent differences in workforce pathways by where postsecondary credentials are earned.
 
-### **Interpretation Over Time**
+**Interpretation Over Time**
 
-**1 Year After Graduation**
+**1 Year After Graduation:**\
+One year after graduation, postsecondary graduation location is associated with clear differences in early workforce pathways, including access to **meaningful regional employment**. Graduates who completed postsecondary education **within the region** or **within the Northwest EDR** show the highest rates of **meaningful employment in the region** (approximately 50–58%), indicating strong early regional attachment when education and labor markets align geographically. In contrast, graduates who **did not complete postsecondary education** or who graduated **outside Minnesota** are less likely to enter meaningful regional employment and are more concentrated in **not-meaningful employment** or **no Minnesota employment record**. Graduates completing postsecondary education elsewhere in Minnesota are more likely to enter **meaningful employment outside the region**, reflecting early mobility within the state.
 
-Graduates from local institutions (EDR 65.8%, Region 62.8%) are far more likely to enter meaningful regional employment. In contrast, those who did not graduate (26.1%) or graduated outside Minnesota (30.9%) are far less tied to the regional workforce. Graduates from Minnesota institutions outside Southern MN are split, with higher meaningful MN employment (26.3%) but weaker regional ties (32.6%). This shows that **local PS graduation is the strongest early anchor to the regional workforce**.
+**5 Years After Graduation:**\
+By five years after graduation, differences by graduation location become more pronounced. Graduates who completed postsecondary education **within the region** continue to show the strongest attachment to **meaningful regional employment** (40.5%), while those graduating **elsewhere in Minnesota** are most likely to hold **meaningful employment outside the region** (42.2%). Graduates who completed postsecondary education **outside Minnesota** show the highest likelihood of having **no Minnesota employment record** (48.7%), indicating sustained geographic exit. Individuals who did not complete postsecondary education remain more concentrated in **not-meaningful employment** and **workforce disconnection**, reinforcing the role of credential location in shaping both employment quality and geography.
 
-**5 Years After Graduation**
+**10 Years After Graduation:**\
+Ten years after graduation, patterns by postsecondary graduation location persist. Graduates who completed postsecondary education **within the region** continue to have the highest rates of **meaningful regional employment** (33.1%), while those graduating **elsewhere in Minnesota** remain more likely to hold **meaningful employment outside the region** (35.4%). Graduates who completed postsecondary education **outside Minnesota** show the highest rates of **no Minnesota employment record** (58.4%), indicating long-term geographic mobility. Differences among those who did not complete postsecondary education remain substantial, with continued overrepresentation in **workforce disconnection**.
 
-Regional employment remains highest for PS grads in the same EDR (52.8%) or elsewhere in Southern MN (52.7%). Graduates outside the region show much weaker ties (23.9% MN, 21.4% outside MN). Non-graduates continue to lag (31.7%). This suggests that **regional and EDR-level graduates sustain strong regional attachment, while mobility increases for those with degrees outside Southern MN**.
+**Conclusion**
 
-**10 Years After Graduation**
-
-Regional employment remains strongest for graduates of Southern MN institutions, especially region-level (44.1%) and EDR-level (36.9%). Those graduating outside the region have much weaker local ties (20.5% for MN outside Southern MN, 17.8% outside MN). Disconnection is highest among out-of-state graduates (54.2%). Over the long term, **regional PS graduation continues to anchor workforce participation, while out-of-region graduates drift away from Southern MN**.
-
-### **Conclusion**
-
-Where students graduate from PS plays a major role in their long-term employment outcomes:
-
--   **Regional and EDR-level PS graduates** are consistently the most likely to be in meaningful regional employment across all years.
--   **Graduates from outside Southern MN** show weaker regional retention and greater disconnection, though they access more statewide opportunities.
--   **Non-graduates** consistently have weaker outcomes, with higher disconnection and not-meaningful work.
-
-These findings highlight that **graduating from institutions within Southern Minnesota is one of the strongest predictors of long-term regional workforce attachment**.
+Postsecondary graduation location is consistently **associated with differences in workforce pathways** in Northwest Minnesota. Graduates who complete postsecondary education **within the region or the Northwest EDR** are far more likely to enter and remain in **meaningful regional employment**, highlighting the importance of geographically aligned education-to-work pathways for regional workforce retention. In contrast, graduates who complete postsecondary education **elsewhere in Minnesota** or **outside the state** are more likely to access opportunities outside the region or to exit Minnesota’s labor market entirely. Although the strength of association varies over time, postsecondary location remains a durable marker of **regional attachment, mobility, and employment location**, underscoring the role of place-based education in shaping long-term workforce outcomes.
 
 ::: panel-tabset
 ### One year after graduating
@@ -3337,80 +3298,81 @@ data <- meaningful.emp.northwest %>%
 
 # Total Summary
 
-Across demographics, high school characteristics, accomplishments, and postsecondary experiences, clear themes emerge about what most strongly predicts **meaningful employment in the region** versus disconnection or statewide mobility.
+Across demographic characteristics, high school context, high school accomplishments, and postsecondary experiences, clear and consistent themes emerge about how graduates from Northwest Minnesota connect to the workforce over time. Rather than reflecting a single pipeline, the analysis reveals **distinct pathways that balance regional attachment, employment quality, and geographic mobility**, with **meaningful regional employment** serving as a central anchor outcome throughout.
 
--   **Postsecondary experiences** are the strongest predictors overall. Where a student graduates from, whether they graduate, and what credential they earn all have lasting effects on both regional retention and statewide opportunities.
--   **Economic status and special education needs** stand out among demographics as powerful predictors of early disadvantage and disconnection.
--   On the other hand, **career and technical education (CTE)** consistently boosts regional employment, making it a strong anchor to the local workforce.
--   Meanwhile, **academic rigor variables (ACT, AP, MCA scores)** largely point students toward postsecondary enrollment and careers beyond the region, signaling statewide mobility rather than regional attachment. Finally, some variables — particularly language indicators and one-off tests like SAT — show weak or inconsistent predictive value.
+Several overarching patterns stand out:
+
+-   **Postsecondary experiences** show the **strongest and most persistent associations** with workforce outcomes. Whether and where students complete postsecondary education, the type of institution they attend, and the credential they earn all shape long-term regional retention and statewide mobility.
+-   **Career and Technical Education (CTE)** is the most consistent contributor to **meaningful regional employment**, supporting early entry into the workforce and sustained regional attachment.
+-   **Academic achievement and rigor indicators** (ACT, MCA scores, AP participation) are strongly associated with postsecondary enrollment and **mobility beyond the region**, rather than long-term regional employment.
+-   **Demographic and high school contextual factors** matter, but primarily by shaping exposure to opportunity and risk rather than directly determining outcomes.
+-   Across nearly all domains, a recurring tension emerges between **regional retention and employment quality**, underscoring the importance of examining both dimensions together.
 
 ------------------------------------------------------------------------
 
 ## **1. Strong Predictors of Regional Employment and Disconnection**
 
-These variables **consistently show strong or moderate effect sizes** and **clear differences in meaningful regional employment**, making them strong candidates for modeling.
+These variables show **small-to-moderate but highly consistent associations** with workforce outcomes and clear differentiation in **meaningful regional employment** across multiple time points.
 
 | Variable | Type | Key Insights |
-|------------------------|------------------------|------------------------|
-| ps.grad.location | Postsecondary | Strongest predictor of regional employment. Local PS grads most likely to stay; out-of-region grads more mobile/disconnected. |
-| ps.grad | Postsecondary | Graduation itself reduces disconnection and improves both regional and statewide employment. |
-| highest.cred.level | Postsecondary | Sub-baccalaureate grads anchor regionally; higher credentials = statewide mobility. |
-| ps.grad.InstitutionSector | Postsecondary | Public 2-year grads most tied to regional workforce; 4-year grads more mobile. |
-| economic.status | Demographic | Low-income students more disconnected and less likely to be regionally employed, especially early. |
-| SpecialEdStatus | Demographic | Special education students face large, persistent disadvantages in regional employment. |
-| Dem_Desc | HS Characteristic | Rural grads more likely to stay regionally; metro grads more mobile and more disconnected. |
-| CTE achievement | Accomplishment | Concentrators/completors consistently most likely to work regionally. |
-| total.cte.courses.taken | Accomplishment (cont.) | More CTE courses = stronger regional employment attachment. |
+|---------------------|------------------|----------------------------------|
+| ps.grad.location | Postsecondary | Strongest and most persistent association. Graduates completing PS **within the region or Northwest EDR** are most likely to remain in meaningful regional employment; out-of-state grads are most mobile and disconnected. |
+| ps.grad | Postsecondary | Completion reduces long-term disconnection and increases access to meaningful employment, particularly outside the region. |
+| highest.cred.level | Postsecondary | **Sub-baccalaureate credentials** align most closely with regional employment; bachelor’s+ credentials are associated with statewide mobility. |
+| ps.grad.InstitutionSector | Postsecondary | **Public 2-year colleges** show the strongest and most durable connection to meaningful regional employment. |
+| CTE achievement | HS Accomplishment | Concentrators and completers consistently show higher rates of meaningful regional employment. |
+| total.cte.courses.taken | HS Accomplishment | Greater CTE intensity corresponds to stronger and more sustained regional workforce attachment. |
+| Economic status | Demographic | Lower-income students enter the workforce earlier and remain regionally attached but face higher exposure to not-meaningful employment and disconnection. |
+| Special education status | Demographic | Persistent disparities across all timeframes, with higher rates of disconnection and lower access to meaningful employment. |
 
 ------------------------------------------------------------------------
 
-## **2. Moderate Predictors — Some Association, Less Consistency**
+## **2. Moderate Predictors — Clear Associations with Attenuation or Context Dependence**
 
-These variables show **moderate associations** with outcomes. They may be useful in modeling, particularly when combined with other predictors.
+These variables show **consistent but weaker associations**, often shaping early pathways or mobility rather than long-term regional attachment.
 
 | Variable | Type | Key Insights |
-|------------------------|------------------------|------------------------|
-| RaceEthnicity | Demographic | Persistent disparities: Black, AI, and Hispanic students more disconnected; Asian students more PS-enrolled/out-of-region. |
-| Gender | Demographic | Early gap: males more regionally employed, females more PS-attending. Gaps narrow over time. |
-| Grad.year.covid | Demographic | Post-COVID grads slightly more disconnected and more likely in local work early on. |
-| ACTCompositeScore | Accomplishment (cont.) | Higher scores strongly tied to PS and statewide employment, less regional retention. |
-| MCA Math, Reading, Science | Accomplishment (cont.) | Higher scores = statewide employment and PS; lower scores = regional work. |
-| avg.unemp.rate | HS Characteristic (cont.) | Higher unemployment counties = more disconnection, weaker early outcomes. |
-| avg.wage.pct.state | HS Characteristic (cont.) | Higher local wages = lower disconnection, somewhat stronger employment. |
+|---------------------|------------------|----------------------------------|
+| attended.ps | Postsecondary | Very large early association; differences narrow substantially by 10 years. |
+| Race/Ethnicity | Demographic | Persistent disparities in mobility and disconnection; patterns vary by group. |
+| Gender | Demographic | Early differences in workforce entry and PS attendance narrow over time. |
+| District rurality (Dem_Desc) | HS Characteristic | Rural graduates more likely to remain regionally employed; urban grads more mobile. |
+| Economic Development Region (EDR) | HS Characteristic | Northwest-based districts show stronger regional attachment. |
+| MCA Reading, Math, Science | HS Accomplishment | Academic differentiation aligns with employment quality and mobility rather than regional retention. |
+| ACT composite score | HS Accomplishment | Higher scores strongly associated with PS continuation and statewide employment. |
+| Local unemployment context | HS Characteristic | Higher unemployment areas associated with earlier workforce entry and weaker early outcomes. |
 
 ------------------------------------------------------------------------
 
-## **3. Weak or Inconsistent Predictors — Candidates for Dropping**
+## **3. Weak or Inconsistent Predictors — Limited Independent Signal**
 
-These variables showed **very weak associations** and could be considered for **dropping from modeling**, unless interaction effects suggest added value.
+These variables show **very small or inconsistent associations** and offer limited added value outside interaction effects.
 
 | Variable | Type | Notes |
-|------------------------|------------------------|------------------------|
-| english.learner | Demographic | Early differences shrink over time; weak independent effect. |
-| LimitedEnglishProficiencyIndicator | Demographic | Similar to English Learner — overlaps, weak long-term signal. |
-| non.english.home | Demographic | Weak association, may overlap with other variables. |
-| sat.taken | Accomplishment | Very small subgroup; weak signal. |
-| took.ACT | Accomplishment | Near-universal; offers little discriminatory value. |
-| ap.exam | Accomplishment | Modest effect, overlaps with ACT and MCA indicators. |
+|-----------------------------|----------------------|----------------------|
+| english.learner | Demographic | Early differences diminish substantially over time. |
+| Limited English Proficiency indicators | Demographic | Overlap with other variables; weak independent association. |
+| non.english.home | Demographic | Small and inconsistent differences. |
+| sat.taken | HS Accomplishment | Small subgroup; weak differentiation. |
+| took.ACT | HS Accomplishment | Near-universal participation limits usefulness. |
+| ap.exam | HS Accomplishment | Moderate overlap with ACT and MCA indicators; limited unique signal. |
 
 ------------------------------------------------------------------------
 
-### **Overall Conclusion**
+## **Overall Conclusion**
 
-The most consistent predictors of **regional workforce retention** are **sub-baccalaureate postsecondary pathways, public 2-year institutions, and CTE engagement**, combined with **rural high school origins**. Meanwhile, **academic rigor variables and 4-year degrees drive statewide mobility** rather than regional employment. Disadvantage markers such as **low-income status and special education needs** are persistent risk factors for disconnection.
+Taken together, the analysis highlights a **dual structure** shaping workforce outcomes in Northwest Minnesota:
 
-In short, the analysis reveals a **dual pipeline**:
+-   **CTE pathways, public 2-year institutions, sub-baccalaureate credentials, and regionally located postsecondary completion** consistently anchor graduates to **meaningful employment within the region**.
+-   **Higher academic achievement and 4-year-oriented pathways** are associated with **greater geographic mobility and employment outside the region**, often at the expense of regional retention.
 
--   **CTE and 2-year credentials anchor students to Southern Minnesota’s workforce**.
--   **High academic achievement and 4-year+ credentials lead to mobility and employment beyond the region**.
+Demographic and contextual factors shape exposure to opportunity and risk but operate largely through these educational and training pathways rather than independently determining outcomes. Importantly, regional retention does not always coincide with employment quality, emphasizing the need for strategies that both **retain graduates locally and expand access to stable, high-quality regional jobs**.
 
-This suggests that interventions to strengthen the regional workforce should prioritize **CTE pathways, 2-year institutions, and supports for low-income and special education students**, while also recognizing that academic high-achievers are more likely to leave the region.
-
-<br>
+Overall, the findings suggest that strengthening the Northwest Minnesota workforce will require **intentional alignment between CTE, 2-year postsecondary pathways, and regional employers**, alongside targeted supports for populations facing persistent disadvantage.
 
 ```{r create new master after analysis}
 master.after.ct <- meaningful.emp.northwest %>%
-  select(-english.learner,  -non.english.home, -took.ACT, -ap.exam)
+  select(-took.ACT, -ap.exam, -english.learner, -non.english.home)
   
 write_csv(master.after.ct, "Data/SLEDS/Masters/After analysis/Master-after-ct.csv")
 ```
