@@ -3315,7 +3315,7 @@ Several overarching patterns stand out:
 These variables show **small-to-moderate but highly consistent associations** with workforce outcomes and clear differentiation in **meaningful regional employment** across multiple time points.
 
 | Variable | Type | Key Insights |
-|---------------------|------------------|----------------------------------|
+|----|----|----|
 | ps.grad.location | Postsecondary | Strongest and most persistent association. Graduates completing PS **within the region or Northwest EDR** are most likely to remain in meaningful regional employment; out-of-state grads are most mobile and disconnected. |
 | ps.grad | Postsecondary | Completion reduces long-term disconnection and increases access to meaningful employment, particularly outside the region. |
 | highest.cred.level | Postsecondary | **Sub-baccalaureate credentials** align most closely with regional employment; bachelor’s+ credentials are associated with statewide mobility. |
@@ -3332,7 +3332,7 @@ These variables show **small-to-moderate but highly consistent associations** wi
 These variables show **consistent but weaker associations**, often shaping early pathways or mobility rather than long-term regional attachment.
 
 | Variable | Type | Key Insights |
-|---------------------|------------------|----------------------------------|
+|----|----|----|
 | attended.ps | Postsecondary | Very large early association; differences narrow substantially by 10 years. |
 | Race/Ethnicity | Demographic | Persistent disparities in mobility and disconnection; patterns vary by group. |
 | Gender | Demographic | Early differences in workforce entry and PS attendance narrow over time. |
@@ -3349,7 +3349,7 @@ These variables show **consistent but weaker associations**, often shaping early
 These variables show **very small or inconsistent associations** and offer limited added value outside interaction effects.
 
 | Variable | Type | Notes |
-|-----------------------------|----------------------|----------------------|
+|----|----|----|
 | english.learner | Demographic | Early differences diminish substantially over time. |
 | Limited English Proficiency indicators | Demographic | Overlap with other variables; weak independent association. |
 | non.english.home | Demographic | Small and inconsistent differences. |

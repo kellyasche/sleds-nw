@@ -132,8 +132,6 @@ mn_counties <- st_read('/Users/kellyasche/Library/CloudStorage/GoogleDrive-kasch
 
 ```{r master original}
 master.original <- read_csv("Data/SLEDS/Masters/After analysis/Master-final-after-mca.csv")
-
-test
 ```
 
 <br>
