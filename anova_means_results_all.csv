@@ -1,0 +1,101 @@
+outcome,mean,sd,n,time.point,variable
+Meaningful emp region,5.938098783817324,1.6716905127842399,4029,after.ed.1,avg.unemp.rate
+Meaningful emp MN,5.9695896073221135,1.8036754128565133,1129,after.ed.1,avg.unemp.rate
+Not meaningful_in_only,5.906867636867637,1.7212041046786815,4810,after.ed.1,avg.unemp.rate
+Not meaningful - other,5.83959301039593,1.6596419845896748,3014,after.ed.1,avg.unemp.rate
+No MN emp record,5.724698921353021,1.648971254470256,6366,after.ed.1,avg.unemp.rate
+Meaningful emp region,0.832299604016231,0.09498321508540203,4029,after.ed.1,avg.wages.pct.state
+Meaningful emp MN,0.8318679716856293,0.09928398617995605,1129,after.ed.1,avg.wages.pct.state
+Not meaningful_in_only,0.8265203397878702,0.09280993076468749,4810,after.ed.1,avg.wages.pct.state
+Not meaningful - other,0.8303701507630048,0.09513246604121496,3014,after.ed.1,avg.wages.pct.state
+No MN emp record,0.8253108406344568,0.09051514059996539,6366,after.ed.1,avg.wages.pct.state
+Meaningful emp region,5.465127823281214,3.8642670322991126,4029,after.ed.1,total.cte.courses.taken
+Meaningful emp MN,4.768821966341896,3.550130171074547,1129,after.ed.1,total.cte.courses.taken
+Not meaningful_in_only,4.689189189189188,3.552720244393245,4810,after.ed.1,total.cte.courses.taken
+Not meaningful - other,4.596217650962178,3.448429845212425,3014,after.ed.1,total.cte.courses.taken
+No MN emp record,4.214263273641217,3.427025003736882,6366,after.ed.1,total.cte.courses.taken
+Meaningful emp region,2.4856197505726643,1.0479149013664846,3929,after.ed.1,MCA.M
+Meaningful emp MN,2.6019855595667867,1.053867841369228,1108,after.ed.1,MCA.M
+Not meaningful_in_only,2.515842013888889,1.0917178921010857,4608,after.ed.1,MCA.M
+Not meaningful - other,2.5145897699965665,1.0833451220296813,2913,after.ed.1,MCA.M
+No MN emp record,2.4816029143898,1.1012374740238728,5490,after.ed.1,MCA.M
+Meaningful emp region,5.994878646181251,1.6859120462997024,4491,after.ed.2,avg.unemp.rate
+Meaningful emp MN,5.961074156196107,1.777235911292678,1353,after.ed.2,avg.unemp.rate
+Not meaningful_in_only,5.888903214715489,1.6948276217993743,3878,after.ed.2,avg.unemp.rate
+Not meaningful - other,5.861606812291743,1.6835942547801874,2701,after.ed.2,avg.unemp.rate
+No MN emp record,5.698565583634175,1.6497333110182915,6925,after.ed.2,avg.unemp.rate
+Meaningful emp region,0.8320075980461094,0.0949326010231422,4491,after.ed.2,avg.wages.pct.state
+Meaningful emp MN,0.8317934411643773,0.10157884876852104,1353,after.ed.2,avg.wages.pct.state
+Not meaningful_in_only,0.8279589613880104,0.092549041719294,3878,after.ed.2,avg.wages.pct.state
+Not meaningful - other,0.8275136733755973,0.09518525258504149,2701,after.ed.2,avg.wages.pct.state
+No MN emp record,0.8255363743107729,0.09012783856352168,6925,after.ed.2,avg.wages.pct.state
+Meaningful emp region,5.3743041638833216,3.8398274686473295,4491,after.ed.2,total.cte.courses.taken
+Meaningful emp MN,4.819660014781966,3.5181268806326265,1353,after.ed.2,total.cte.courses.taken
+Not meaningful_in_only,4.762248581743168,3.6154739086749252,3878,after.ed.2,total.cte.courses.taken
+Not meaningful - other,4.484635320251761,3.4055843228324765,2701,after.ed.2,total.cte.courses.taken
+No MN emp record,4.245631768953069,3.4199853623705296,6925,after.ed.2,total.cte.courses.taken
+Meaningful emp region,2.4767335766423355,1.058803454770181,4384,after.ed.2,MCA.M
+Meaningful emp MN,2.5845808383233537,1.0466434186936475,1336,after.ed.2,MCA.M
+Not meaningful_in_only,2.4738411493629706,1.0847650453485262,3689,after.ed.2,MCA.M
+Not meaningful - other,2.507651109410864,1.1009766700260923,2614,after.ed.2,MCA.M
+No MN emp record,2.5226556016597512,1.09501750293558,6025,after.ed.2,MCA.M
+Meaningful emp region,6.007377627309916,1.6916241071651756,4726,after.ed.3,avg.unemp.rate
+Meaningful emp MN,5.967028003613369,1.7544107077574516,1476,after.ed.3,avg.unemp.rate
+Not meaningful_in_only,5.9173604960141715,1.692639063977528,3387,after.ed.3,avg.unemp.rate
+Not meaningful - other,5.827258890272589,1.6797653874617073,2409,after.ed.3,avg.unemp.rate
+No MN emp record,5.692802721088435,1.651763290959406,7350,after.ed.3,avg.unemp.rate
+Meaningful emp region,0.8320310385707482,0.09444549123545387,4726,after.ed.3,avg.wages.pct.state
+Meaningful emp MN,0.8303002916336871,0.10124978789512944,1476,after.ed.3,avg.wages.pct.state
+Not meaningful_in_only,0.8267484323196316,0.0928001622571069,3387,after.ed.3,avg.wages.pct.state
+Not meaningful - other,0.8298369694037012,0.09683305633457186,2409,after.ed.3,avg.wages.pct.state
+No MN emp record,0.8255462866089779,0.0898395020222721,7350,after.ed.3,avg.wages.pct.state
+Meaningful emp region,5.413245873889126,3.8559767614476264,4726,after.ed.3,total.cte.courses.taken
+Meaningful emp MN,4.665989159891598,3.4756618836379807,1476,after.ed.3,total.cte.courses.taken
+Not meaningful_in_only,4.780927074106877,3.5840036369945767,3387,after.ed.3,total.cte.courses.taken
+Not meaningful - other,4.46077210460772,3.4394708463090797,2409,after.ed.3,total.cte.courses.taken
+No MN emp record,4.248979591836736,3.4095502602042567,7350,after.ed.3,total.cte.courses.taken
+Meaningful emp region,2.46324007807417,1.0604831699969368,4611,after.ed.3,MCA.M
+Meaningful emp MN,2.6161268090971745,1.0475530215095874,1451,after.ed.3,MCA.M
+Not meaningful_in_only,2.4609642301710735,1.0857524742075426,3215,after.ed.3,MCA.M
+Not meaningful - other,2.506448839208942,1.1023734447953923,2326,after.ed.3,MCA.M
+No MN emp record,2.528316524437548,1.0929832518999956,6445,after.ed.3,MCA.M
+Meaningful emp region,6.013495024875621,1.7080576259108189,4824,after.ed.4,avg.unemp.rate
+Meaningful emp MN,5.969323101141283,1.707261906713213,1694,after.ed.4,avg.unemp.rate
+Not meaningful_in_only,5.925103156016505,1.711165199326188,2989,after.ed.4,avg.unemp.rate
+Not meaningful - other,5.846382912379171,1.6815008728498955,2138,after.ed.4,avg.unemp.rate
+No MN emp record,5.684724566186334,1.641968578039701,7703,after.ed.4,avg.unemp.rate
+Meaningful emp region,0.8317806239966709,0.09442497416262348,4824,after.ed.4,avg.wages.pct.state
+Meaningful emp MN,0.8320456833827877,0.10052889822987021,1694,after.ed.4,avg.wages.pct.state
+Not meaningful_in_only,0.8263826366882367,0.09334604638277758,2989,after.ed.4,avg.wages.pct.state
+Not meaningful - other,0.8282698793807147,0.09633198166552237,2138,after.ed.4,avg.wages.pct.state
+No MN emp record,0.8258921853674263,0.08997097947987076,7703,after.ed.4,avg.wages.pct.state
+Meaningful emp region,5.384742951907133,3.820292323897328,4824,after.ed.4,total.cte.courses.taken
+Meaningful emp MN,4.547225501770958,3.474803572861283,1694,after.ed.4,total.cte.courses.taken
+Not meaningful_in_only,4.845098695215791,3.6688237856988883,2989,after.ed.4,total.cte.courses.taken
+Not meaningful - other,4.429373246024322,3.3976674098366284,2138,after.ed.4,total.cte.courses.taken
+No MN emp record,4.285083733610283,3.417954717885759,7703,after.ed.4,total.cte.courses.taken
+Meaningful emp region,2.4747667514843084,1.0491623931173797,4716,after.ed.4,MCA.M
+Meaningful emp MN,2.643843843843844,1.0589021095094957,1665,after.ed.4,MCA.M
+Not meaningful_in_only,2.40923623445826,1.1038087221352453,2815,after.ed.4,MCA.M
+Not meaningful - other,2.4881010199125786,1.0947481472124068,2059,after.ed.4,MCA.M
+No MN emp record,2.533931988812012,1.0923513850301696,6793,after.ed.4,MCA.M
+Meaningful emp region,6.01096570699953,1.7153036543498903,4967,after.ed.5,avg.unemp.rate
+Meaningful emp MN,5.963198867657466,1.7803444195002522,1884,after.ed.5,avg.unemp.rate
+Not meaningful_in_only,5.90578307272276,1.7053704866838197,2686,after.ed.5,avg.unemp.rate
+Not meaningful - other,5.9409271752291986,1.629727193142948,1927,after.ed.5,avg.unemp.rate
+No MN emp record,5.671998139692203,1.6326117519880239,7884,after.ed.5,avg.unemp.rate
+Meaningful emp region,0.83101915603745,0.09477852557240936,4967,after.ed.5,avg.wages.pct.state
+Meaningful emp MN,0.8338115620227547,0.09912640832506352,1884,after.ed.5,avg.wages.pct.state
+Not meaningful_in_only,0.8275659108186455,0.09495310204475906,2686,after.ed.5,avg.wages.pct.state
+Not meaningful - other,0.8265306707498821,0.0963793754327457,1927,after.ed.5,avg.wages.pct.state
+No MN emp record,0.8257992839916267,0.08946906770865914,7884,after.ed.5,avg.wages.pct.state
+Meaningful emp region,5.374672840748949,3.798799380125303,4967,after.ed.5,total.cte.courses.taken
+Meaningful emp MN,4.559978768577495,3.468867868710758,1884,after.ed.5,total.cte.courses.taken
+Not meaningful_in_only,4.778853313477291,3.5714906134989626,2686,after.ed.5,total.cte.courses.taken
+Not meaningful - other,4.385573430202389,3.4375091006287053,1927,after.ed.5,total.cte.courses.taken
+No MN emp record,4.320776255707765,3.4637675673189263,7884,after.ed.5,total.cte.courses.taken
+Meaningful emp region,2.4769167353668586,1.0556963968711446,4852,after.ed.5,MCA.M
+Meaningful emp MN,2.684239130434783,1.0546623319649686,1840,after.ed.5,MCA.M
+Not meaningful_in_only,2.3981774960380338,1.0836645336244555,2524,after.ed.5,MCA.M
+Not meaningful - other,2.4336378291241267,1.1015761610774892,1861,after.ed.5,MCA.M
+No MN emp record,2.53220484865873,1.0942342704660093,6971,after.ed.5,MCA.M

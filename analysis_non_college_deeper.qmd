@@ -1,0 +1,2252 @@
+---
+title: "Deeper-Dive Analysis Framework: Non-College Graduates Without Meaningful Workforce Participation"
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(sf)
+library(ggrepel)
+library(scales)
+library(shiny)
+library(shinycssloaders)
+library(ggiraph)
+library(kableExtra)
+library(rmapshaper)
+library(cowplot)
+library(DT)
+library(htmlwidgets)
+library(RColorBrewer)
+library(readxl)
+library(janitor)
+library(lubridate)
+library(systemfonts)
+reset_font_cache()
+library(ggtext)
+library(gmodels)
+library(fastDummies)
+library(car)
+library(glmnet)
+library(glmnetUtils)
+library(pscl)
+library(sjPlot)
+library(ggforce)
+library(openxlsx)
+```
+
+```{r themes and shapefiles, include=FALSE}
+theme_bar <- theme_bw() +
+  theme(panel.grid.major = element_line(color = "grey70", linewidth  = 0.1),
+        panel.grid.minor = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_text(face = "bold"),
+        panel.border = element_blank(),
+        legend.background = element_rect(fill = "transparent", color = "transparent"),
+        legend.key = element_rect(fill = "transparent"),
+        legend.key.size = unit(1, "lines"),
+        legend.margin = margin(0,0,0,0),
+        legend.title = element_blank(),
+        legend.text = element_text(margin = margin(l = 2)),
+        text = element_text(family = "Arial") ,
+        plot.title.position = "plot",
+        plot.title = element_text(face = "bold"))
+
+theme_line <- theme_bw() +
+  theme(legend.background = element_rect(fill = "transparent", color = "transparent"),
+        legend.key = element_rect(fill = "transparent"),
+        legend.text = element_text(margin = margin(l = 2)),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_line(color = "grey70", linewidth = 0.1),
+        axis.ticks = element_blank(),
+        axis.text = element_text(face = "bold"),
+        panel.border = element_blank(),
+        legend.margin = margin(0,0,0,0),
+        legend.key.size = unit(1, "lines"),
+        text = element_text(family = "Arial") ,
+        plot.title.position = "plot",
+        plot.title = element_text(face = "bold"))
+
+
+theme_sf <- theme_bw() +
+  theme(axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks=element_blank(),
+        panel.background = element_blank(),
+        panel.grid.major = element_line(color = "white"),
+        panel.border = element_blank(),
+        legend.title = element_blank(),
+        legend.text = element_text(margin = margin(l = 2)),
+        legend.margin = margin(0,0,0,0),
+        legend.key.size = unit(1, "lines"),
+        text = element_text(family = "Arial") ,
+        plot.title.position = "plot",
+        plot.title = element_text(face = "bold"))
+
+regions <- read_csv("/Users/kellyasche/Library/CloudStorage/GoogleDrive-kasche@ruralmn.org/My Drive/Data Prep/R Projects/Join docs/county_regions.csv") %>%
+    select(5,6) %>%
+    unique() %>%
+    mutate(edr = str_replace(edr, "  ", " "),
+           planning.region = str_replace(planning.region, " Minnesota", ""),
+           planning.region = fct_relevel(planning.region, "Northwest", "Northeast", "Central", "Seven County Mpls-St Paul", "Southwest", "Southeast"),
+           edr = fct_relevel(edr, "EDR 1 - Northwest", "EDR 2 - Headwaters", "EDR 3 - Arrowhead", "EDR 4 - West Central", "EDR 5 - North Central", "EDR 6E- Southwest Central", "EDR 6W- Upper Minnesota Valley", "EDR 7E- East Central", "EDR 7W- Central", "EDR 8 - Southwest", "EDR 9 - South Central", "EDR 10 - Southeast", "EDR 11 - 7 County Twin Cities", "Minnesota"))
+
+counties.regions <- read_csv("/Users/kellyasche/Library/CloudStorage/GoogleDrive-kasche@ruralmn.org/My Drive/Data Prep/R Projects/Join docs/county_regions.csv") %>%
+  rename(mif = `MIF Region`) %>%
+  mutate(countyfp = formatC(countyfp, width = 3, flag = "0"),
+         Name = str_to_title(Name),
+         Name = str_replace(Name, "Q", "q"),
+         Name = str_replace(Name, "Of The", "of the"),
+         Name = str_replace(Name, "Mcleod", "McLeod"),
+         Dem_Desc = ifelse(Name == "Minnesota", "Minnesota", Dem_Desc) ,
+         edr = str_replace(edr, "  ", " "),
+         planning.region = str_replace(planning.region, " Minnesota", ""),
+         planning.region = fct_relevel(planning.region, "Northwest", "Northeast", "Central", "Seven County Mpls-St Paul", "Southwest", "Southeast"),
+         edr = fct_relevel(edr, "EDR 1 - Northwest", "EDR 2 - Headwaters", "EDR 3 - Arrowhead", "EDR 4 - West Central", "EDR 5 - North Central", "EDR 6E- Southwest Central", "EDR 6W- Upper Minnesota Valley", "EDR 7E- East Central", "EDR 7W- Central", "EDR 8 - Southwest", "EDR 9 - South Central", "EDR 10 - Southeast", "EDR 11 - 7 County Twin Cities", "Minnesota"),
+         Dem_Desc = fct_relevel(Dem_Desc, "Entirely rural", "Town/rural mix", "Urban/town/rural mix", "Entirely urban"))
+
+counties.regions.1 <- counties.regions %>%
+  mutate(statefp = "27",
+         project.pr = ifelse(edr %in% c("EDR 1 - Northwest", "EDR 2 - Headwaters", "EDR 4 - West Central"), "Northwest",
+                             ifelse(edr == "EDR 3 - Arrowhead", "Northeast",
+                                    ifelse(edr %in% c("EDR 5 - North Central", "EDR 7E- East Central", "EDR 7W- Central"), "Central",
+                                           ifelse(edr %in% c("EDR 6E- Southwest Central", "EDR 6W- Upper Minnesota Valley", "EDR 8 - Southwest"), "Southwest",
+                                                  ifelse(edr %in% c("EDR 9 - South Central", "EDR 10 - Southeast"), "Southern", as.character(planning.region)))))),
+         project.pr = fct_relevel(project.pr, "Northwest", "Northeast", "Central", "Seven County Mpls-St Paul", "Southwest", "Southern"))
+
+
+color.ruca <- c("Entirely rural" = "#009933", "Town/rural mix" = "#99CC33", "Urban/town/rural mix" = "#CC9966", "Entirely urban" = "#754C29", "Minnesota" = "black")
+
+color.pr <- c("Northwest" = 	"#4575b4", "Northeast" = "grey", "Central" = "#fee090", "Seven County Mpls-St Paul" = "#d73027", "Southwest" = "#91bfdb", "Southeast" = "#fc8d59", "Minnesota" = "black")
+
+color.edr <- c("EDR 1 - Northwest" = "#b3cde3", "EDR 2 - Headwaters" = "#8c96c6", "EDR 3 - Arrowhead" = "#fe9929", "EDR 4 - West Central" = "#8856a7", "EDR 5 - North Central" = "#810f7c", "EDR 6E- Southwest Central" = "#e5f5f9", "EDR 6W- Upper Minnesota Valley" = "#bdc9e1", "EDR 7E- East Central" = "#99d8c9", "EDR 7W- Central" = "#2ca25f", "EDR 8 - Southwest" = "#74a9cf", "EDR 9 - South Central" = "#0570b0", "EDR 10 - Southeast" = "#d7301f", "EDR 11 - 7 County Twin Cities" = "#d8b365", "Minnesota" = "black")
+
+color.edr.simple <- c("EDR 1" = "#b3cde3", "EDR 2" = "#8c96c6", "EDR 3" = "#fe9929", "EDR 4" = "#8856a7", "EDR 5" = "#810f7c", "EDR 6E" = "#e5f5f9", "EDR 6W" = "#bdc9e1", "EDR 7E" = "#99d8c9", "EDR 7W" = "#2ca25f", "EDR 8" = "#74a9cf", "EDR 9" = "#0570b0", "EDR 10" = "#d7301f", "EDR 11" = "#d8b365", "Minnesota" = "black")
+
+color.pr.edr <- c ("Northwest" = "#4575b4","Northeast" = "#e0f3f8", "Central" = "#fee090", "Seven County Mpls-St Paul" = "#d73027", "Southwest" = "#91bfdb", "Southeast" = "#fc8d59", "Minnesota" = "black", "EDR 1 - Northwest" = "#b3cde3", "EDR 2 - Headwaters" = "#8c96c6", "EDR 3 - Arrowhead" = "#fe9929", "EDR 4 - West Central" = "#8856a7", "EDR 5 - North Central" = "#810f7c", "EDR 6E- Southwest Central" = "#e5f5f9", "EDR 6W- Upper Minnesota Valley" = "#bdc9e1", "EDR 7E- East Central" = "#99d8c9", "EDR 7W- Central" = "#2ca25f", "EDR 8 - Southwest" = "#74a9cf", "EDR 9 - South Central" = "#0570b0", "EDR 10 - Southeast" = "#d7301f", "EDR 11 - 7 County Twin Cities" = "#d8b365")
+
+mn_counties <- st_read("/Users/kellyasche/Library/CloudStorage/GoogleDrive-kasche@ruralmn.org/My Drive/Data Prep/R Projects/Shapefiles/County shapefiles/MNCounties_MNDOT.shp", quiet = TRUE) %>%
+  ms_simplify(keep = .01, keep_shapes = TRUE) %>%
+  rename(countyfp = FIPS_CODE)
+```
+
+```{r master}
+master.original <- read_csv("Data/SLEDS/Masters/After analysis/Master-after-ct.csv") 
+
+kable(names(master.original))
+
+kable(head(master.original))
+```
+
+# Research Questions: Workforce Trajectories of Non-College Graduates in Northwest Minnesota
+
+This phase of the analysis examines workforce participation trajectories among high school graduates in Northwest Minnesota who did not complete a postsecondary credential. Rather than relying on a single point-in-time workforce outcome, the analysis focuses on patterns of labor market attachment during the first five years after exiting formal education, with particular attention to persistence, instability, and regional attachment.
+
+The research is guided by the following questions:
+
+1.  **Prevalence and Persistence of Workforce Disconnection**
+
+Among non-college graduates, how common is sustained workforce disconnection during the first five years after exiting formal education?
+
+-   How frequently are individuals categorized as having not meaningful workforce participation or no Minnesota employment record during years 1 through 5 after exiting formal education?
+-   To what extent does workforce disconnection reflect persistent patterns versus intermittent instability?
+
+This question establishes the scope and depth of workforce disconnection in early adulthood.
+
+<br>
+
+2.  **Workforce Trajectories of Disconnected Individuals**
+
+Among individuals classified as disconnected during the first five years after exiting formal education, what employment trajectories do they follow over time?
+
+-   Are individuals persistently disconnected across multiple years, or do they move in and out of more stable workforce participation?
+-   How do patterns of persistence and recovery differ across individuals?
+
+This question shifts the focus from static outcomes to dynamic labor market pathways.
+
+<br>
+
+3.  **Regional Attachment Among Individuals Without Meaningful Workforce Participation**
+
+For non-college graduates who experience workforce disconnection, where does employment occur when it is present?
+
+-   Are individuals without meaningful workforce participation more likely to work within Northwest Minnesota or elsewhere in Minnesota?
+-   Do patterns of regional attachment differ between persistently disconnected individuals and those with intermittent disconnection?
+
+This question distinguishes regional underemployment from regional disengagement.
+
+<br>
+
+4.  **Transitions Into Meaningful Workforce Participation**
+
+Among individuals who are initially disconnected but later achieve meaningful workforce participation, what characterizes those transitions?
+
+-   At what point do individuals move into meaningful workforce participation during early adulthood?
+-   Does the location of meaningful employment—within Northwest Minnesota or elsewhere in Minnesota—differ for individuals who transition later?
+
+This question explores recovery pathways and the role of geography in supporting or constraining workforce stability.
+
+<br>
+
+5.  **Stability of No Minnesota Employment Records**
+
+Among individuals categorized as having no Minnesota employment record during the first five years after high school, how persistent is this status?
+
+-   Are individuals repeatedly absent from Minnesota employment records, or does this classification occur intermittently?
+-   How often do individuals with no Minnesota employment record transition into other workforce participation categories?
+
+This question helps distinguish long-term labor market detachment from temporary absence or mobility outside the state.
+
+<br>
+
+6.  **Individual Characteristics and Workforce Disconnection**
+
+How are individual characteristics associated with workforce disconnection and subsequent employment trajectories?
+
+-   How do factors such as economic disadvantage, English learner status, special education status, race and ethnicity, and Career and Technical Education (CTE) participation relate to persistent disconnection, intermittent instability, and recovery?
+-   Which characteristics appear to support workforce stability and regional retention, and which are associated with disengagement or out-migration?
+
+This question links observed workforce trajectories to potential leverage points for education and workforce policy.
+
+<br>
+
+# Study Population and Group Definitions
+
+**Study Population**
+
+The analytic population consists of individuals who: - Graduated from a high school in Northwest Minnesota, - Did not complete a postsecondary credential (`ps.grad = No`), and - Have workforce participation records available for at least the first five years after high school graduation OR the first five years after exiting formal post-secondary education.
+
+<br>
+
+**Definition of Workforce Disconnection**
+
+Workforce participation is measured annually during the first five years after high school or existing post-secondary attendance. Individuals are classified as **disconnected** in a given year if they are categorized as either: - Not meaningful workforce participation, or - No Minnesota employment record.
+
+Using this annual classification, individuals are grouped based on the persistence of disconnection during years 1 through 5:
+
+-   **Disconnected (Broad Definition):**\
+    Disconnected in three or more of the first five years after graduation.
+
+-   **Persistently Disconnected:**\
+    Disconnected in four or five of the first five years after graduation.
+
+-   **Intermittently Disconnected:**\
+    Disconnected in one or two of the first five years after graduation.
+
+These definitions emphasize sustained labor market detachment rather than short-term transitions.
+
+<br>
+
+**Regional Attachment**
+
+For years in which individuals are employed but not meaningfully attached to the workforce, employment location is classified as: - Within Northwest Minnesota, or - Outside Northwest Minnesota (elsewhere in Minnesota).
+
+This distinction is used to assess whether workforce disconnection reflects regional underutilization or disengagement from the regional labor market.
+
+<br>
+
+**Framing Consideration**
+
+Together, these definitions allow the analysis to move beyond point-in-time workforce outcomes and toward a trajectory-based understanding of early-career labor market experiences. This approach supports clearer interpretation of workforce instability, recovery, and regional retention among non-college graduates in Northwest Minnesota.
+
+<br>
+
+# Methodology and Analytic Steps
+
+This analysis examines workforce participation trajectories among non-college graduates in Northwest Minnesota, with a focus on identifying patterns of workforce disconnection, regional attachment, and employment stability during the first five years after high school.
+
+## Step 1: Data Preparation and Analytic Population
+
+**1.1 Analytic Population**
+
+The analytic population is restricted to individuals who: - Graduated from a high school in Northwest Minnesota, - Did not complete a postsecondary credential (`ps.grad = No`), and
+
+-   Have complete workforce participation categorizations for years 1 through 5 after high school or,
+-   first 5 years after exiting attendance in a post-secondary institution.
+
+**1.2 Annual Workforce Participation Classification**
+
+For each individual, annual workforce participation status is identified for: - `grad.year.1` - `grad.year.2` - `grad.year.3` - `grad.year.4` - `grad.year.5`
+
+Each year is classified into one of the following categories: - Meaningful workforce participation - Not meaningful workforce participation - No Minnesota employment record.
+
+**1.3 Workforce Disconnection Indicators**
+
+For each annual observation, a binary **disconnection indicator** is created:
+
+-   **Disconnected (year-level)** = Not meaningful workforce participation **or** No Minnesota employment record
+
+Using these annual indicators, individuals are grouped based on persistence of disconnection across years 1–5:
+
+-   **Persistently Disconnected:** Disconnected in 4 or 5 of the first 5 years
+-   **Disconnected (Broad):** Disconnected in 3 of the first 5 years
+-   **Intermittently Disconnected:** Disconnected in 1–2 of the first 5 years
+-   **Consistently Attached:** Disconnected in 0 of the first 5 years
+
+These categories emphasize sustained labor market attachment or detachment rather than point-in-time outcomes.
+
+**1.4 Regional Location of Not Meaningful Employment**
+
+For years in which individuals are categorized as **not meaningfully attached to the workforce**, employment location is further classified as: - Within Northwest Minnesota - Outside Northwest Minnesota (elsewhere in Minnesota) - Both (simultaneous employment inside and outside the region)
+
+This classification allows identification of regional underemployment versus regional disengagement.
+
+**1.5 Employment Intensity and Job Holding**
+
+For each individual and each year (years 1–5), the following employment intensity measures are constructed: - Number of distinct employers during the year - Indicator for multiple job holding (two or more employers)
+
+These measures are used to distinguish underemployment from precarious or fragmented employment.
+
+<br>
+
+## Step 2: Descriptive and Summary Statistics
+
+**2.1 Distribution of Workforce Disconnection**
+
+Summary statistics are produced to describe:
+
+-   The proportion of non-college graduates in each workforce disconnection category
+-   Differences in persistence and intermittency of disconnection
+
+This establishes the overall scope and severity of workforce disconnection in early adulthood.
+
+**2.2 Regional Attachment and Job Structure**
+
+Among individuals experiencing workforce disconnection, summary statistics examine:
+
+-   The location of not meaningful employment (within region, outside region, both)
+-   Average and median number of employers per year
+-   Prevalence of multiple job holding
+
+These summaries clarify whether disconnection reflects local underemployment, out-of-region work, or fragmented employment patterns.
+
+<br>
+
+## Step 3: Relationship Between Individual Characteristics and Disconnection Trajectories
+
+**3.1 Variables of Interest**
+
+The analysis examines associations between workforce disconnection categories and key individual characteristics, including:
+
+-   Demographics
+
+    -   `RaceEthnicity`
+
+    -   `economic.status`
+
+    -   `SpecialEdStatus`
+
+    -   `Gender`
+
+-   High school characteristics
+
+    -   `Dem_Desc`
+    -   `avg.unemp.rate`
+    -   `avg.wages.pct.state`
+
+-   High school academics
+
+    -   `cte.achievement`
+
+    -   `total.cte.courses.taken`
+
+    -   `MCA.M`
+
+    -   `pseo.participant`
+
+-   Post-secondary
+
+    -   `attended.ps`
+
+**3.2 Analytic Approach**
+
+-   Categorical variables are examined using cross-tabulations and measures of association (e.g., Cramer’s V).
+-   Continuous variables are examined using ANOVA.
+-   Interpretation emphasizes substantive differences and patterns rather than statistical significance alone.
+
+**3.3 Stratified and Comparative Analyses**
+
+Where sample sizes permit, additional analyses compare: - Persistently disconnected versus intermittently disconnected individuals - Individuals disconnected within the region versus outside the region - Individuals who transition into meaningful workforce participation versus those who do not
+
+These comparisons help identify which characteristics are associated with stability, recovery, and regional retention.
+
+<br>
+
+## Framing and Interpretation
+
+This methodology prioritizes a trajectory-based understanding of workforce participation, recognizing that early-career labor market experiences are dynamic rather than static. By combining persistence measures, regional employment location, and job-holding intensity, the analysis aims to provide actionable insights for workforce development and labor force planning in Northwest Minnesota.
+
+<br>
+
+# Data prep
+
+## Step 1: Analytic population
+
+The first step is filtering for our population;
+
+-   `ps.grad` = "No"
+
+```{r}
+analytic.pop <- master.original %>%
+  filter(ps.grad == "No",
+         grad.year.5 != "After 2023") 
+
+kable(head(analytic.pop))
+kable(names(analytic.pop))
+```
+
+## Step 2: Identify Workforce State for 5 Years After Formal Education
+
+Next, we need to pull out all the individuals in which we have five years of workforce categories after they either graduate from high school or the last year in which they exited post-secondary attendance.
+
+After that, we will categorize their workforce participation state into the following;
+
+-   Meaningful WF - NW
+-   Meaningful WF - MN
+-   Not meaningful WF
+-   No MN emp record.
+
+I already created the annual workforce participation states for every individuals one year after graduation through 15 years after graduation. I will bring that list in and filter it by our analytic population.
+
+```{r}
+annual.wf.states <- read_csv("Data/SLEDS/Masters/States/annual-seven-states.csv") %>%
+  select(PersonID, grad.year, states) %>%
+  mutate(grad.year = fct_relevel(grad.year, "grad.year.0", "grad.year.1", "grad.year.2", "grad.year.3", "grad.year.4", "grad.year.5", "grad.year.6", "grad.year.7", "grad.year.8", "grad.year.9", "grad.year.10", "grad.year.11", "grad.year.12", "grad.year.13", "grad.year.14", "grad.year.15")) 
+
+no_ps_attendance <- analytic.pop %>%
+  filter(attended.ps == "No") %>%
+  select(PersonID) %>%
+  left_join(annual.wf.states, by = "PersonID") %>%
+  filter(states != "After 2023",
+         states != "Attending ps",
+         grad.year %in% c("grad.year.1", "grad.year.2", "grad.year.3", "grad.year.4", "grad.year.5")) %>%
+  group_by(PersonID) %>%
+  mutate(n = n()) %>%
+  ungroup() %>%
+  filter(n == 5) %>%
+  mutate(states = as_factor(states))
+
+last_ps_attendance <- analytic.pop %>%
+  filter(attended.ps == "Yes") %>%
+  select(PersonID) %>%
+  left_join(annual.wf.states, by = "PersonID") %>%
+  filter(states != "After 2023") %>%
+  mutate(numeric.grad.year = str_sub(grad.year, -2, -1),
+         numeric.grad.year = str_replace(numeric.grad.year, "\\.", ""),
+         numeric.grad.year = as.integer(numeric.grad.year)) %>%
+  filter(states == "Attending ps") %>%
+  group_by(PersonID) %>%
+  summarize(last_ps_year = max(numeric.grad.year, na.rm = TRUE)) %>%
+  ungroup() 
+
+ps_attendance <- annual.wf.states %>%
+  right_join(last_ps_attendance, by = "PersonID") %>%
+  filter(states != "After 2023") %>%
+  mutate(numeric.grad.year = str_sub(grad.year, -2, -1),
+         numeric.grad.year = str_replace(numeric.grad.year, "\\.", ""),
+         numeric.grad.year = as.integer(numeric.grad.year),
+         final.year = last_ps_year + 5) %>%
+  group_by(PersonID) %>%
+  filter(numeric.grad.year <= final.year,
+         numeric.grad.year > last_ps_year) %>%
+  mutate(n = n()) %>%
+  ungroup() %>%
+  filter(n == 5) %>%
+  select(PersonID, grad.year, states, n)
+
+master.annual.wf.five.year.states <- ps_attendance %>%
+  rbind(no_ps_attendance) %>%
+  mutate(states = str_replace(states, "Not meaningful, not attending ps", "Not meaningful"),
+         states = str_replace(states, "No MN emp record, not attending ps", "No MN emp record"),
+         states = ifelse(states %in% c("Meaningful emp County", "Meaningful emp EDR"), "Meaningful emp region", states),
+         states = fct_relevel(states, "Meaningful emp region", "Meaningful emp MN", "Not meaningful", "No MN emp record")) %>%
+  select(-n) %>%
+  group_by(PersonID) %>%
+  arrange(grad.year) %>%
+  mutate(year.after.exit = seq(n())) %>%
+  ungroup()
+
+
+kable(head(master.annual.wf.five.year.states))
+
+kable(names(master.annual.wf.five.year.states))
+
+```
+
+We now have a dataset consisting of `r comma(nrow(master.annual.wf.five.year.states))` individuals that meet the criteria that we want to examine along with their workforce categories from 1 to 5 years after exiting formal education.
+
+<br>
+
+## Step 3: Workforce Disconnection Indicators
+
+Next we add another category to determine the level of disconnection, if any, for each individual. Disconnected is defined as any individual that was categorized as not having meaningful workforce participation or no Minnesota employment record in a given year one through five years after exiting formal education.
+
+The level of disconnection is defined as the following;
+
+-   **Persistently Disconnected:** Disconnected in 4 or 5 of the first 5 years
+-   **Broadly Disconnected:** Disconnected in 3 of the first 5 years
+-   **Intermittently Disconnected:** Disconnected in 1–2 of the first 5 years
+-   **Consistently Attached:** Disconnected in 0 of the first 5 years
+
+```{r}
+disconnected.level <- master.annual.wf.five.year.states %>%
+  mutate(disconnected = ifelse(states %in% c("Not meaningful", "No MN emp record"), "Disconnected", "Attached"),
+         disconnected = as.factor(disconnected)) %>%
+  group_by(PersonID, disconnected) %>%
+  summarize(n = n()) %>%
+  ungroup() %>%
+  complete(PersonID, disconnected, fill = list(n = 0)) %>%
+  filter(disconnected == "Disconnected") %>%
+  mutate(disconnected.cat = ifelse(n == 0, "Consistently attached",
+                                   ifelse(n %in% c(1,2), "Intermittently disconnected",
+                                          ifelse(n == 3, "Broadly disconnected",
+                                                 ifelse(n %in% c(4,5), "Persistently disconnected", "A")))),
+         disconnected.cat = fct_relevel(disconnected.cat, "Consistently attached", "Intermittently disconnected", "Broadly disconnected", "Persistently disconnected"))
+
+kable(names(disconnected.level))
+kable(head(disconnected.level))
+```
+
+The dataset now has `r comma(nrow(disconnected.level))` individuals that did not graduate college AND have 5 years of workforce categories immediately after exiting formal education categorized by workforce disconnection levels.
+
+## **Step 4 & 5: Regional Location of Not Meaningful Employment**
+
+For years in which individuals are categorized as **not meaningfully attached to the workforce**, employment location is further classified as: - Within Northwest Minnesota - Outside Northwest Minnesota (elsewhere in Minnesota) - Both (simultaneous employment inside and outside the region)
+
+This classification allows identification of regional underemployment versus regional disengagement.
+
+The population of individuals we need are the following;
+
+-   Did not graduate college
+-   For each individual categorize whether they had not meaningful workforce participation in the region, not in the region, or both.
+
+We will use the `master.annual.wf.five.year.states` dataset as the starting point. We will have to have the year they graduated high school so when I match up employment records I'm only using employment records for the first 5 years after exiting formal education.
+
+```{r}
+hs.grad.year <- read_csv("Data/SLEDS/K12 Enrollment/K12Enrollment-master.csv")
+
+analytic.pop.annual.wf.states.hs.grad.year <- master.annual.wf.five.year.states %>%
+  left_join(hs.grad.year[,c(1,8)], by = "PersonID")  %>%
+  rename(after.ed.year = grad.year.x,
+         hs.grad.year = grad.year.y) %>%
+  mutate(numeric.after.ed.year = str_sub(after.ed.year, -2, -1),
+         numeric.after.ed.year = str_replace(numeric.after.ed.year, "\\.", ""),
+         numeric.after.ed.year = as.integer(numeric.after.ed.year),
+         emp.year = hs.grad.year + numeric.after.ed.year) 
+  
+kable(head(analytic.pop.annual.wf.states.hs.grad.year))
+
+kable(names(analytic.pop.annual.wf.states.hs.grad.year))
+```
+
+Now we need to bring in the employment data for Northwest graduates and then filter for PersonID that are in the newly created dataset. The columns we are going to keep from the employment dataset are the following;
+
+-   PersonID: Identifies the graduate from Northwest Minnesota
+-   TimeID: Last day of fiscal quarter
+-   EmploymentOrganizationID: An internal identification for each employer.
+-   EmployeeQuarterlyHoursWorked: The total number of hours worked by an employee at an employer’s location during a specific calendar quarter
+-   EmployeeQuarterlyWages: The total wages earned by an employee at an employer’s location during a specific calendar quarter
+-   EmployeeTenure: The total number of quarters a worker has been employeed by an organization at a specific location, up to an including the current calendar quarter
+-   CountyName: The name of the county corresponding to the County and MNCounty Codes for this Location.
+
+```{r}
+employment.original <- read_csv("Data/SLEDS/Employment/Employment-Northwest.csv") %>%
+  drop_na(PersonID)
+
+emp.year <- employment.original %>%
+  filter(!is.na(TimeID)) %>%
+  mutate(emp.year = str_sub(TimeID, 1, 4),
+         emp.year = as.integer(emp.year),
+         quarter = str_sub(TimeID, 5,6),
+         quarter = ifelse(quarter == "03", 1,
+                          ifelse(quarter == "06", 2,
+                                 ifelse(quarter == "09", 3,
+                                        ifelse(quarter == "12", 4, 0))))) %>%
+  select(PersonID, EmploymentOrganizationID, EmployeeQuarterlyHoursWorked, EmployeeTenure, CountyName, emp.year, quarter) %>%
+  mutate(CountyName = str_replace(CountyName, " County", ""),
+         CountyName = str_replace(CountyName, " County", ""),
+         CountyName = str_replace(CountyName, "Saint Louis", "St. Louis"),
+         CountyName = str_replace(CountyName, "City of Duluth", "St. Louis"),
+         CountyName = str_replace(CountyName, "City of Minneapolis", "Hennepin"),
+         CountyName = str_replace(CountyName, "City of St. Paul", "Ramsey"),
+         CountyName = str_replace(CountyName, "Shakopee Mdewakanton Community", "Scott"),
+         CountyName = str_replace(CountyName, "White Earth Tribal Counci", "Mahnomen")) %>%
+  left_join(counties.regions.1[,c(1,2,10)], by = c("CountyName" = "Name"))
+
+not.meaningful.pop.emp.year <- analytic.pop.annual.wf.states.hs.grad.year %>%
+  filter(states == "Not meaningful") %>%
+  select(PersonID, emp.year)
+
+not.meaningful.emp.quarter <- not.meaningful.pop.emp.year %>%
+  left_join(emp.year, by = c("PersonID", "emp.year")) %>%
+  mutate(project.pr = ifelse(is.na(project.pr), "Unclassified", as.character(project.pr)),
+         in_region = (project.pr == "Northwest"),
+         unclassified_region = (project.pr == "Unclassified"),
+         out_region = c(!in_region & !unclassified_region)) %>%
+  group_by(PersonID, emp.year, quarter) %>%
+  summarise(n.emp = n(),
+         any_in_quarter = any(in_region, na.rm = TRUE),
+         any_out_quarter = any(out_region, na.rm = TRUE),
+         any_unclassified_quarter = any(unclassified_region, na.rm = TRUE),
+         any_mixed_qtr =  (sum(c(any_in_quarter, any_out_quarter, any_unclassified_quarter), na.rm = TRUE) >= 2)) %>%
+  ungroup()
+
+not.meaningful.emp.annual <- not.meaningful.emp.quarter %>%
+  group_by(PersonID, emp.year) %>%
+  summarize(multiple_emp_same_quarter = any(n.emp > 1),
+            max_emp_in_qtr = max(n.emp),
+            any_in_region = any(any_in_quarter, na.rm = TRUE),
+            any_out_region = any(any_out_quarter, na.rm = TRUE),
+            any_unclassified_region = any(any_unclassified_quarter, na.rm = TRUE),
+            any_mixed_region = any(any_mixed_qtr, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(region_location_year = case_when(any_in_region & !any_out_region & !any_unclassified_region ~ "in_only", !any_in_region & any_out_region & !any_unclassified_region ~ "out_only", !any_in_region & !any_out_region & any_unclassified_region  ~ "unclassified_only", TRUE ~ "mixed" )) %>%
+  mutate(
+    mixed_type = case_when(
+      region_location_year != "mixed" ~ NA_character_,
+      any_in_region & any_out_region & !any_unclassified_region ~ "in_out",
+      any_in_region & any_unclassified_region & !any_out_region ~ "in_unclassified",
+      any_out_region & any_unclassified_region & !any_in_region ~ "out_unclassified",
+      any_in_region & any_out_region & any_unclassified_region  ~ "in_out_unclassified"
+    ),
+    both_structure = case_when(region_location_year != "mixed" ~ NA_character_,
+                               any_mixed_region ~ "simultaneous",
+                               !any_mixed_region ~ "sequential",
+                               TRUE ~ NA_character_)) %>%
+  select(-any_in_region, -any_out_region, -any_unclassified_region, - any_mixed_region)
+
+
+kable(head(not.meaningful.emp.annual))
+
+kable(names(not.meaningful.emp.annual))
+```
+
+We have created a dataset with `r comma(nrow(not.meaningful.emp.annual))` individuals that do not have meaningful workforce participation for any given year up to 5 years after graduating high school that also provides if they had multiple employers in one quarter, the max number of different employers in one quarter for that employment year, and whether the employer was located in the region, outside the region, unclassified, or a mixture of these categories. Another column further refines the "mixed" category into whether it was sequential - meaning the mix occurred in separate quarters - or simultaneous - meaning there was a mix within the same quarter.
+
+Next, we will piece this back together with the entire analytic population and create a complete annual workforce state for all individuals that did not complete post-secondary and has 5 years of workforce categories after graduating high school.
+
+```{r}
+Master.not.meaningful <- not.meaningful.emp.annual %>%
+  left_join(hs.grad.year[,c(1, 8)], by = "PersonID") %>%
+  rename(hs.grad.year = grad.year) %>%
+  mutate(grad.year = emp.year - hs.grad.year,
+         grad.year = paste("grad.year.", grad.year, sep = "")) %>%
+  complete(PersonID, grad.year) %>%
+  mutate(grad.year = fct_relevel(grad.year, "grad.year.0", "grad.year.1", "grad.year.2", "grad.year.3", "grad.year.4", "grad.year.5", "grad.year.6", "grad.year.7", "grad.year.8", "grad.year.9", "grad.year.10", "grad.year.11", "grad.year.12", "grad.year.13", "grad.year.14", "grad.year.15"))
+
+
+Master.annual.wf.states.disconnected <- master.annual.wf.five.year.states %>%
+  left_join(Master.not.meaningful, by = c("PersonID", "grad.year")) %>%
+  unite("wf.states.refined",
+        states, region_location_year, mixed_type, both_structure,
+        sep = "_",
+        na.rm = TRUE) %>%
+  mutate(year.after.exit = paste("after.ed.", year.after.exit, sep = "")) %>%
+  select(PersonID, year.after.exit, wf.states.refined) %>%
+  pivot_wider(names_from = year.after.exit, values_from = wf.states.refined) %>%
+  left_join(disconnected.level[,c(1,4)], by = "PersonID")
+
+kable(head(Master.annual.wf.states.disconnected)) 
+
+kable(names(Master.annual.wf.states.disconnected))
+```
+
+Okay, now I need to bring this all together.
+
+```{r}
+master <- analytic.pop %>%
+  right_join(Master.annual.wf.states.disconnected, by = "PersonID") %>%
+  mutate(disconnected.cat = fct_relevel(disconnected.cat, "Consistently attached", "Intermittently disconnected", "Broadly disconnected", "Persistently disconnected"))
+
+kable(head(master))
+
+kable(names(master))
+```
+
+The data set has `r comma(nrow(master))` individuals in it. These individuals did not complete post-secondary and had workforce categories for 5 years after exiting formal education.
+
+<br>
+
+# Descriptive analysis
+
+## **Distribution of Workforce Disconnection**
+
+Summary statistics are produced to describe: - The proportion of non-college graduates in each workforce disconnection category - Differences in persistence and intermittency of disconnection
+
+This establishes the overall scope and severity of workforce disconnection in early adulthood.
+
+Let's first examine the disconnected categories among these individuals. The level of disconnection is defined as the following;
+
+-   **Persistently Disconnected:** Disconnected in 4 or 5 of the first 5 years
+-   **Disconnected (Broad):** Disconnected in 3 of the first 5 years
+-   **Intermittently Disconnected:** Disconnected in 1–2 of the first 5 years
+-   **Consistently Attached:** Disconnected in 0 of the first 5 years
+
+The chart below shows why it's so important to understand this particular group.
+
+-   Over half of non-college grads are disconnected from the labor force for at least 4 of the first five years after exiting formal education.
+-   The lowest percentage of non-college grads are consistently attached - 12%.
+
+Among Northwest Minnesota's non-college graduates from the 2008–2018 high school graduation cohorts, workforce disconnection during the first five years after high school is strikingly common and predominantly persistent. Only 10.6% of non-college graduates are consistently attached to the workforce across all five years, while the vast majority experience some form of disconnection. The largest single group — 58.2% — are persistently disconnected, meaning they are absent from meaningful workforce participation in four or five of the first five years after high school. An additional 11.8% are broadly disconnected (three of five years) and 19.4% are intermittently disconnected (one or two of five years). Taken together, more than two-thirds of non-college graduates in Northwest Minnesota experience disconnection in three or more of their first five post-high school years, pointing to a workforce attachment challenge that is both widespread and deeply entrenched for this population.
+
+```{r}
+data <- master %>%
+  group_by(disconnected.cat) %>%
+  summarize(n = n()) %>%
+  ungroup() %>%
+  mutate(pct = n / sum(n),
+         data_id = seq(n()),
+         disconnected.cat = fct_relevel(disconnected.cat, "Consistently attached", "Intermittently disconnected", "Broadly disconnected",  "Persistently disconnected"))
+
+plot <- ggplot(data, aes(disconnected.cat, pct, fill = disconnected.cat)) +
+  geom_col_interactive(position = "dodge", aes(data_id = data_id, tooltip = paste(disconnected.cat, "\nN: ", comma(n), "\n%: ", percent(pct, accuracy = .1), sep = ""))) +
+  geom_label(aes(label = percent(pct, accuracy = .1)), show.legend = FALSE, color = "black", size = 5, position = position_dodge(width = .9)) +
+  labs(x="", y = "", color="", title = "Percent share of non-college grads,\n2008 - 2018 high school grads")+
+  scale_y_continuous(labels=scales::percent)+
+  theme_bar+
+  scale_fill_manual(values = brewer.pal(n = 5, "RdYlBu"),
+                    guide = guide_legend(ncol = 3)) +
+  theme(legend.position = "bottom",
+        text = element_text(size = 16),
+        axis.text.x = element_text(angle = 25, hjust = .9))
+
+
+girafe(ggobj = plot, width_svg = 8, height_svg = 8) %>%
+  girafe_options(opts_selection(type = "none"),
+                 opts_sizing(rescale = FALSE))      
+
+
+```
+
+<br>
+
+## **Regional Attachment and Job Structure**
+
+Among individuals experiencing workforce disconnection, summary statistics examine: - The location of not meaningful employment (within region, outside region, both) - Average and median number of employers per year - Prevalence of multiple job holding
+
+These summaries clarify whether disconnection reflects local underemployment, out-of-region work, or fragmented employment patterns.
+
+Let's start with the distribution of the various workforce states with the newly defined categories within "Not meaningful" but not all of them because it will get too messy. Let's first do the following categories;
+
+1.  Attending ps
+2.  Meaningful emp region
+3.  Meaningful emp MN
+4.  Not meaningful
+    1.  In only
+    2.  Out only
+    3.  Unclassified only
+    4.  Mixed
+5.  No MN emp record
+
+The distribution of workforce participation among non-college graduates shifts notably across the first five years after formal education. A few key trends stand out.
+
+**The "No MN employment record" category dominates and grows over time.** This is consistently the largest single category across all five years, increasing from 32.9% at year 1 to 40.7% by year 5. While the North Dakota border effect likely accounts for some of this, the steady growth over time is a concerning trend that warrants attention.
+
+**Regional meaningful employment is stable.** The share achieving meaningful employment within the region holds relatively steady across all five years (20.8% to 25.7%), suggesting that those who attach to the regional workforce tend to remain attached rather than cycling in and out.
+
+**Marginal in-region employment declines sharply.** The "not meaningful - in only" category starts as the second largest group at year 1 (24.9%) but drops to 13.9% by year 5, suggesting individuals in marginal employment are either transitioning into meaningful regional employment or drifting out of the MN labor market entirely over time.
+
+**Meaningful MN employment outside the region grows modestly** (5.8% to 9.7%), consistent with earlier findings that some non-completers find stable employment elsewhere in Minnesota as their careers develop.
+
+Overall, the trajectory points to a gradual sorting process during the first five years — a modest share stabilizes into regional meaningful employment, while a growing share drifts further from the Minnesota labor market entirely.
+
+```{r}
+wf.states.factors <- c("Attending ps", "Meaningful emp region", "Meaningful emp MN", "Not meaningful_in_only", "Not meaningful_out_only", "Not meaningful_unclassified_only", "Not meaningful - mixed", "No MN emp record")
+
+data <- Master.annual.wf.states.disconnected %>%
+  select(PersonID:after.ed.5) %>%
+  pivot_longer(names_to = "grad.year", values_to = "wf.states", 2:ncol(.)) %>%
+  mutate(wf.states = ifelse(wf.states %in% c("Not meaningful_mixed_in_out_simultaneous", "Not meaningful_mixed_in_out_sequential", "Not meaningful_mixed_in_unclassified_simultaneous" , "Not meaningful_mixed_in_out_unclassified_simultaneous", "Not meaningful_mixed_out_unclassified_simultaneous", "Not meaningful_mixed_out_unclassified_sequential", "Not meaningful_mixed_in_unclassified_sequential", "Not meaningful_mixed_in_out_unclassified_sequential"), "Not meaningful - mixed", wf.states),
+         wf.states = fct_relevel(wf.states, wf.states.factors)) %>%
+  group_by(grad.year, wf.states) %>%
+  summarize(n = n()) %>%
+  ungroup() %>%
+  group_by(grad.year) %>%
+  mutate(pct = n / sum(n)) %>%
+  ungroup() %>%
+  mutate(data_id = seq(n()))
+
+
+plot <- ggplot(data, aes(wf.states, pct, fill = wf.states)) +
+  facet_wrap(~grad.year, ncol = 2) +
+  geom_col_interactive(position = "dodge", aes(data_id = data_id, tooltip = paste(grad.year, "\nWorkforce category: ", wf.states, "\nN: ", comma(n), "\nPercent: ", percent(pct, accuracy = .1), sep = ""))) +
+  geom_label(aes(label = percent(pct, accuracy = .1)), show.legend = FALSE, color = "white", size = 5, position = position_dodge(width = .9)) +
+  labs(x="", y = "", color="", title = "Percent share of total building construction establishments")+
+  scale_y_continuous(labels=scales::percent)+
+  theme_bar+
+  scale_fill_manual(values = c("#8c510a", "#bf812d", "#dfc27d", "#c7eae5", "#80cdc1", "#35978f", "#01665e", "black"),
+                    guide = guide_legend(ncol = 3)) +
+  theme(legend.position = "none",
+        text = element_text(size = 16),
+        axis.text.x = element_text(angle = 25, hjust = .9))
+
+
+girafe(ggobj = plot, width_svg = 10, height_svg = 10) %>%
+  girafe_options(opts_selection(type = "none"),
+                 opts_sizing(rescale = FALSE))      
+
+```
+
+Let's dive a bit deeper into the disconnected group - not meaningful workforce participation and individuals with No MN employment. The chart below shows the percentage of disconnected individuals (not meaningful, no MN employment record) that fall into each of the refined categories.
+
+The following chart provides a more granular look at the composition of non-meaningful workforce participation across the first five years after formal education, breaking down where individuals are working when they are employed but not reaching the meaningful employment threshold.
+
+A few key patterns stand out:
+
+-   **"No MN employment record" dominates and grows steadily**, rising from 44.9% at year 1 to 63.1% by year 5. This is by far the largest and fastest-growing category, reinforcing the earlier chart findings and the concern about long-term labor market detachment or cross-border employment
+-   **In-region only ("not meaningful_in_only") is the largest employment subcategory but declines sharply** — from 33.9% at year 1 to 21.5% at year 5. This suggests that marginal in-region workers are either transitioning into meaningful employment or drifting out of MN records entirely over time
+-   **Out-of-region not meaningful employment ("not meaningful_out_only") remains small and relatively stable** across all five years (8.4% to 8.0%), suggesting limited movement into out-of-region marginal employment
+-   **Mixed employment patterns — working both inside and outside the region — are modest throughout** (combined simultaneous and sequential mixed categories account for roughly 10–11% at year 1 declining to about 7% by year 5), suggesting most individuals work within a single geographic context rather than straddling regional boundaries
+-   **The sequential mixed categories are consistently smaller than simultaneous mixed categories**, indicating that when individuals do work in multiple locations, it tends to happen within the same year rather than shifting between years
+
+Overall, this table reinforces the dominant trend — over the first five years, non-completers increasingly either stabilize into in-region meaningful employment or disappear from Minnesota employment records entirely, with the middle ground of marginal in-region employment shrinking steadily over time.
+
+```{r}
+refined.disconnected.factors <- c( "Not meaningful_in_only",  "Not meaningful_out_only", "Not meaningful_unclassified_only", "Not meaningful_mixed_in_out_simultaneous", "Not meaningful_mixed_in_unclassified_simultaneous", "Not meaningful_mixed_out_unclassified_simultaneous", "Not meaningful_mixed_in_out_unclassified_simultaneous","Not meaningful_mixed_in_out_sequential", "Not meaningful_mixed_in_unclassified_sequential", "Not meaningful_mixed_out_unclassified_sequential", "Not meaningful_mixed_in_out_unclassified_sequential", "No MN emp record")
+
+data <- Master.annual.wf.states.disconnected %>%
+  select(PersonID:after.ed.5) %>%
+  pivot_longer(names_to = "grad.year", values_to = "wf.state", 2:ncol(.)) %>%
+  filter(!wf.state %in% c("Meaningful emp region", "Meaningful emp MN", "Attending ps")) %>%
+  mutate(wf.state = fct_relevel(wf.state, refined.disconnected.factors)) %>%
+  group_by(grad.year, wf.state) %>%
+  summarize(n = n()) %>%
+  ungroup() %>%
+  group_by(grad.year) %>%
+  mutate(pct = n / sum(n)) %>%
+  ungroup() %>%
+  mutate(data_id = seq(n()))
+
+write_csv(data, "Claude.csv")
+
+plot <- ggplot(data, aes(grad.year, pct, fill = wf.state)) +
+  facet_wrap(~wf.state, ncol = 2) +
+  geom_col_interactive(position = "dodge", aes(data_id = data_id, tooltip = paste(grad.year, "\nWorkforce category: ", wf.state, "\nN: ", comma(n), "\nPercent: ", percent(pct, accuracy = .1), sep = ""))) +
+  geom_label(aes(label = percent(pct, accuracy = .1)), show.legend = FALSE, color = "white", size = 5, position = position_dodge(width = .9)) +
+  labs(x="", y = "", color="", title = "Percent share of disconnected workforce states")+
+  scale_y_continuous(labels=scales::percent)+
+  theme_bar+
+  scale_fill_manual(values = brewer.pal(n = 12, "Paired"),
+                    guide = guide_legend(ncol = 3)) +
+  theme(legend.position = "none",
+        text = element_text(size = 16),
+        axis.text.x = element_text(angle = 25, hjust = .9))
+
+
+girafe(ggobj = plot, width_svg = 8, height_svg = 12) %>%
+  girafe_options(opts_selection(type = "none"),
+                 opts_sizing(rescale = FALSE))      
+```
+
+<br>
+
+## What does this tell us?
+
+The descriptive statistics paint a sobering picture of workforce attachment among Northwest Minnesota's non-college graduates in the years immediately following high school. Taken together, three broad themes emerge.
+
+**Workforce disconnection is the norm, not the exception.** Only 10.6% of non-college graduates maintain consistent workforce attachment across all five years after high school. The overwhelming majority — nearly 90% — experience some form of disconnection, with 58.2% persistently disconnected across four or five of their first five post-high school years. This rate is somewhat elevated compared to other Minnesota regions (which ranged from 40–55%), suggesting that Northwest Minnesota's labor market structure, seasonal industries, and geographic position on the North Dakota border may compound the challenges already facing this population.
+
+**The "no MN employment record" category is the dominant and growing outcome.** Across the annual snapshots, the share of non-completers with no Minnesota employment record grows steadily from 32.9% at year 1 to 40.7% by year 5, and accounts for an increasing share of the total disconnected population over time. While cross-border employment in North Dakota almost certainly accounts for a portion of this group — particularly in EDR 1 — the scale and persistence of this pattern suggests genuine labor market detachment is a meaningful driver as well. The county-level unemployment findings from the earlier analysis, which showed this group coming from lower unemployment areas, provide some support for the cross-border interpretation but do not fully explain the magnitude.
+
+**Marginal in-region employment is a transitional rather than stable state.** The share of non-completers in not meaningful but in-region employment declines sharply over the five-year window — from 33.9% at year 1 to 21.5% at year 5. This suggests that marginal in-region employment is not a stable resting point but rather a transitional state from which individuals either graduate into meaningful regional employment or drift further from the Minnesota labor market. The steady growth of the "no MN employment record" category alongside the decline in marginal in-region employment suggests the latter transition is more common than the former.
+
+**Regional meaningful employment is stable for those who achieve it.** Despite the overall picture of disconnection, the share achieving meaningful employment within the region holds relatively steady across the five-year window (20.8% to 25.7%), suggesting that regional workforce attachment — once established — tends to be durable. This is an encouraging signal for workforce development efforts focused on early career stabilization within the region.
+
+**The overall trajectory reflects a gradual sorting process.** Over the first five years after high school, non-college graduates in Northwest Minnesota sort into two broad groups — a minority who stabilize into meaningful regional employment and a growing majority who drift further from Minnesota's labor market. The window between year 1 and year 3 appears to be the critical period during which this sorting occurs, making early intervention particularly important for this population.
+
+<br>
+
+# Relationship Between Individual Characteristics and Disconnection Trajectories
+
+The next sections focus on exploring what relationships exist between individual characteristics and the different ways in which disconnect from the workforce is measured - disconnected levels and refined disconnected categories.
+
+The variables that we will be including in this analysis are the following;
+
+-   Demographics
+    -   `RaceEthnicity`
+    -   `economic.status`
+    -   `SpecialEdStatus`
+    -   `Gender`
+-   High school characteristics
+    -   `Dem_Desc`
+    -   `avg.unemp.rate`
+    -   `avg.wages.pct.state`
+-   High school academics
+    -   `cte.achievement`
+    -   `total.cte.courses.taken`
+    -   `MCA.M`
+    -   `pseo.participant`
+-   Post-secondary
+    -   `attended.ps`
+
+## Disconnection levels
+
+We will first examine the broad disconnection levels and determine if there are any strong relationships between those levels and various economic, demographic, and school performance variables. The level of disconnection is defined as the following;
+
+-   **Persistently Disconnected:** Disconnected in 4 or 5 of the first 5 years
+-   **Disconnected (Broad):** Disconnected in 3 of the first 5 years
+-   **Intermittently Disconnected:** Disconnected in 1–2 of the first 5 years
+-   **Consistently Attached:** Disconnected in 0 of the first 5 years
+
+For categorical variables analysis will be conducted using Cramer's V-test and continuous variables will be tested using ANOVA.
+
+<br>
+
+### Demographic variables
+
+#### Summary
+
+Across all four demographic variables, associations with disconnection persistence are statistically significant but negligible-to-weak in practical terms. No demographic variable strongly predicts whether a non-college completer will be persistently disconnected from the workforce during their first five years after high school.
+
+Key takeaways:
+
+-   **Gender** is the strongest demographic predictor (V = 0.086), with females substantially more likely to be persistently disconnected (61.8% vs. 55.6%) and males more likely to achieve consistent workforce attachment. This is consistent with the male-dominated industry composition of the NW region and reinforces findings from the earlier point-in-time analysis
+-   **Race/ethnicity** shows negligible overall association (V = 0.044) but notable distributional differences — Asian/PI, Black, and Hispanic non-completers have persistent disconnection rates 10–14 percentage points higher than White students, a pattern obscured by the small cell sizes for these groups and the dominance of White students in the dataset
+-   **Special education status** produces the next largest gap in persistent disconnection (61.6% vs. 57.1%) but the overall association remains negligible (V = 0.041)
+-   **Economic status** is the weakest demographic predictor (V = 0.042), with distributions nearly identical across disconnection categories — a surprising finding given its stronger role in the point-in-time analysis at year 1
+
+Overall, the demographic variables explain very little of the variation in disconnection persistence, suggesting that the drivers of sustained workforce detachment among non-college completers lie more in high school experiences and labor market context than in demographic characteristics alone. This is an important finding for policy — it suggests that workforce disconnection among non-college completers is not primarily a demographic phenomenon but a structural one.
+
+<br>
+
+#### `economic.status`
+
+Cramér's V is negligible (0.042), meaning economic status explains very little variation in disconnection persistence. Key patterns:
+
+-   Persistently disconnected rates are nearly identical between non-disadvantaged (58.7%) and disadvantaged (57.7%) students
+-   Disadvantaged students are slightly less likely to be consistently attached (9.6% vs. 11.6%)
+-   Overall, economic status shows almost no independent relationship with how persistently disconnected non-college completers are during their first five years after high school
+
+*Tracking note: Negligible predictor of disconnection persistence.*
+
+```{r}
+tab_xtab(var.row = master$disconnected.cat, var.col = master$economic.status, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+<br>
+
+#### `RaceEthnicity`
+
+Cramér's V is negligible (0.044), meaning race/ethnicity explains very little variation in disconnection persistence despite being statistically significant. Key patterns:
+
+-   White and American Indian non-completers have the highest rates of consistent attachment (11.1% and 9.0% respectively), while Black, Hispanic, and Asian/PI students are notably lower (5.0%, 6.6%, and 7.0%)
+-   Persistent disconnection is substantially higher among Asian/PI (69.9%), Black (70.3%), and Hispanic (71.2%) non-completers compared to White (57.1%) and American Indian (59.1%) students
+-   Small cell sizes for non-White groups warrant caution in interpretation
+-   Despite the meaningful distributional differences, the overall Cramér's V remains negligible, driven largely by the dominance of the White population in the dataset
+
+*Tracking note: Negligible overall association, but notable distributional differences for smaller racial and ethnic groups — particularly the 10-14 percentage point higher persistent disconnection rates for Asian/PI, Black, and Hispanic non-completers compared to White students.*
+
+```{r}
+tab_xtab(var.row = master$disconnected.cat, var.col = master$RaceEthnicity, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+<br>
+
+#### `SpecialEdStatus`
+
+Cramér's V is negligible (0.041), meaning special education status explains very little variation in disconnection persistence. Key patterns:
+
+-   Special education students have a notably higher rate of persistent disconnection (61.6% vs. 57.1%), the largest difference seen across demographic variables so far
+-   Non-special ed students are slightly more likely to be consistently attached (11.0% vs. 9.3%) and intermittently disconnected (19.9% vs. 17.8%)
+-   Despite these directional differences, the overall association remains negligible, suggesting special education status shapes the degree of disconnection more than its presence or absence
+
+*Tracking note: Negligible predictor, but the 4.5 percentage point gap in persistent disconnection is the largest demographic difference seen so far.*
+
+```{r}
+tab_xtab(var.row = master$disconnected.cat, var.col = master$SpecialEdStatus, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+<br>
+
+#### `Gender`
+
+Cramér's V is weak but the strongest demographic predictor seen so far (0.086). Key patterns:
+
+-   Females have a notably higher rate of persistent disconnection (61.8% vs. 55.6%), a 6.2 percentage point gap that is the largest difference observed across any demographic variable
+-   Males are more likely to be consistently attached (12.5% vs. 8.0%) and intermittently disconnected (20.4% vs. 17.9%), suggesting males are more likely to find at least some foothold in the workforce during the first five years
+-   This aligns with the earlier point-in-time analysis where males consistently showed higher rates of regional meaningful employment, likely reflecting the male-dominated industries prevalent in NW Minnesota
+-   The gender gap in persistent disconnection is particularly notable given that economic status and special education status — often assumed to be strong drivers of disconnection — showed weaker associations
+
+*Tracking note: Weak but strongest demographic predictor. Gender gap in persistent disconnection is consistent with earlier point-in-time findings.*
+
+```{r}
+tab_xtab(var.row = master$disconnected.cat, var.col = master$Gender, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+<br>
+
+### High school characteristics
+
+#### Summary
+
+Across the four high school characteristic variables, associations with disconnection persistence are statistically significant but weak in practical terms, mirroring the demographic variable findings. However, some meaningful patterns emerge that are consistent with and reinforce the earlier point-in-time analysis.
+
+Key takeaways:
+
+-   **Dem_Desc** is the strongest predictor in this group (V = 0.098) and produces the most striking single finding in the analysis so far — entirely urban non-completers have a persistent disconnection rate of 77.5%, nearly 25 percentage points above the overall rate. Town/rural mix students remain the most consistently attached group, reinforcing the rural/urban divide seen throughout the earlier analysis
+-   **Average unemployment rate** continues to show a counterintuitive pattern — persistently disconnected individuals come from lower unemployment counties — which is most likely driven by the North Dakota border effect and the "no MN emp record" ambiguity. This finding should be interpreted cautiously and flagged explicitly in any write-up
+-   **Average wages** shows a more intuitive direction — persistently disconnected individuals come from slightly lower wage counties — but the effect sizes are negligibly small and add little independent signal beyond what Dem_Desc already captures
+-   **EDR** was not included in this analysis, but the unemployment and wage findings together continue to point toward geographic labor market context as a modest but consistent contextual factor
+
+Overall, high school characteristics explain only a modest amount of variation in disconnection persistence. The dominant finding is the urban/rural divide captured by Dem_Desc, which is both the strongest predictor in this group and the most actionable — entirely urban non-completers represent a particularly high-risk subgroup warranting targeted attention. The county-level economic variables add geographic context but should be interpreted carefully given the cross-border employment ambiguity.
+
+<br>
+
+#### `Dem_Desc`
+
+Cramér's V is weak but the strongest high school characteristics variable seen so far (0.098). Key patterns:
+
+-   Entirely urban non-completers stand out dramatically — 77.5% are persistently disconnected, nearly 25 percentage points higher than the overall rate of 58.2% and the highest persistent disconnection rate of any category examined so far
+-   Entirely urban non-completers are also the least likely to be consistently attached (4.3%) or intermittently disconnected (9.8%), suggesting the urban labor market context provides the least support for workforce attachment among this population
+-   Town/rural mix students show the most favorable outcomes — the highest consistent attachment rate (12.6%) and the lowest persistent disconnection rate (52.8%) — consistent with earlier point-in-time findings where this group showed the strongest regional employment rates
+-   Entirely rural and urban/town/rural mix students fall between these extremes, tracking closer to the overall averages
+-   The stark urban/rural divide mirrors and strengthens the findings from the point-in-time analysis, where entirely urban non-completers were consistently the most disconnected group
+
+*Tracking note: Weak but strongest predictor seen so far across both demographic and high school characteristic variables. The entirely urban pattern is particularly striking and consistent.*
+
+```{r}
+tab_xtab(var.row = master$disconnected.cat, var.col = master$Dem_Desc, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+<br>
+
+#### `avg.unemp.rate`
+
+The relationship between county-level unemployment rate and disconnection persistence is statistically significant, continuing the counterintuitive pattern seen in the earlier point-in-time analysis. Key patterns:
+
+-   Persistently disconnected individuals come from counties with significantly lower average unemployment rates than all other groups, with differences of -0.232 compared to consistently attached, -0.276 compared to intermittently disconnected, and -0.223 compared to broadly disconnected
+-   Consistently attached and intermittently disconnected individuals come from the highest unemployment counties, which is the opposite of what might be expected if unemployment were driving disconnection
+-   This mirrors the earlier point-in-time finding and reinforces the cross-border employment interpretation — persistently disconnected individuals in lower unemployment counties along the North Dakota border may be employed outside Minnesota rather than genuinely detached from the labor force
+-   This is a potential flag for the "no MN emp record" ambiguity we flagged earlier — the counterintuitive direction of this relationship is likely being driven at least in part by cross-border workers being classified as disconnected
+
+*Tracking note: Statistically significant but counterintuitive direction. Likely influenced by the North Dakota border effect and the "no MN emp record" ambiguity. Interpret with caution.*
+
+```{r}
+summary <- aov(avg.unemp.rate ~ disconnected.cat, data = master)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+<br>
+
+#### `avg.wages.pct.state`
+
+The relationship between county-level wages and disconnection persistence is statistically significant but with very small effect sizes, consistent with the earlier point-in-time findings. Key patterns:
+
+-   Persistently disconnected individuals come from counties with significantly lower wages relative to the state average compared to both consistently attached and intermittently disconnected individuals, though the magnitude of differences is very small (0.007-0.008 percentage points)
+-   Consistently attached and intermittently disconnected individuals come from nearly identical wage environments, with no significant difference between them
+-   Broadly disconnected individuals fall between the other groups but do not differ significantly from any category
+-   The direction of this finding is more intuitive than the unemployment rate result — lower wage counties produce more persistently disconnected individuals — but the effect sizes are too small to be practically meaningful
+-   Unlike the unemployment rate, this variable does not show the same stark counterintuitive pattern, suggesting it is less affected by the North Dakota border effect
+
+*Tracking note: Statistically significant but negligible practical effect. More intuitive direction than unemployment rate but adds little independent signal.*
+
+```{r}
+summary <- aov(avg.wages.pct.state ~ disconnected.cat, data = master)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+<br>
+
+### High school academics
+
+#### Summary
+
+Across the three high school accomplishment variables examined, CTE engagement emerges as the dominant and most policy-relevant predictor of disconnection persistence, while academic readiness and PSEO participation add little independent signal.
+
+Key takeaways:
+
+-   **CTE achievement** and **total CTE courses taken** together provide the strongest and most consistent findings in the entire persistence analysis so far. Both variables show a clear dose-response relationship — greater CTE engagement is associated with lower persistent disconnection and higher consistent attachment at every level. The 11.8 percentage point spread in persistent disconnection rates across CTE achievement categories and the 1.25 course gap between consistently attached and persistently disconnected students represent the most practically meaningful differences observed in this analysis
+-   **MCA Math scores** show a negligible and non-linear relationship with disconnection persistence (V = 0.032), with no clear gradient across quartiles. The highest math scorers do not show the lowest disconnection rates, consistent with the earlier finding that academic proficiency among non-completers predicts out-of-region mobility rather than workforce attachment. MCA Reading and Science scores were excluded as they tell the same story as MCA Math
+-   **PSEO participation** is not a statistically significant predictor of disconnection persistence (p = 0.070, V = 0.023), confirming that its influence in the point-in-time analysis was transitional and driven largely by continued post-secondary attendance rather than any durable workforce attachment effect
+
+Overall, the high school accomplishments findings reinforce the central theme emerging across this analysis — CTE engagement is the most robust and consistent predictor of workforce attachment among non-college completers, while academic readiness measures that predict college-going and out-of-region mobility show little relationship with whether non-completers remain connected to the workforce over time.
+
+<br>
+
+#### `pseo.participant`
+
+The relationship between PSEO participation and disconnection persistence is not statistically significant (p = 0.070) and the association is negligible (V = 0.023). Key patterns:
+
+-   Distributions across disconnection categories are nearly identical between PSEO participants and non-participants, with persistent disconnection rates of 57.7% and 59.8% respectively
+-   PSEO participants are slightly more likely to be consistently attached (11.1% vs. 9.8%) but the difference is trivial
+-   This contrasts with the earlier point-in-time analysis where PSEO showed a meaningful association at year 1, driven by continued post-secondary attendance. Once that short-term effect dissipates, PSEO participation has essentially no relationship with how persistently disconnected a non-completer becomes
+-   Note that the total N is smaller here due to missing PSEO data for some individuals
+
+*Tracking note: Not a significant predictor of disconnection persistence. PSEO's earlier influence was transitional rather than durable.*
+
+```{r}
+tab_xtab(var.row = master$disconnected.cat, var.col = master$pseo.participant, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+<br>
+
+#### `cte.achievement`
+
+Cramér's V is weak (0.074) but statistically significant, and the directional pattern is the clearest and most consistent seen in the accomplishments group so far. Key patterns:
+
+-   A clear dose-response relationship exists across all disconnection categories — greater CTE engagement is associated with lower persistent disconnection and higher consistent attachment at every level
+-   Persistent disconnection rates follow a stepwise pattern: CTE concentrators/completers (54.0%), CTE participants (59.6%), and no CTE students (65.8%) — an 11.8 percentage point spread from most to least engaged
+-   Consistent attachment follows the same pattern in reverse: CTE concentrators (12.5%), CTE participants (9.7%), and no CTE students (7.5%)
+-   This mirrors and reinforces the point-in-time findings, where CTE was the most stable and policy-relevant predictor of regional workforce attachment
+-   The dose-response pattern is particularly notable — it suggests that even partial CTE engagement (participant level) provides meaningful protection against persistent disconnection compared to no CTE involvement at all
+
+*Tracking note: Weak but most consistent and policy-relevant predictor in the accomplishments group so far. The dose-response pattern across all three CTE categories is the clearest directional finding in the persistence analysis to date.*
+
+```{r}
+tab_xtab(var.row = master$disconnected.cat, var.col = master$cte.achievement, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+<br>
+
+#### `total.cte.courses.taken`
+
+The relationship between total CTE courses taken and disconnection persistence is statistically significant across all group comparisons, with a clear and consistent pattern — more CTE coursework is associated with less persistent disconnection. Key patterns:
+
+-   Every disconnection category differs significantly from every other, suggesting a true gradient relationship between CTE course-taking and workforce attachment
+-   Persistently disconnected individuals take on average 1.25 fewer CTE courses than consistently attached individuals — the largest gap in the analysis and the most practically meaningful difference seen in the accomplishments group
+-   The stepwise pattern holds across all comparisons: consistently attached students take the most CTE courses, followed by intermittently disconnected, broadly disconnected, and persistently disconnected students in descending order
+-   This reinforces the CTE achievement findings — both the categorical measure and the continuous course count tell the same story, providing strong convergent evidence that CTE engagement is the most robust high school-level predictor of workforce attachment among non-college completers
+
+*Tracking note: Strong convergent evidence with CTE achievement. The gradient across all four disconnection categories makes this one of the clearest findings in the persistence analysis.*
+
+```{r}
+summary <- aov(total.cte.courses.taken ~ disconnected.cat, data = master)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+<br>
+
+#### `MCA.M`
+
+Cramér's V is negligible (0.032), meaning math proficiency explains very little variation in disconnection persistence despite being statistically significant. Key patterns:
+
+-   Persistent disconnection rates do not follow a clear linear pattern across quartiles — quartile 1 (lowest, 57.9%), quartile 2 (55.0%), quartile 3 (54.0%), and quartile 4 (highest, 58.8%) — with the highest math scorers actually showing slightly higher persistent disconnection than middle quartiles
+-   Consistent attachment is highest in quartile 3 (12.9%) rather than quartile 4, which is counterintuitive but consistent with the earlier point-in-time finding that higher academic proficiency among non-completers tends to point toward out-of-region employment rather than regional attachment
+-   Unlike CTE engagement, math proficiency does not show a clear dose-response relationship with disconnection persistence, suggesting academic readiness is not a strong driver of whether non-completers remain attached to the workforce
+-   This contrasts with the point-in-time analysis where MCA scores strengthened over time — here, when looking at persistence across five years, the signal largely disappears
+
+*Tracking note: Negligible predictor of disconnection persistence. The absence of a linear pattern is notable and consistent with earlier findings that academic proficiency predicts mobility rather than regional attachment.*
+
+```{r}
+tab_xtab(var.row = master$disconnected.cat, var.col = master$MCA.M, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+<br>
+
+### Post-secondary
+
+#### `attended.ps`
+
+Cramér's V is weak (0.080) but statistically significant, and the pattern is clear and intuitive. Key patterns:
+
+-   Non-completers who never attended post-secondary are substantially more likely to be persistently disconnected (61.0% vs. 53.5%), a 7.5 percentage point gap that is one of the larger differences seen in the persistence analysis
+-   Those who attended post-secondary — even without completing — are more likely to be consistently attached (12.7% vs. 9.4%) and intermittently disconnected (21.7% vs. 18.0%), suggesting that any post-secondary exposure provides some durable protection against persistent workforce disconnection
+-   This contrasts with the point-in-time analysis where attended.ps showed a massive association at year 1 (V = 0.639) that nearly disappeared by year 10 (V = 0.032). In the persistence framework, a modest but real relationship remains, suggesting that post-secondary attendance does provide some lasting — if limited — workforce attachment benefit even for non-completers
+-   The finding is notable given that PSEO participation showed no significant relationship with persistence — it appears that actual post-secondary attendance matters more than early college exposure alone
+
+*Tracking note: Weak but meaningful predictor. The durable association contrasts with the near-complete dissipation seen in the point-in-time analysis and suggests post-secondary attendance provides modest long-term workforce attachment benefits even without completion.*
+
+```{r}
+tab_xtab(var.row = master$disconnected.cat, var.col = master$attended.ps, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+<br>
+
+### Summary of relationships
+
+Across all variable groups, the persistence analysis reveals a consistent and sobering picture of workforce disconnection among Northwest Minnesota's non-college graduates. The findings both reinforce and extend the point-in-time analysis, with a few important new insights emerging from the trajectory-based framework.
+
+#### Strongest Predictors
+
+**CTE engagement is the most robust and consistent predictor across the entire analysis.** Both CTE achievement and total CTE courses taken show clear dose-response relationships with disconnection persistence that hold across all comparison groups. CTE concentrators and completers have a persistent disconnection rate of 54.0% compared to 65.8% for students with no CTE involvement — an 11.8 percentage point spread that represents the largest practically meaningful difference in the analysis. Crucially, this relationship was also the most stable in the point-in-time analysis, suggesting CTE's influence on workforce attachment is durable rather than transitional.
+
+**Attended post-secondary** is the second strongest predictor (V = 0.080), with non-completers who had some post-secondary exposure showing meaningfully lower persistent disconnection rates (53.5% vs. 61.0%). This is a notable finding — even incomplete post-secondary attendance provides modest but lasting workforce attachment benefits.
+
+#### Moderate Predictors
+
+**Dem_Desc** is the strongest high school characteristics predictor (V = 0.098) and produces the single most striking finding in the analysis — entirely urban non-completers have a persistent disconnection rate of 77.5%, nearly 25 percentage points above the overall rate. This urban penalty is consistent across both the point-in-time and persistence frameworks and represents a clear geographic concentration of workforce disconnection risk.
+
+**Gender** is the strongest demographic predictor (V = 0.086), with females persistently disconnected at a rate of 61.8% compared to 55.6% for males. This gap is consistent with the male-dominated industry composition of the NW region and holds across both analytic frameworks.
+
+#### Weaker but Notable Findings
+
+**Race/ethnicity** shows negligible overall association but notable distributional differences for smaller groups — Asian/PI, Black, and Hispanic non-completers have persistent disconnection rates 10–14 percentage points higher than White students, a pattern that warrants attention despite the small cell sizes.
+
+**Average unemployment rate** continues to show a counterintuitive direction — persistently disconnected individuals come from lower unemployment counties — which is most likely an artifact of the North Dakota border effect and the "no MN emp record" ambiguity rather than a substantive finding.
+
+**Economic status, special education status, and PSEO participation** all show negligible associations with disconnection persistence, suggesting these factors shape early transitions more than long-term workforce trajectories.
+
+**MCA Math scores** show no meaningful linear relationship with disconnection persistence, reinforcing the earlier finding that academic proficiency predicts out-of-region mobility rather than workforce attachment among non-completers.
+
+#### Key Themes for Policy and Practice
+
+Three themes stand out for workforce development and education policy:
+
+-   **CTE is the most powerful lever available at the high school level.** Its consistent, durable, and dose-responsive relationship with workforce attachment makes it the clearest policy target in this analysis. Expanding access to and depth of CTE participation among students at risk of non-completion should be a priority
+-   **The urban penalty demands targeted attention.** Entirely urban non-completers face dramatically higher disconnection rates than their rural and mixed-community peers, suggesting that place-based workforce interventions may be warranted in urban communities within the NW region
+-   **Any post-secondary exposure helps.** Even incomplete post-secondary attendance is associated with meaningfully lower persistent disconnection, suggesting that strategies to keep non-traditional students engaged in post-secondary — even briefly — may have lasting workforce benefits
+
+<br>
+
+## Refined disconnected workforce categories
+
+This analysis is focused on whether any variables that are most likely to show up in each of these categories. With such small numbers of individuals among the more refined workforce state categories, let's combine some of them before the analysis. So let's collapse into three primary categories;
+
+1.  Group A: No MN employment record
+2.  Group B: In-Region Marginal Employment
+    1.  This group will be only the `Not meaningful_in_only` and is our local underutilization group.
+3.  Group C: Other Disconnected Employment
+    1.  This group contains all other `Not meaningful` employment categories.
+        1.  `Not meaningful_out_only`
+        2.  `Not meaningful_unclassified_only`
+        3.  `Not meaningful_mixed_in_out_simultaneous`
+        4.  `Not meaningful_mixed_in_unclassified_simultaneous`
+        5.  `Not meaningful_mixed_out_unclassified_simultaneous`
+        6.  `Not meaningful_mixed_in_out_unclassified_simultaneous`
+        7.  `Not meaningful_mixed_in_out_sequential`
+        8.  `Not meaningful_mixed_in_unclassified_sequential`
+        9.  `Not meaningful_mixed_out_unclassified_sequential`
+        10. `Not meaningful_mixed_in_out_unclassified_sequential`
+
+And just like before, we are going to measure the relationships between independent variables and the workforce participation categories for each after.ed.x. Here are the variables again;
+
+-   Demographics
+    -   `RaceEthnicity`
+    -   `economic.status`
+    -   `SpecialEdStatus`
+    -   `Gender`
+-   High school characteristics
+    -   `Dem_Desc`
+    -   `avg.unemp.rate`
+    -   `avg.wages.pct.state`
+-   High school academics
+    -   `cte.achievement`
+    -   `total.cte.courses.taken`
+    -   `MCA.M`
+    -   `pseo.participant`
+-   Post-secondary
+    -   `attended.ps`
+
+First we will collapse the workforce participation categories into the three groups.
+
+```{r}
+new.groups <- master %>%
+  select(PersonID, after.ed.1:after.ed.5) %>%
+  pivot_longer(names_to = "after.ed", values_to = "wf.state", after.ed.1:after.ed.5) %>%
+  mutate(new.wf.state = ifelse(wf.state %in% c("Not meaningful_out_only", "Not meaningful_unclassified_only", "Not meaningful_mixed_in_out_simultaneous", "Not meaningful_mixed_in_unclassified_simultaneous", "Not meaningful_mixed_out_unclassified_simultaneous", "Not meaningful_mixed_in_out_unclassified_simultaneous", "Not meaningful_mixed_in_out_sequential", "Not meaningful_mixed_in_unclassified_sequential", "Not meaningful_mixed_out_unclassified_sequential", "Not meaningful_mixed_in_out_unclassified_sequential"), "Not meaningful - other", wf.state),
+         new.wf.state = fct_relevel(new.wf.state, "Meaningful emp region", "Meaningful emp MN", "Not meaningful_in_only", "Not meaningful - other", "No MN emp record")) %>%
+  select(PersonID, after.ed, new.wf.state) %>%
+  pivot_wider(names_from = after.ed, values_from = new.wf.state)
+
+data.analysis <- master %>%
+  select(-after.ed.1:-after.ed.5) %>%
+  left_join(new.groups, by = "PersonID")
+
+kable(head(data.analysis))  
+
+kable(names(data.analysis))
+
+levels(new.groups$new.wf.state)
+```
+
+<br>
+
+### Demographics
+
+#### Summary
+
+Across all four demographic variables, associations with refined disconnection categories are statistically significant but negligible-to-weak in practical terms, consistent with findings from both the point-in-time and persistence analyses. However, some meaningful patterns emerge in the composition of the disconnection groups that add nuance beyond what the persistence analysis alone revealed.
+
+Key takeaways:
+
+-   **Gender** is the strongest demographic predictor across all five time points (V = 0.073–0.088) and the most stable. Males are consistently overrepresented in meaningful employment categories while females are overrepresented in both marginal employment groups. The "no MN emp record" group skews more male, consistent with cross-border employment patterns in male-dominated industries
+-   **Special education status** shows a strengthening association over time (V = 0.043–0.068), with special education students increasingly concentrated in marginal employment categories — particularly "not meaningful - in only" — as years progress. This suggests local underutilization is a growing concern for this subgroup over time
+-   **Race/ethnicity** remains negligible overall (V = 0.043–0.052) but the directional patterns within the disconnection groups are notable — American Indian non-completers trend toward local underutilization (Group B), while Black and Hispanic non-completers trend toward fragmented or out-of-region marginal employment (Group C). Hispanic non-completers are also notably overrepresented in the "no MN emp record" group, potentially reflecting seasonal agricultural or cross-border employment patterns
+-   **Economic status** is the weakest demographic predictor (V = 0.061–0.084), with disadvantaged students slightly overrepresented in "not meaningful - other" and underrepresented in "no MN emp record" — the latter again pointing to the cross-border employment interpretation
+
+Overall, demographic characteristics explain very little of the variation in which type of disconnection non-college completers experience. The most actionable demographic finding remains the gender gap, which is consistent, structural, and likely tied to the industry composition of the NW region. The within-group patterns for race/ethnicity and special education status add important equity dimensions but are limited by small cell sizes and negligible overall associations.
+
+<br>
+
+#### `economic.status`
+
+Cramér's V is negligible across all five time points (0.061–0.084), meaning economic disadvantage explains very little variation in which disconnection category individuals fall into. Key patterns:
+
+-   The most consistent finding is that economically disadvantaged students (status = 1) are overrepresented in "not meaningful - other" across all five years (ranging from 54.3% to 56.7% disadvantaged), suggesting that when disconnected non-completers do have some employment, economically disadvantaged individuals are more likely to be working in fragmented or out-of-region marginal employment
+-   The "no MN emp record" group is consistently the least economically disadvantaged of the three disconnection groups across all time points (\~45% disadvantaged), again pointing to the cross-border employment interpretation — individuals from less economically disadvantaged backgrounds may be more likely to cross into North Dakota for work
+-   Meaningful employment categories show distributions close to the overall average with no strong pattern
+-   The association strengthens very slightly over time (0.061 to 0.084) but remains negligible throughout
+
+*Tracking note: Negligible predictor. The most interesting pattern is the consistent overrepresentation of disadvantaged students in the "not meaningful - other" group and their underrepresentation in the "no MN emp record" group.*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.1, var.col = data.analysis$economic.status, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE) 
+```
+
+##### after.ed.2
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.2, var.col = data.analysis$economic.status, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.3
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.3, var.col = data.analysis$economic.status, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.4
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.4, var.col = data.analysis$economic.status, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.5
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.5, var.col = data.analysis$economic.status, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+:::
+
+<br>
+
+#### `RaceEthnicity`
+
+Cramér's V is negligible across all five time points (0.043–0.052). Key patterns:
+
+-   American Indian non-completers are consistently overrepresented in the "not meaningful - in only" (Group B) category across all years (\~9-11% vs. \~8% overall), suggesting a pattern of local underutilization rather than labor market detachment
+-   Black and Hispanic non-completers are consistently overrepresented in "not meaningful - other" (Group C) across all time points, suggesting more fragmented or out-of-region marginal employment patterns
+-   Hispanic non-completers are notably overrepresented in "no MN emp record" (Group A) across all years (\~5% vs. \~3% overall), which may reflect cross-border employment or seasonal agricultural work patterns common in NW Minnesota
+-   Small cell sizes for non-White groups warrant caution throughout
+
+*Tracking note: Negligible predictor. Directional patterns suggest different disconnection types by race/ethnicity — American Indian toward local underutilization, Hispanic and Black toward fragmented or out-of-region marginal employment.*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.1, var.col = data.analysis$RaceEthnicity, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.2
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.2, var.col = data.analysis$RaceEthnicity, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.3
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.3, var.col = data.analysis$RaceEthnicity, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.4
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.4, var.col = data.analysis$RaceEthnicity, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.5
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.5, var.col = data.analysis$RaceEthnicity, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+:::
+
+<br>
+
+#### `SpecialEdStatus`
+
+Cramér's V is negligible but strengthens slightly over time (0.043–0.068). Key patterns:
+
+-   Special education students are consistently overrepresented in both "not meaningful - in only" (Group B) and "not meaningful - other" (Group C) relative to meaningful employment categories, with the gap widening over time
+-   By years 4 and 5, special education students make up roughly 28-30% of the in-region marginal employment group compared to only 17-19% of the meaningful MN employment group
+-   The "no MN emp record" group sits between the disconnected and meaningfully employed groups in special education representation, consistent with earlier findings
+-   The strengthening association over time suggests special education status becomes a more meaningful differentiator of disconnection type as careers develop
+
+*Tracking note: Negligible but strengthening predictor. Special education students are increasingly concentrated in marginal employment categories over time.*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.1, var.col = data.analysis$SpecialEdStatus, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.2
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.2, var.col = data.analysis$SpecialEdStatus, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.3
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.3, var.col = data.analysis$SpecialEdStatus, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.4
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.4, var.col = data.analysis$SpecialEdStatus, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.5
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.5, var.col = data.analysis$SpecialEdStatus, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+:::
+
+<br>
+
+#### `Gender`
+
+Cramér's V is weak but the strongest demographic predictor and stable across all five time points (0.073–0.088). Key patterns:
+
+-   Males dominate meaningful employment categories at all time points — roughly 60-64% of meaningful emp region and 60% of meaningful emp MN are male, consistent with the male-dominated industries of the NW region
+-   Females are substantially overrepresented in both disconnection groups — making up roughly 46-49% of "not meaningful - other" and 46-48% of "not meaningful - in only" by years 4 and 5, compared to only 36% of meaningful emp region
+-   The gender gap is remarkably consistent across all five time points and strengthens slightly over time (0.073 to 0.088), suggesting a persistent structural difference rather than a transitional one
+-   The "no MN emp record" group has a gender composition closer to the meaningful employment groups (\~40% female) than to the marginal employment groups, again consistent with the cross-border employment interpretation
+
+*Tracking note: Weak but strongest and most stable demographic predictor. The gender gap is consistent across all time points and all disconnection types.*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.1, var.col = data.analysis$Gender, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.2
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.2, var.col = data.analysis$Gender, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.3
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.3, var.col = data.analysis$Gender, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.4
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.4, var.col = data.analysis$Gender, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.5
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.5, var.col = data.analysis$Gender, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+:::
+
+<br>
+
+### High School Characteristics
+
+#### Summary
+
+Across the three high school characteristic variables examined, the findings are consistent with and reinforce patterns seen throughout the earlier analyses. Geographic context remains a meaningful but modest predictor of which type of disconnection non-college completers experience, while county-level economic variables continue to point primarily to the North Dakota border effect.
+
+Key takeaways:
+
+-   **Dem_Desc** is the strongest predictor in this group (V = 0.104–0.113) and produces the clearest geographic sorting pattern in the entire refined disconnection analysis. Entirely urban non-completers are dramatically overrepresented in the "no MN emp record" group across all five years, while entirely rural non-completers trend toward local underutilization (Group B). Town/rural mix students remain the most consistently attached group throughout. These patterns are stable across all five time points, suggesting they reflect structural features of the regional labor market rather than transitional effects
+-   **Average unemployment rate** continues to produce the most counterintuitive and consistent finding in the analysis — the "no MN emp record" group comes from significantly lower unemployment counties than all other groups at every time point, with the gap growing over time. This is almost certainly driven by the North Dakota border effect and should be flagged prominently in any write-up. Importantly, this pattern is now even clearer in the refined disconnection analysis than it was in the point-in-time analysis, as the "no MN emp record" group is isolated rather than combined with other disconnected categories
+-   **Average wages** adds little independent signal beyond unemployment rate, with only very small and inconsistent differences across disconnection categories. County wage levels are not a meaningful differentiator of which type of disconnection non-completers experience
+
+Overall, the high school characteristics findings reinforce two key themes. First, the urban/rural divide is a structural feature of workforce disconnection in Northwest Minnesota — where a non-completer went to high school shapes not just whether they are disconnected but what kind of disconnection they experience. Second, the North Dakota border effect continues to complicate interpretation of the "no MN emp record" category and warrants explicit acknowledgment in the final write-up.
+
+<br>
+
+#### `Dem_Desc`
+
+Cramér's V is weak but the strongest predictor in this group and remarkably stable across all five time points (0.104–0.113). Key patterns:
+
+-   Entirely urban non-completers are dramatically overrepresented in the "no MN emp record" group (Group A) at every time point (\~19% of Group A vs. \~6-7% of meaningful employment categories), making this the clearest and most consistent geographic signal in the analysis
+-   Entirely rural non-completers are overrepresented in "not meaningful - in only" (Group B) across all time points (\~11-12% vs. \~7% of meaningful emp MN), suggesting local underutilization is more characteristic of rural non-completers
+-   Town/rural mix students — the largest group — are consistently overrepresented in meaningful employment categories and underrepresented in Group A, reinforcing their favorable workforce attachment pattern seen throughout the analysis
+-   The stability of Cramér's V across all five years indicates these geographic patterns are structural rather than transitional
+
+*Tracking note: Weak but strongest and most stable predictor in this group. The urban/no MN emp record pattern and rural/local underutilization pattern are the clearest geographic findings in the refined disconnection analysis.*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.1, var.col = data.analysis$Dem_Desc, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.2
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.2, var.col = data.analysis$Dem_Desc, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.3
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.3, var.col = data.analysis$Dem_Desc, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.4
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.4, var.col = data.analysis$Dem_Desc, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.5
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.5, var.col = data.analysis$Dem_Desc, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+:::
+
+<br>
+
+#### `avg.unemp.rate`
+
+The counterintuitive pattern seen throughout the analysis continues and sharpens here. Key patterns:
+
+-   The "no MN emp record" group (Group A) consistently comes from the lowest unemployment counties across all five time points, significantly lower than every other group at every time point — the most consistent and statistically robust finding for this variable
+-   The gap between "no MN emp record" and all other groups grows over time, with mean differences ranging from -0.213 at year 1 to -0.339 at year 5 compared to meaningful emp region
+-   "Not meaningful - in only" (Group B) and "not meaningful - other" (Group C) sit between meaningful employment and "no MN emp record" in county unemployment levels, with Group C generally coming from slightly lower unemployment counties than Group B
+-   This pattern is almost certainly being driven by the North Dakota border effect — individuals from lower unemployment northwestern counties are more likely to be employed cross-border and therefore absent from MN employment records
+
+*Tracking note: The most counterintuitive and consistent finding in the analysis. Almost certainly driven by the North Dakota border effect. Flag prominently in write-up.*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+summary <- aov(avg.unemp.rate ~ after.ed.1, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.2
+
+```{r}
+
+summary <- aov(avg.unemp.rate ~ after.ed.2, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.3
+
+```{r}
+summary <- aov(avg.unemp.rate ~ after.ed.3, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.4
+
+```{r}
+summary <- aov(avg.unemp.rate ~ after.ed.4, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.5
+
+```{r}
+summary <- aov(avg.unemp.rate ~ after.ed.5, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+:::
+
+<br>
+
+#### `avg.wages.pct.state`
+
+The relationship between county wages and disconnection type is statistically significant but practically negligible across all five time points, with very small effect sizes. Key patterns:
+
+-   The only consistent significant finding is that "no MN emp record" (Group A) comes from slightly lower wage counties than meaningful emp region across all five time points, with differences of only 0.005–0.007 percentage points
+-   "Not meaningful - in only" (Group B) and "not meaningful - other" (Group C) do not consistently differ from meaningful employment categories in county wage levels
+-   Mean wages across all five categories are remarkably similar, hovering around 0.825–0.834 throughout, indicating that county wage levels are not a meaningful differentiator of disconnection type
+-   This variable adds little independent signal beyond what the unemployment rate already captures
+
+*Tracking note: Negligible practical effect. Consistent with earlier findings — county wages add little beyond unemployment rate and both point to the same geographic pattern.*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+summary <- aov(avg.wages.pct.state ~ after.ed.1, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.2
+
+```{r}
+summary <- aov(avg.wages.pct.state ~ after.ed.2, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.3
+
+```{r}
+summary <- aov(avg.wages.pct.state ~ after.ed.3, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.4
+
+```{r}
+summary <- aov(avg.wages.pct.state ~ after.ed.4, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.5
+
+```{r}
+summary <- aov(avg.wages.pct.state ~ after.ed.5, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+:::
+
+<br>
+
+### High school academics
+
+#### Summary
+
+Across the four high school accomplishment variables examined, CTE engagement emerges again as the dominant and most policy-relevant predictor of which type of workforce participation non-college completers experience, while academic proficiency adds a nuanced and important secondary signal. PSEO participation adds little independent information.
+
+Key takeaways:
+
+-   **Total CTE courses taken** is the strongest predictor in the entire accomplishments group, producing significant differences between nearly every pair of outcome categories at every time point. The gradient is clear and consistent — meaningful emp region takes the most CTE courses, followed by the marginal employment groups, with "no MN emp record" taking the fewest. This pattern holds across all five years without attenuation, making it the most robust finding in the refined disconnection analysis
+-   **CTE achievement** tells the same story categorically — CTE concentrators and completers are most heavily represented in meaningful emp region and least represented in "no MN emp record" and "not meaningful - other." The stability of Cramér's V across all five time points (0.072–0.078) reinforces that CTE engagement is a durable differentiator of workforce attachment type, not just early career transitions
+-   **MCA Math scores** produce the most nuanced finding in this group. By years 4 and 5, a clear hierarchy emerges — meaningful emp MN scores highest, followed by "no MN emp record" and meaningful emp region, with "not meaningful - in only" scoring lowest. This pattern has two important implications. First, it reinforces throughout the analysis that higher academic proficiency points toward out-of-region rather than regional employment. Second, the relatively high scores of the "no MN emp record" group compared to the marginal employment groups is the strongest academic evidence yet supporting the cross-border employment interpretation — individuals absent from MN records are not the least academically prepared group
+-   **PSEO participation** is negligible and weakening across all five time points (V = 0.038–0.055), adding no meaningful signal for distinguishing disconnection type. Its earlier influence was entirely transitional
+
+Overall, the accomplishments findings reinforce and sharpen the central themes of the analysis. CTE engagement is the most consistent and actionable predictor of both workforce attachment and the type of disconnection experienced. The MCA Math findings add an important interpretive layer — local underutilization (Group B) is associated with the weakest academic preparation, while the "no MN emp record" group (Group A) looks more academically similar to the meaningfully employed groups, further supporting the case that a meaningful portion of Group A represents cross-border employment rather than true labor force detachment.
+
+<br>
+
+#### `pseo.participant`
+
+Cramér's V is negligible across all five time points (0.038–0.055) and weakens over time. Key patterns:
+
+-   PSEO participants are most overrepresented in "not meaningful - in only" (Group B) and "meaningful emp MN" in early years, but these differences largely dissipate by years 3-5
+-   Meaningful emp region consistently has the lowest PSEO participation rate of any category (\~15-16%), suggesting that PSEO — which predicts college-going and out-of-region mobility — is not associated with regional workforce attachment even among non-completers
+-   The weakening association over time (0.055 at year 1 to 0.039 by year 5) is consistent with earlier findings that PSEO's influence is transitional rather than durable
+-   No consistent pattern distinguishes the three disconnection groups from each other on PSEO participation
+
+*Tracking note: Negligible and weakening predictor. PSEO adds little signal for distinguishing disconnection type.*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.1, var.col = data.analysis$pseo.participant, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.2
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.2, var.col = data.analysis$pseo.participant, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.3
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.3, var.col = data.analysis$pseo.participant, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.4
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.4, var.col = data.analysis$pseo.participant, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.5
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.5, var.col = data.analysis$pseo.participant, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+:::
+
+<br>
+
+#### `cte.achievement`
+
+Cramér's V is weak but stable and consistent across all five time points (0.072–0.078), making this the strongest categorical predictor in the accomplishments group. Key patterns:
+
+-   Meaningful emp region is the most CTE-engaged group at every time point — CTE concentrators and completers make up 57-58% of this category consistently, compared to 46-47% of the "no MN emp record" group and 45-46% of "not meaningful - other"
+-   No CTE students are most heavily concentrated in the disconnection categories — making up roughly 26-27% of "no MN emp record" and 25-27% of "not meaningful - other" compared to only 16-17% of meaningful emp region across all time points
+-   "Not meaningful - in only" (Group B) sits between the two extremes in CTE composition, with a slightly higher share of concentrators than the other disconnection groups, suggesting local underutilization is somewhat more common among students with moderate CTE engagement
+-   The pattern is remarkably stable across all five years, reinforcing CTE engagement as a durable differentiator of workforce attachment type
+
+*Tracking note: Weak but most stable and consistent categorical predictor in this group. CTE engagement clearly differentiates regional meaningful employment from all disconnection categories, particularly "no MN emp record" and "not meaningful - other."*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.1, var.col = data.analysis$cte.achievement, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.2
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.2, var.col = data.analysis$cte.achievement, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.3
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.3, var.col = data.analysis$cte.achievement, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.4
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.4, var.col = data.analysis$cte.achievement, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.5
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.5, var.col = data.analysis$cte.achievement, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+:::
+
+<br>
+
+#### `total.cte.courses.taken`
+
+This is the strongest and most consistent predictor in the accomplishments group, with significant differences between nearly every pair of outcome categories at every time point. Key patterns:
+
+-   Meaningful emp region has the highest mean CTE courses at every time point (5.37–5.47), significantly higher than all other categories — a gap of roughly 1.1–1.25 courses compared to "no MN emp record" and 0.87–0.99 courses compared to "not meaningful - other"
+-   "No MN emp record" (Group A) consistently has the lowest mean CTE courses of the three disconnection groups across all time points (4.21–4.32), significantly lower than both "not meaningful - in only" and meaningful emp region
+-   "Not meaningful - in only" (Group B) takes more CTE courses than "not meaningful - other" (Group C) at most time points, suggesting that local underutilization is associated with slightly more CTE engagement than fragmented or out-of-region marginal employment
+-   The gradient from meaningful emp region → not meaningful in only → not meaningful other → no MN emp record is consistent and statistically significant across all five years
+
+*Tracking note: Strongest continuous predictor in the analysis. The consistent gradient across all five outcome categories and all five time points makes this the clearest and most robust finding in the accomplishments group.*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+summary <- aov(total.cte.courses.taken ~ after.ed.1, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.2
+
+```{r}
+summary <- aov(total.cte.courses.taken ~ after.ed.2, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.3
+
+```{r}
+summary <- aov(total.cte.courses.taken ~ after.ed.3, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.4
+
+```{r}
+summary <- aov(total.cte.courses.taken ~ after.ed.4, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+
+##### after.ed.5
+
+```{r}
+summary <- aov(total.cte.courses.taken ~ after.ed.5, data = data.analysis)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+```
+:::
+
+<br>
+
+#### `MCA.M`
+
+MCA Math shows a statistically significant but nuanced pattern that becomes clearer and more interesting over time. Key patterns:
+
+-   Meaningful emp MN consistently has the highest math scores of any group at all time points, and the gap widens over time (0.116 above meaningful emp region at year 1 growing to 0.207 by year 5) — reinforcing the finding that higher academic proficiency points toward out-of-region employment
+-   "Not meaningful - in only" (Group B) has the lowest math scores of the three disconnection groups by years 4 and 5, significantly lower than both meaningful emp MN and "no MN emp record" — suggesting local underutilization is associated with the weakest academic preparation
+-   "No MN emp record" (Group A) scores notably higher than "not meaningful - in only" by years 3-5, adding further support to the cross-border employment interpretation — individuals absent from MN records are not the lowest-skilled group
+-   Meaningful emp region and "no MN emp record" have very similar math scores across all time points, which is a striking finding suggesting these two groups are not strongly differentiated by academic preparation
+
+*Tracking note: Moderate predictor with a nuanced and strengthening pattern. The key finding is that "not meaningful - in only" has the lowest math scores by later years, while "no MN emp record" scores closer to the meaningfully employed groups — consistent with cross-border employment rather than labor force detachment.*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.1, var.col = data.analysis$MCA.M, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.2
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.2, var.col = data.analysis$MCA.M, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.3
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.3, var.col = data.analysis$MCA.M, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.4
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.4, var.col = data.analysis$MCA.M, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.5
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.5, var.col = data.analysis$MCA.M, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+:::
+
+<br>
+
+### Post-secondary
+
+#### `attended.ps`
+
+Cramér's V is weak but among the strongest predictors in the entire analysis, starting at 0.106 at year 1 and stabilizing at 0.073–0.074 by years 4 and 5. Key patterns:
+
+-   "Not meaningful - in only" (Group B) has the highest share of individuals who never attended post-secondary across all five time points (\~68%), making never attending post-secondary the most distinctive characteristic of local underutilization
+-   "Not meaningful - other" (Group C) also has a high share of non-attenders (\~64-66%), similar to "no MN emp record" (\~63-64%), suggesting that all three disconnection groups are predominantly composed of individuals who never attended post-secondary
+-   Meaningful emp MN stands out with the highest post-secondary attendance rate of any group — nearly 54% at year 1, stabilizing around 46-54% across all years — consistent with the finding that out-of-region employment is associated with higher educational exposure
+-   Meaningful emp region has a notably lower post-secondary attendance rate than meaningful emp MN (\~40% vs. \~46-54%), but substantially higher than any of the three disconnection groups, suggesting post-secondary exposure provides some regional workforce attachment benefit even without completion
+-   The association weakens but stabilizes after year 2 (0.106 → 0.074), suggesting a durable rather than purely transitional relationship between post-secondary attendance and disconnection type
+
+*Tracking note: Weak but one of the stronger predictors in the analysis. The most notable finding is that "not meaningful - in only" has the highest never-attended rate of any group, distinguishing local underutilization as the outcome most associated with no post-secondary exposure whatsoever.*
+
+::: panel-tabset
+##### after.ed.1
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.1, var.col = data.analysis$attended.ps, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.2
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.2, var.col = data.analysis$attended.ps, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.3
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.3, var.col = data.analysis$attended.ps, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.4
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.4, var.col = data.analysis$attended.ps, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+
+##### after.ed.5
+
+```{r}
+tab_xtab(var.row = data.analysis$after.ed.5, var.col = data.analysis$attended.ps, 
+         title = "", 
+         show.exp = TRUE,
+         show.col.prc = TRUE,
+         use.viewer = TRUE)
+```
+:::
+
+<br>
+
+### Overall Summary — Refined Disconnection Category Analysis
+
+The refined disconnection analysis adds important texture to the persistence findings by distinguishing between three types of workforce disconnection — no MN employment record (Group A), in-region marginal employment (Group B), and other disconnected employment (Group C) — and examining which individual characteristics are associated with each. Across all variable groups and all five time points, a coherent and interpretively rich picture emerges.
+
+#### The Three Disconnection Groups Are Meaningfully Distinct
+
+One of the most important findings of this analysis is that the three disconnection groups are not interchangeable. They differ systematically across multiple dimensions in ways that suggest different underlying mechanisms:
+
+-   **Group A ("No MN emp record")** is consistently associated with lower county unemployment rates, higher MCA math scores, more male composition, and more urban community backgrounds. This profile is more consistent with cross-border employment in North Dakota than with pure labor force detachment, particularly for individuals from EDR 1. However, the scale and persistence of this group — and its association with lower CTE engagement and lower post-secondary attendance — suggests genuine detachment is also a meaningful driver for a substantial portion of this group
+-   **Group B ("Not meaningful - in only")** is the clearest local underutilization group. It is associated with the highest share of never-attended post-secondary, the lowest MCA math scores of any disconnection group by years 4 and 5, more rural community backgrounds, more American Indian representation, and more special education students over time. This group appears to represent individuals who are present in the regional labor market but unable to achieve stable, meaningful attachment — a profile that points toward skill gaps, employer mismatch, or structural barriers to full-time employment within the region
+-   **Group C ("Not meaningful - other")** is the most heterogeneous group, combining out-of-region marginal workers, multi-employer workers, and unclassified employment patterns. It is associated with higher economic disadvantage, more Black and Hispanic representation, and lower CTE engagement than Group B. Its profile sits between Groups A and B on most dimensions, making it the hardest to interpret cleanly
+
+#### Strongest Predictors Across the Refined Analysis
+
+**Total CTE courses taken** is the strongest and most consistent predictor across all five time points and all three disconnection groups. The gradient from meaningful emp region (highest CTE) to "no MN emp record" (lowest CTE) is statistically significant at every time point and never attenuates. CTE achievement tells the same story categorically. Together, these two variables provide the clearest and most actionable signal in the entire analysis — greater CTE engagement is associated not just with lower disconnection but with a more favorable type of disconnection when it does occur.
+
+**Attended post-secondary** is the second strongest predictor, with never-attended individuals most heavily concentrated in Group B (local underutilization) across all five years. Even incomplete post-secondary exposure is associated with meaningfully different disconnection patterns, with post-secondary attenders more likely to appear in meaningful employment categories or Group A than in Groups B or C.
+
+**Dem_Desc** is the strongest geographic predictor, producing the clearest sorting pattern — entirely urban non-completers are dramatically overrepresented in Group A across all years, while entirely rural non-completers trend toward Group B. This geographic sorting is structural and stable, suggesting that place of origin shapes not just whether disconnection occurs but what form it takes.
+
+#### The North Dakota Border Effect Is Confirmed and Sharpened
+
+Across every relevant variable — county unemployment rate, MCA math scores, gender composition, and community type — the "no MN emp record" group consistently looks more like the meaningfully employed groups than like the other disconnection groups. This convergent evidence across multiple independent variables provides the strongest support yet for the interpretation that a meaningful portion of Group A represents cross-border employment rather than labor force detachment. This should be acknowledged prominently and consistently in any policy-facing write-up of these findings.
+
+#### Key Themes for Policy and Practice
+
+-   **CTE engagement remains the most powerful and consistent lever** for improving workforce outcomes among non-college completers. Its influence extends beyond whether disconnection occurs to shaping what type of disconnection is experienced, with higher CTE engagement associated with less severe and more regionally proximate disconnection patterns
+-   **Local underutilization (Group B) is the most actionable disconnection type** for regional workforce development. These individuals are present in the regional labor market but not achieving meaningful attachment. They have the weakest academic preparation, the least post-secondary exposure, and the most rural backgrounds — a profile that points toward targeted skill development, employer engagement, and on-the-job training as potential intervention points
+-   **The "no MN emp record" group (Group A) requires careful interpretation** before it can be treated as a policy target. Distinguishing cross-border workers from genuinely detached individuals within this group would require employment data from North Dakota and other border states, and would substantially change the estimated scale of true labor force detachment in Northwest Minnesota
+-   **Demographic characteristics alone are poor predictors of disconnection type**, but equity-relevant patterns within the data — particularly for American Indian, Black, and Hispanic non-completers, and for female non-completers — warrant attention and should not be obscured by the negligible overall associations
+
+<br>
+
+# Summary: Workforce Disconnection Among Non-College Completers in Northwest Minnesota
+
+## Overview
+
+This analysis examined workforce disconnection among Northwest Minnesota's non-college graduates using a trajectory-based framework spanning the first five years after high school. Rather than relying on a single point-in-time outcome, the analysis combined descriptive statistics on annual workforce participation, persistence of disconnection across years 1–5, and relationships between individual characteristics and both persistence categories and refined disconnection types. Together, these three components provide a multi-layered picture of workforce detachment among one of the region's most vulnerable populations.
+
+## Scale and Persistence of Disconnection
+
+Workforce disconnection among non-college completers in Northwest Minnesota is both widespread and predominantly persistent. Only 10.6% of non-college graduates maintain consistent workforce attachment across all five years after high school, while 58.2% are persistently disconnected — meaning they are absent from meaningful workforce participation in four or five of their first five post-high school years. An additional 11.8% are broadly disconnected (three of five years) and 19.4% are intermittently disconnected (one or two of five years). This rate of persistent disconnection is notably elevated compared to other Minnesota regions, which ranged from 40–55%, suggesting that Northwest Minnesota's seasonal industry composition, the 1,000-hour single-employer threshold, and the North Dakota border effect compound the challenges already facing this population.
+
+The annual snapshots reinforce this picture. The share of non-completers with no Minnesota employment record grows steadily from 32.9% at year 1 to 40.7% by year 5, while in-region marginal employment declines from 33.9% to 21.5% over the same period. This trajectory reflects a gradual sorting process — a modest share stabilizes into meaningful regional employment while a growing majority drifts further from the Minnesota labor market. The window between years 1 and 3 appears to be the critical period during which this sorting occurs, making early intervention particularly important.
+
+## What Predicts Disconnection Persistence
+
+Across all variable groups examined, no single variable strongly predicts whether a non-college completer will be persistently disconnected. However, a clear hierarchy of predictors emerges.
+
+**CTE engagement** is the most robust and policy-relevant predictor across the entire analysis. Both CTE achievement and total CTE courses taken show clear dose-response relationships with disconnection persistence that hold across all comparison groups. CTE concentrators and completers have a persistent disconnection rate of 54.0% compared to 65.8% for students with no CTE involvement — an 11.8 percentage point spread representing the largest practically meaningful difference in the persistence analysis. This relationship is durable, stable, and specific to regional workforce attachment rather than broader Minnesota employment.
+
+**Attended post-secondary** is the second strongest predictor of persistence (V = 0.080), with non-completers who had some post-secondary exposure showing meaningfully lower persistent disconnection rates (53.5% vs. 61.0%). Even incomplete post-secondary attendance provides modest but lasting workforce attachment benefits — a notable finding given that PSEO participation alone showed no significant relationship with persistence.
+
+**Dem_Desc** is the strongest high school characteristics predictor (V = 0.098), with entirely urban non-completers showing a persistent disconnection rate of 77.5% — nearly 25 percentage points above the overall rate and the single most striking finding in the persistence analysis. Town/rural mix students remain the most consistently attached group throughout.
+
+**Gender** is the strongest demographic predictor (V = 0.086), with females persistently disconnected at a rate of 61.8% compared to 55.6% for males, consistent with the male-dominated industry composition of the NW region.
+
+**Economic status, special education status, race/ethnicity, MCA math scores, and PSEO participation** all show negligible associations with disconnection persistence, suggesting these factors shape early transitions more than long-term workforce trajectories. The absence of a strong MCA math relationship is particularly notable — academic proficiency predicts out-of-region mobility rather than workforce attachment among non-completers.
+
+## What Predicts Disconnection Type
+
+The refined disconnection analysis reveals that the three disconnection groups — no MN employment record (Group A), in-region marginal employment (Group B), and other disconnected employment (Group C) — are meaningfully distinct and are associated with different individual profiles.
+
+**Total CTE courses taken** is the strongest predictor of disconnection type, producing significant differences between nearly every pair of outcome categories at every time point. Meaningful regional employment takes the most CTE courses (\~5.4), followed by marginal employment groups, with "no MN emp record" taking the fewest (\~4.2–4.3). This gradient is consistent across all five years and never attenuates.
+
+**Attended post-secondary** produces the clearest sorting pattern across disconnection types — never-attended individuals are most heavily concentrated in Group B (local underutilization, \~68% never attended) across all five years, distinguishing this group as the outcome most associated with no educational exposure beyond high school.
+
+**Dem_Desc** produces strong geographic sorting — entirely urban non-completers are dramatically overrepresented in Group A across all years, while entirely rural non-completers trend toward Group B. This geographic sorting is stable and structural.
+
+**MCA math scores** add an important interpretive layer by years 4 and 5 — Group B (local underutilization) has the lowest math scores of any disconnection group, while Group A ("no MN emp record") scores closer to the meaningfully employed groups. This convergent evidence supports the cross-border employment interpretation for at least a portion of Group A.
+
+## The North Dakota Border Effect
+
+One of the most consistent and consequential findings across the entire analysis is the counterintuitive profile of the "no MN emp record" group. Across multiple independent variables — county unemployment rates (lowest of any group), MCA math scores (higher than marginal employment groups), gender composition (more male), and community type (more urban) — this group consistently looks more like the meaningfully employed population than like the other disconnection groups. This convergent evidence provides strong support for the interpretation that a meaningful portion of Group A represents cross-border employment in North Dakota rather than true labor force detachment. This caveat should be acknowledged prominently in any policy-facing interpretation of disconnection rates in Northwest Minnesota, as it suggests that reported disconnection rates are likely a ceiling estimate of true labor force detachment rather than a precise measure.
+
+## Key Themes for Policy and Practice
+
+Three themes stand out across the full analysis:
+
+-   **CTE engagement is the most powerful and consistent lever available at the high school level.** Its influence is durable, dose-responsive, and extends beyond whether disconnection occurs to shaping what type of disconnection is experienced. Expanding access to and depth of CTE participation — particularly for students at risk of non-completion — should be a priority for both education and workforce development policy in Northwest Minnesota
+
+-   **Local underutilization (Group B) is the most actionable disconnection type for regional intervention.** These individuals are present in the regional labor market but unable to achieve stable, meaningful attachment. They have the weakest academic preparation, the least post-secondary exposure, the most rural backgrounds, and the highest concentration of special education students over time. This profile points toward targeted skill development, employer engagement, and on-the-job training as potential intervention points — particularly in rural communities where this pattern is most concentrated
+
+-   **The "no MN emp record" group requires careful interpretation before it can be treated as a uniform policy target.** Distinguishing cross-border workers from genuinely detached individuals within this group would require employment data from North Dakota and other border states. Without this, the true scale of labor force detachment in Northwest Minnesota cannot be precisely estimated, and interventions targeting this group risk misallocating resources toward individuals who are already employed — just not in Minnesota

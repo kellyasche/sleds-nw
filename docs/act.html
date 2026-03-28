@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.56">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -21,8 +21,9 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -64,15 +65,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -114,20 +117,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/selectize-0.12.0/selectize.min.js"></script>
 <link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
 <script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
-<link href="site_libs/ggiraphjs-0.9.2/girafe.css" rel="stylesheet">
-<script src="site_libs/ggiraphjs-0.9.2/girafe.js"></script>
-<script src="site_libs/girafe-binding-0.9.3/girafe.js"></script>
+<link href="site_libs/ggiraphjs-0.9.4/girafe.css" rel="stylesheet">
+<script src="site_libs/ggiraphjs-0.9.4/girafe.js"></script>
+<script src="site_libs/girafe-binding-0.9.4/girafe.js"></script>
 
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Pathways taken after high school - Northwest</span>
     </a>
@@ -235,11 +240,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">Multivariate Confirmation Analysis - Logistic Regression</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./analysis_non_post_secondary_graduates.qmd">
+    <a class="dropdown-item" href="./analysis_non_post_secondary_graduates.html">
  <span class="dropdown-text">Non-college graduates</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./analysis_non_college_deeper.qmd">
+    <a class="dropdown-item" href="./analysis_non_college_deeper.html">
  <span class="dropdown-text">Further analysis on non-college grads</span></a>
   </li>  
     </ul>
@@ -292,10 +297,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Next up is to join the ACT data. I’ll first load the entire ACT dataset, clean it up, and then join with my master/Northwest graduate dataset to finalize.</p>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>act.original <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'/Users/kellyasche/Library/CloudStorage/GoogleDrive-kasche@ruralmn.org/My Drive/Research/FY25-27/FY26/OHE Journey to meaningful employment/Data/SLEDS/ACT/ACT.csv'</span>) <span class="sc">%&gt;%</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>act.original <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'/Users/kellyasche/Library/CloudStorage/GoogleDrive-kasche@ruralmn.org/My Drive/Research/FY25-27/FY26/OHE Journey to meaningful employment/Data/SLEDS/ACT/ACT.csv'</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">PersonID =</span> <span class="fu">as.integer</span>(PersonID))</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(act.original))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(act.original))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
@@ -376,7 +381,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </div>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">names</span>(act.original))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">names</span>(act.original))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -415,7 +420,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Out of the scores provided, I’m just going to use the composite score. Since an individual may have taken the test multiple times I will only use the highest composite score for each individual. This is how colleges do it as well.</p>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>act.highest.comp <span class="ot">&lt;-</span> act.original <span class="sc">%&gt;%</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>act.highest.comp <span class="ot">&lt;-</span> act.original <span class="sc">%&gt;%</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PersonID, ACTCompositeScore) <span class="sc">%&gt;%</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">PersonID =</span> <span class="fu">as.integer</span>(PersonID)) <span class="sc">%&gt;%</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PersonID) <span class="sc">%&gt;%</span></span>
@@ -423,7 +428,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(PersonID, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(act.highest.comp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(act.highest.comp))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -460,7 +465,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">names</span>(act.highest.comp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">names</span>(act.highest.comp))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -484,7 +489,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Now we will join it up with the master.</p>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>master<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/SLEDS/Masters/master-1.csv"</span>) <span class="sc">%&gt;%</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>master<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/SLEDS/Masters/master-1.csv"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(act.highest.comp, <span class="at">by =</span> <span class="st">"PersonID"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Dem_Desc =</span> <span class="fu">fct_relevel</span>(Dem_Desc, <span class="st">"Town/rural mix"</span>, <span class="st">"Urban/town/rural mix"</span>, <span class="st">"Entirely urban"</span>))</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -492,7 +497,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PersonID) <span class="sc">%&gt;%</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(act.highest.comp, <span class="at">by =</span> <span class="st">"PersonID"</span>)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(master<span class="fl">.2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(master<span class="fl">.2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
@@ -669,7 +674,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">names</span>(master<span class="fl">.2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">names</span>(master<span class="fl">.2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -750,8 +755,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><br></p>
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-3c8d5ad2039c5bb35cce" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-3c8d5ad2039c5bb35cce">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"21210\" data-max=\"44440\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["ACT not taken","ACT taken"],[21210,44440],["32.3%","67.7%"]],"container":"<table class=\"cell-border stripe\">\n  <thead>\n    <tr>\n      <th>act.taken<\/th>\n      <th>n observations<\/th>\n      <th>% of total observations<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":1},{"name":"act.taken","targets":0},{"name":"n observations","targets":1},{"name":"% of total observations","targets":2}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-91569b4130516e64d8f4" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-91569b4130516e64d8f4">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"21210\" data-max=\"44440\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["ACT not taken","ACT taken"],[21210,44440],["32.3%","67.7%"]],"container":"<table class=\"cell-border stripe\">\n  <thead>\n    <tr>\n      <th>act.taken<\/th>\n      <th>n observations<\/th>\n      <th>% of total observations<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":1},{"name":"act.taken","targets":0},{"name":"n observations","targets":1},{"name":"% of total observations","targets":2}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p><br></p>
@@ -759,22 +764,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The cross-tabs for the percentage of students who have taken the ACT by RUCA category has a p-value of less than .01, indicating that RUCA category is related. The table shows that graduates from entirely rural school districts take the ACT at a higher rate - 71% compared to 67% for the other county groups.</p>
 <p><br></p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">RUCA Table</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">RUCA Cross-tabs</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">RUCA Table</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">RUCA Cross-tabs</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-5d1d418b5588903b49b3" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-5d1d418b5588903b49b3">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;Town/rural mix&quot;,&quot;Urban/town/rural mix&quot;,&quot;Entirely urban&quot;,&quot;Entirely rural&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"1851\" data-max=\"12061\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"4488\" data-max=\"24876\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["Town/rural mix","Urban/town/rural mix","Entirely urban","Entirely rural"],[12061,4039,3259,1851],[24876,8459,6617,4488],["67.3%","67.7%","67.0%","70.8%"]],"container":"<table class=\"cell-border stripe\">\n  <thead>\n    <tr>\n      <th>Dem_Desc<\/th>\n      <th>ACT not taken<\/th>\n      <th>ACT taken<\/th>\n      <th>Percent ACT taken<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"name":"Dem_Desc","targets":0},{"name":"ACT not taken","targets":1},{"name":"ACT taken","targets":2},{"name":"Percent ACT taken","targets":3}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-677aaf83d956a11687cb" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-677aaf83d956a11687cb">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;Town/rural mix&quot;,&quot;Urban/town/rural mix&quot;,&quot;Entirely urban&quot;,&quot;Entirely rural&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"1851\" data-max=\"12061\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"4488\" data-max=\"24876\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["Town/rural mix","Urban/town/rural mix","Entirely urban","Entirely rural"],[12061,4039,3259,1851],[24876,8459,6617,4488],["67.3%","67.7%","67.0%","70.8%"]],"container":"<table class=\"cell-border stripe\">\n  <thead>\n    <tr>\n      <th>Dem_Desc<\/th>\n      <th>ACT not taken<\/th>\n      <th>ACT taken<\/th>\n      <th>Percent ACT taken<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"name":"Dem_Desc","targets":0},{"name":"ACT not taken","targets":1},{"name":"ACT taken","targets":2},{"name":"Percent ACT taken","targets":3}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>act.taken.ruca.cross.tabs <span class="ot">&lt;-</span> master<span class="fl">.2</span> <span class="sc">%&gt;%</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>act.taken.ruca.cross.tabs <span class="ot">&lt;-</span> master<span class="fl">.2</span> <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act.taken =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(ACTCompositeScore), <span class="st">"ACT not taken"</span>, <span class="st">"ACT taken"</span>))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(act.taken.ruca.cross.tabs<span class="sc">$</span>Dem_Desc, act.taken.ruca.cross.tabs<span class="sc">$</span>act.taken, <span class="at">expected =</span> <span class="cn">TRUE</span>, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.c =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(act.taken.ruca.cross.tabs<span class="sc">$</span>Dem_Desc, act.taken.ruca.cross.tabs<span class="sc">$</span>act.taken, <span class="at">expected =</span> <span class="cn">TRUE</span>, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.c =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
  
@@ -831,22 +836,22 @@ Chi^2 =  32.1622     d.f. =  3     p =  4.83731e-07
 <p>The cross-tabs for the percentage of students who have taken the ACT by RUCA category has a p-value of less than .01, indicating that EDR is related. The difference between the three EDRs though is minimal - EDR 2 had 65% of their graduates take the ACT compared to 68% for the other two EDRs.</p>
 <p><br></p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">EDR Table</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">EDR Cross-tabs</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">EDR Table</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">EDR Cross-tabs</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-e49853f7121383276aa5" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-e49853f7121383276aa5">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"4377\" data-max=\"11729\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"8034\" data-max=\"25090\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["EDR 1 - Northwest","EDR 2 - Headwaters","EDR 4 - West Central"],[5104,4377,11729],[11316,8034,25090],["68.9%","64.7%","68.1%"]],"container":"<table class=\"cell-border stripe\">\n  <thead>\n    <tr>\n      <th>edr<\/th>\n      <th>ACT not taken<\/th>\n      <th>ACT taken<\/th>\n      <th>Percent ACT taken<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"name":"edr","targets":0},{"name":"ACT not taken","targets":1},{"name":"ACT taken","targets":2},{"name":"Percent ACT taken","targets":3}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-f652b7b080fd6cc96521" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-f652b7b080fd6cc96521">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"4377\" data-max=\"11729\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"8034\" data-max=\"25090\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["EDR 1 - Northwest","EDR 2 - Headwaters","EDR 4 - West Central"],[5104,4377,11729],[11316,8034,25090],["68.9%","64.7%","68.1%"]],"container":"<table class=\"cell-border stripe\">\n  <thead>\n    <tr>\n      <th>edr<\/th>\n      <th>ACT not taken<\/th>\n      <th>ACT taken<\/th>\n      <th>Percent ACT taken<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"name":"edr","targets":0},{"name":"ACT not taken","targets":1},{"name":"ACT taken","targets":2},{"name":"Percent ACT taken","targets":3}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>act.taken.edr.cross.tabs <span class="ot">&lt;-</span> master<span class="fl">.2</span> <span class="sc">%&gt;%</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>act.taken.edr.cross.tabs <span class="ot">&lt;-</span> master<span class="fl">.2</span> <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act.taken =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(ACTCompositeScore), <span class="st">"ACT not taken"</span>, <span class="st">"ACT taken"</span>))</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(act.taken.edr.cross.tabs<span class="sc">$</span>edr, act.taken.ruca.cross.tabs<span class="sc">$</span>act.taken, <span class="at">expected =</span> <span class="cn">TRUE</span>, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.c =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(act.taken.edr.cross.tabs<span class="sc">$</span>edr, act.taken.ruca.cross.tabs<span class="sc">$</span>act.taken, <span class="at">expected =</span> <span class="cn">TRUE</span>, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.c =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
  
@@ -899,8 +904,8 @@ Chi^2 =  64.38107     d.f. =  2     p =  1.046713e-14
 <p><br></p>
 <div class="cell">
 <div class="cell-output-display">
-<div class="girafe html-widget html-fill-item" id="htmlwidget-81f288ac30582b2c5ee3" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-81f288ac30582b2c5ee3">{"x":{"html":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='ggiraph-svg' role='graphics-document' id='svg_3c8d5ad2039c5bb3' viewBox='0 0 504 360'>\n <defs id='svg_3c8d5ad2039c5bb3_defs'>\n  <clipPath id='svg_3c8d5ad2039c5bb3_c1'>\n   <rect x='0' y='0' width='504' height='360'/>\n  <\/clipPath>\n  <clipPath id='svg_3c8d5ad2039c5bb3_c2'>\n   <rect x='144.39' y='0' width='215.22' height='360'/>\n  <\/clipPath>\n  <clipPath id='svg_3c8d5ad2039c5bb3_c3'>\n   <rect x='149.87' y='28.74' width='151.3' height='325.78'/>\n  <\/clipPath>\n <\/defs>\n <g id='svg_3c8d5ad2039c5bb3_rootg' class='ggiraph-svg-rootg'>\n  <g clip-path='url(#svg_3c8d5ad2039c5bb3_c1)'>\n   <rect x='0' y='0' width='504' height='360' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.75' stroke-linejoin='round' stroke-linecap='round' class='ggiraph-svg-bg'/>\n  <\/g>\n  <g clip-path='url(#svg_3c8d5ad2039c5bb3_c2)'>\n   <rect x='144.39' y='0' width='215.22' height='360' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n  <\/g>\n  <g clip-path='url(#svg_3c8d5ad2039c5bb3_c3)'>\n   <polyline points='163.59,354.52 163.59,353.73 163.59,350.34 163.59,346.96 163.59,343.57 163.59,340.18 163.59,336.79 163.59,333.40 163.59,330.01 163.59,326.62 163.59,323.23 163.59,319.84 163.59,316.45 163.59,313.06 163.59,309.67 163.59,306.29 163.59,302.90 163.59,299.51 163.59,296.12 163.59,292.73 163.59,289.34 163.59,285.95 163.59,282.56 163.59,279.17 163.59,275.78 163.59,272.39 163.59,269.00 163.59,265.62 163.59,262.23 163.59,258.84 163.59,255.45 163.59,252.06 163.59,248.67 163.59,245.28 163.59,241.89 163.59,238.50 163.59,235.11 163.59,231.72 163.59,228.34 163.59,224.95 163.59,221.56 163.59,218.17 163.59,214.78 163.59,211.39 163.59,208.00 163.59,204.61 163.59,201.22 163.59,197.83 163.59,194.44 163.59,191.05 163.59,187.67 163.59,184.28 163.59,180.89 163.59,177.50 163.59,174.11 163.59,170.72 163.59,167.33 163.59,163.94 163.59,160.55 163.59,157.16 163.59,153.77 163.59,150.39 163.59,147.00 163.59,143.61 163.59,140.22 163.59,136.83 163.59,133.44 163.59,130.05 163.59,126.66 163.59,123.27 163.59,119.88 163.59,116.49 163.59,113.10 163.59,109.72 163.59,106.33 163.59,102.94 163.59,99.55 163.59,96.16 163.59,92.77 163.59,89.38 163.59,85.99 163.59,82.60 163.59,79.21 163.59,75.82 163.59,72.44 163.59,69.05 163.59,65.66 163.59,62.27 163.59,58.88 163.59,55.49 163.59,52.10 163.59,48.71 163.59,45.32 163.59,41.93 163.59,38.54 163.59,35.15 163.59,31.77 163.59,28.74' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='197.14,354.52 197.14,353.73 197.14,350.34 197.14,346.96 197.14,343.57 197.14,340.18 197.14,336.79 197.14,333.40 197.14,330.01 197.14,326.62 197.14,323.23 197.14,319.84 197.14,316.45 197.14,313.06 197.14,309.67 197.14,306.29 197.14,302.90 197.14,299.51 197.14,296.12 197.14,292.73 197.14,289.34 197.14,285.95 197.14,282.56 197.14,279.17 197.14,275.78 197.14,272.39 197.14,269.00 197.14,265.62 197.14,262.23 197.14,258.84 197.14,255.45 197.14,252.06 197.14,248.67 197.14,245.28 197.14,241.89 197.14,238.50 197.14,235.11 197.14,231.72 197.14,228.34 197.14,224.95 197.14,221.56 197.14,218.17 197.14,214.78 197.14,211.39 197.14,208.00 197.14,204.61 197.14,201.22 197.14,197.83 197.14,194.44 197.14,191.05 197.14,187.67 197.14,184.28 197.14,180.89 197.14,177.50 197.14,174.11 197.14,170.72 197.14,167.33 197.14,163.94 197.14,160.55 197.14,157.16 197.14,153.77 197.14,150.39 197.14,147.00 197.14,143.61 197.14,140.22 197.14,136.83 197.14,133.44 197.14,130.05 197.14,126.66 197.14,123.27 197.14,119.88 197.14,116.49 197.14,113.10 197.14,109.72 197.14,106.33 197.14,102.94 197.14,99.55 197.14,96.16 197.14,92.77 197.14,89.38 197.14,85.99 197.14,82.60 197.14,79.21 197.14,75.82 197.14,72.44 197.14,69.05 197.14,65.66 197.14,62.27 197.14,58.88 197.14,55.49 197.14,52.10 197.14,48.71 197.14,45.32 197.14,41.93 197.14,38.54 197.14,35.15 197.14,31.77 197.14,28.74' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='230.69,354.52 230.69,353.73 230.69,350.34 230.69,346.96 230.69,343.57 230.69,340.18 230.69,336.79 230.69,333.40 230.69,330.01 230.69,326.62 230.69,323.23 230.69,319.84 230.69,316.45 230.69,313.06 230.69,309.67 230.69,306.29 230.69,302.90 230.69,299.51 230.69,296.12 230.69,292.73 230.69,289.34 230.69,285.95 230.69,282.56 230.69,279.17 230.69,275.78 230.69,272.39 230.69,269.00 230.69,265.62 230.69,262.23 230.69,258.84 230.69,255.45 230.69,252.06 230.69,248.67 230.69,245.28 230.69,241.89 230.69,238.50 230.69,235.11 230.69,231.72 230.69,228.34 230.69,224.95 230.69,221.56 230.69,218.17 230.69,214.78 230.69,211.39 230.69,208.00 230.69,204.61 230.69,201.22 230.69,197.83 230.69,194.44 230.69,191.05 230.69,187.67 230.69,184.28 230.69,180.89 230.69,177.50 230.69,174.11 230.69,170.72 230.69,167.33 230.69,163.94 230.69,160.55 230.69,157.16 230.69,153.77 230.69,150.39 230.69,147.00 230.69,143.61 230.69,140.22 230.69,136.83 230.69,133.44 230.69,130.05 230.69,126.66 230.69,123.27 230.69,119.88 230.69,116.49 230.69,113.10 230.69,109.72 230.69,106.33 230.69,102.94 230.69,99.55 230.69,96.16 230.69,92.77 230.69,89.38 230.69,85.99 230.69,82.60 230.69,79.21 230.69,75.82 230.69,72.44 230.69,69.05 230.69,65.66 230.69,62.27 230.69,58.88 230.69,55.49 230.69,52.10 230.69,48.71 230.69,45.32 230.69,41.93 230.69,38.54 230.69,35.15 230.69,31.77 230.69,28.74' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='264.24,354.52 264.24,353.73 264.24,350.34 264.24,346.96 264.24,343.57 264.24,340.18 264.24,336.79 264.24,333.40 264.24,330.01 264.24,326.62 264.24,323.23 264.24,319.84 264.24,316.45 264.24,313.06 264.24,309.67 264.24,306.29 264.24,302.90 264.24,299.51 264.24,296.12 264.24,292.73 264.24,289.34 264.24,285.95 264.24,282.56 264.24,279.17 264.24,275.78 264.24,272.39 264.24,269.00 264.24,265.62 264.24,262.23 264.24,258.84 264.24,255.45 264.24,252.06 264.24,248.67 264.24,245.28 264.24,241.89 264.24,238.50 264.24,235.11 264.24,231.72 264.24,228.34 264.24,224.95 264.24,221.56 264.24,218.17 264.24,214.78 264.24,211.39 264.24,208.00 264.24,204.61 264.24,201.22 264.24,197.83 264.24,194.44 264.24,191.05 264.24,187.67 264.24,184.28 264.24,180.89 264.24,177.50 264.24,174.11 264.24,170.72 264.24,167.33 264.24,163.94 264.24,160.55 264.24,157.16 264.24,153.77 264.24,150.39 264.24,147.00 264.24,143.61 264.24,140.22 264.24,136.83 264.24,133.44 264.24,130.05 264.24,126.66 264.24,123.27 264.24,119.88 264.24,116.49 264.24,113.10 264.24,109.72 264.24,106.33 264.24,102.94 264.24,99.55 264.24,96.16 264.24,92.77 264.24,89.38 264.24,85.99 264.24,82.60 264.24,79.21 264.24,75.82 264.24,72.44 264.24,69.05 264.24,65.66 264.24,62.27 264.24,58.88 264.24,55.49 264.24,52.10 264.24,48.71 264.24,45.32 264.24,41.93 264.24,38.54 264.24,35.15 264.24,31.77 264.24,28.74' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='297.80,354.52 297.80,353.73 297.80,350.34 297.80,346.96 297.80,343.57 297.80,340.18 297.80,336.79 297.80,333.40 297.80,330.01 297.80,326.62 297.80,323.23 297.80,319.84 297.80,316.45 297.80,313.06 297.80,309.67 297.80,306.29 297.80,302.90 297.80,299.51 297.80,296.12 297.80,292.73 297.80,289.34 297.80,285.95 297.80,282.56 297.80,279.17 297.80,275.78 297.80,272.39 297.80,269.00 297.80,265.62 297.80,262.23 297.80,258.84 297.80,255.45 297.80,252.06 297.80,248.67 297.80,245.28 297.80,241.89 297.80,238.50 297.80,235.11 297.80,231.72 297.80,228.34 297.80,224.95 297.80,221.56 297.80,218.17 297.80,214.78 297.80,211.39 297.80,208.00 297.80,204.61 297.80,201.22 297.80,197.83 297.80,194.44 297.80,191.05 297.80,187.67 297.80,184.28 297.80,180.89 297.80,177.50 297.80,174.11 297.80,170.72 297.80,167.33 297.80,163.94 297.80,160.55 297.80,157.16 297.80,153.77 297.80,150.39 297.80,147.00 297.80,143.61 297.80,140.22 297.80,136.83 297.80,133.44 297.80,130.05 297.80,126.66 297.80,123.27 297.80,119.88 297.80,116.49 297.80,113.10 297.80,109.72 297.80,106.33 297.80,102.94 297.80,99.55 297.80,96.16 297.80,92.77 297.80,89.38 297.80,85.99 297.80,82.60 297.80,79.21 297.80,75.82 297.80,72.44 297.80,69.05 297.80,65.66 297.80,62.27 297.80,58.88 297.80,55.49 297.80,52.10 297.80,48.71 297.80,45.32 297.80,41.93 297.80,38.54 297.80,35.15 297.80,31.77 297.80,28.74' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='149.87,293.41 150.37,293.41 152.40,293.41 154.44,293.41 156.47,293.41 158.50,293.41 160.54,293.41 162.57,293.41 164.60,293.41 166.64,293.41 168.67,293.41 170.70,293.41 172.74,293.41 174.77,293.41 176.80,293.41 178.84,293.41 180.87,293.41 182.90,293.41 184.94,293.41 186.97,293.41 189.00,293.41 191.04,293.41 193.07,293.41 195.11,293.41 197.14,293.41 199.17,293.41 201.21,293.41 203.24,293.41 205.27,293.41 207.31,293.41 209.34,293.41 211.37,293.41 213.41,293.41 215.44,293.41 217.47,293.41 219.51,293.41 221.54,293.41 223.57,293.41 225.61,293.41 227.64,293.41 229.67,293.41 231.71,293.41 233.74,293.41 235.77,293.41 237.81,293.41 239.84,293.41 241.88,293.41 243.91,293.41 245.94,293.41 247.98,293.41 250.01,293.41 252.04,293.41 254.08,293.41 256.11,293.41 258.14,293.41 260.18,293.41 262.21,293.41 264.24,293.41 266.28,293.41 268.31,293.41 270.34,293.41 272.38,293.41 274.41,293.41 276.44,293.41 278.48,293.41 280.51,293.41 282.54,293.41 284.58,293.41 286.61,293.41 288.65,293.41 290.68,293.41 292.71,293.41 294.75,293.41 296.78,293.41 298.81,293.41 300.85,293.41 301.17,293.41' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='149.87,226.30 150.37,226.30 152.40,226.30 154.44,226.30 156.47,226.30 158.50,226.30 160.54,226.30 162.57,226.30 164.60,226.30 166.64,226.30 168.67,226.30 170.70,226.30 172.74,226.30 174.77,226.30 176.80,226.30 178.84,226.30 180.87,226.30 182.90,226.30 184.94,226.30 186.97,226.30 189.00,226.30 191.04,226.30 193.07,226.30 195.11,226.30 197.14,226.30 199.17,226.30 201.21,226.30 203.24,226.30 205.27,226.30 207.31,226.30 209.34,226.30 211.37,226.30 213.41,226.30 215.44,226.30 217.47,226.30 219.51,226.30 221.54,226.30 223.57,226.30 225.61,226.30 227.64,226.30 229.67,226.30 231.71,226.30 233.74,226.30 235.77,226.30 237.81,226.30 239.84,226.30 241.88,226.30 243.91,226.30 245.94,226.30 247.98,226.30 250.01,226.30 252.04,226.30 254.08,226.30 256.11,226.30 258.14,226.30 260.18,226.30 262.21,226.30 264.24,226.30 266.28,226.30 268.31,226.30 270.34,226.30 272.38,226.30 274.41,226.30 276.44,226.30 278.48,226.30 280.51,226.30 282.54,226.30 284.58,226.30 286.61,226.30 288.65,226.30 290.68,226.30 292.71,226.30 294.75,226.30 296.78,226.30 298.81,226.30 300.85,226.30 301.17,226.30' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='149.87,159.20 150.37,159.20 152.40,159.20 154.44,159.20 156.47,159.20 158.50,159.20 160.54,159.20 162.57,159.20 164.60,159.20 166.64,159.20 168.67,159.20 170.70,159.20 172.74,159.20 174.77,159.20 176.80,159.20 178.84,159.20 180.87,159.20 182.90,159.20 184.94,159.20 186.97,159.20 189.00,159.20 191.04,159.20 193.07,159.20 195.11,159.20 197.14,159.20 199.17,159.20 201.21,159.20 203.24,159.20 205.27,159.20 207.31,159.20 209.34,159.20 211.37,159.20 213.41,159.20 215.44,159.20 217.47,159.20 219.51,159.20 221.54,159.20 223.57,159.20 225.61,159.20 227.64,159.20 229.67,159.20 231.71,159.20 233.74,159.20 235.77,159.20 237.81,159.20 239.84,159.20 241.88,159.20 243.91,159.20 245.94,159.20 247.98,159.20 250.01,159.20 252.04,159.20 254.08,159.20 256.11,159.20 258.14,159.20 260.18,159.20 262.21,159.20 264.24,159.20 266.28,159.20 268.31,159.20 270.34,159.20 272.38,159.20 274.41,159.20 276.44,159.20 278.48,159.20 280.51,159.20 282.54,159.20 284.58,159.20 286.61,159.20 288.65,159.20 290.68,159.20 292.71,159.20 294.75,159.20 296.78,159.20 298.81,159.20 300.85,159.20 301.17,159.20' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='149.87,92.09 150.37,92.09 152.40,92.09 154.44,92.09 156.47,92.09 158.50,92.09 160.54,92.09 162.57,92.09 164.60,92.09 166.64,92.09 168.67,92.09 170.70,92.09 172.74,92.09 174.77,92.09 176.80,92.09 178.84,92.09 180.87,92.09 182.90,92.09 184.94,92.09 186.97,92.09 189.00,92.09 191.04,92.09 193.07,92.09 195.11,92.09 197.14,92.09 199.17,92.09 201.21,92.09 203.24,92.09 205.27,92.09 207.31,92.09 209.34,92.09 211.37,92.09 213.41,92.09 215.44,92.09 217.47,92.09 219.51,92.09 221.54,92.09 223.57,92.09 225.61,92.09 227.64,92.09 229.67,92.09 231.71,92.09 233.74,92.09 235.77,92.09 237.81,92.09 239.84,92.09 241.88,92.09 243.91,92.09 245.94,92.09 247.98,92.09 250.01,92.09 252.04,92.09 254.08,92.09 256.11,92.09 258.14,92.09 260.18,92.09 262.21,92.09 264.24,92.09 266.28,92.09 268.31,92.09 270.34,92.09 272.38,92.09 274.41,92.09 276.44,92.09 278.48,92.09 280.51,92.09 282.54,92.09 284.58,92.09 286.61,92.09 288.65,92.09 290.68,92.09 292.71,92.09 294.75,92.09 296.78,92.09 298.81,92.09 300.85,92.09 301.17,92.09' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <path id='svg_3c8d5ad2039c5bb3_e1' d='M 202.387536 208.242009 L 201.906488 221.201100 L 202.904781 221.240826 L 202.232980 234.099226 L 202.100596 240.591682 L 225.918703 241.653683 L 239.993211 242.087765 L 253.929717 242.365599 L 254.145211 235.876283 L 254.550645 222.937163 L 254.135749 222.929949 L 254.548719 209.923510 L 235.114660 209.418854 L 218.978731 208.955683 L 208.891857 208.451759 L 202.387536 208.242009 Z ' fill='#F1EEF6' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='005' title='Becker&amp;lt;br/&amp;gt;Number of students taken the ACT: 3,271&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 64.0%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e2' d='M 235.996371 105.869865 L 235.595400 118.810669 L 236.008135 118.821701 L 235.495386 133.176754 L 235.192656 144.533582 L 235.666141 144.546298 L 253.360447 145.154570 L 252.419375 146.271081 L 250.928855 149.635478 L 250.828057 152.937882 L 251.775497 154.973448 L 254.838143 156.214345 L 254.391312 169.971674 L 254.844202 171.070174 L 254.394492 190.517373 L 273.778787 191.222168 L 280.341334 191.343863 L 293.219429 191.473973 L 293.255229 189.015237 L 293.568871 178.446039 L 293.507745 166.251381 L 293.674467 159.096915 L 293.956193 146.126564 L 293.667052 146.126383 L 293.941457 131.652199 L 293.895779 120.181897 L 279.833410 119.948714 L 255.026285 119.380175 L 255.335074 106.398409 L 248.868319 106.191478 L 235.996371 105.869865 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='007' title='Beltrami&amp;lt;br/&amp;gt;Number of students taken the ACT: 4,624&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 66.4%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e3' d='M 169.550669 206.804556 L 170.632259 210.267617 L 170.098325 212.662187 L 170.374348 216.215108 L 169.555299 216.642431 L 169.758204 220.262424 L 170.900705 221.189524 L 171.265581 223.313501 L 172.803490 224.413242 L 171.867351 225.943642 L 171.817881 229.394081 L 170.397358 231.550724 L 170.394835 234.721200 L 171.376686 235.485350 L 171.064159 238.855236 L 169.960787 242.096112 L 170.487916 245.734216 L 196.360090 246.860222 L 201.943571 247.094747 L 202.100596 240.591682 L 202.232980 234.099226 L 202.904781 221.240826 L 201.906488 221.201100 L 202.387536 208.242009 L 169.550669 206.804556 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='027' title='Clay&amp;lt;br/&amp;gt;Number of students taken the ACT: 6,617&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 67.0%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e4' d='M 235.490132 151.026420 L 235.016063 170.434376 L 236.277131 170.477122 L 235.825395 183.422261 L 235.860987 187.910302 L 235.114660 209.418854 L 254.548719 209.923510 L 254.893451 197.036778 L 254.226395 197.010238 L 254.394492 190.517373 L 254.844202 171.070174 L 254.391312 169.971674 L 254.838143 156.214345 L 251.775497 154.973448 L 250.828057 152.937882 L 250.928855 149.635478 L 252.419375 146.271081 L 253.360447 145.154570 L 235.666141 144.546298 L 235.490132 151.026420 Z ' fill='#F1EEF6' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='029' title='Clearwater&amp;lt;br/&amp;gt;Number of students taken the ACT: 877&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 62.2%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e5' d='M 253.614767 287.939164 L 236.285117 287.323108 L 221.261961 286.884169 L 220.821357 299.843856 L 221.381884 299.862887 L 220.948367 312.819388 L 233.915818 313.317225 L 253.240409 313.879665 L 253.263433 312.799833 L 253.631879 300.912971 L 253.242852 300.902966 L 253.614767 287.939164 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='041' title='Douglas&amp;lt;br/&amp;gt;Number of students taken the ACT: 4,499&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 69.9%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e6' d='M 221.261961 286.884169 L 195.561394 285.821825 L 195.255457 292.310771 L 194.987748 298.791612 L 195.613891 298.815595 L 195.092097 311.849185 L 208.327780 312.395761 L 220.948367 312.819388 L 221.381884 299.862887 L 220.821357 299.843856 L 221.261961 286.884169 Z ' fill='#74A9CF' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='051' title='Grant&amp;lt;br/&amp;gt;Number of students taken the ACT: 943&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 74.3%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e7' d='M 254.394492 190.517373 L 254.226395 197.010238 L 254.893451 197.036778 L 254.548719 209.923510 L 254.135749 222.929949 L 254.550645 222.937163 L 254.145211 235.876283 L 260.569046 235.988154 L 273.394551 236.408854 L 279.903998 236.575368 L 280.257030 223.661600 L 279.989966 223.656145 L 280.543568 197.865168 L 280.140825 197.857692 L 280.341334 191.343863 L 273.778787 191.222168 L 254.394492 190.517373 Z ' fill='#F1EEF6' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='057' title='Hubbard&amp;lt;br/&amp;gt;Number of students taken the ACT: 1,496&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 62.5%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e8' d='M 197.101082 103.945626 L 197.717501 91.049406 L 196.850915 91.013679 L 197.769386 69.910668 L 173.120829 68.710894 L 157.360386 67.852341 L 156.749101 70.360358 L 156.897510 71.792101 L 158.297243 76.722598 L 159.423203 78.942292 L 158.957166 81.520200 L 160.037071 83.753530 L 160.149801 86.643931 L 162.327327 91.969380 L 162.383735 93.581769 L 161.207803 96.330968 L 159.517344 98.377486 L 159.462425 100.270903 L 158.718877 102.074668 L 171.181089 102.786826 L 191.695376 103.766214 L 197.101082 103.945626 Z ' fill='#74A9CF' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='069' title='Kittson&amp;lt;br/&amp;gt;Number of students taken the ACT: 596&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 72.2%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e9' d='M 250.886975 72.005360 L 251.031082 75.493485 L 250.730768 76.796071 L 252.384816 79.605946 L 254.824051 80.881321 L 259.241564 80.205474 L 262.091434 78.155931 L 261.740959 93.660799 L 249.261386 93.297681 L 248.868319 106.191478 L 255.335074 106.398409 L 255.026285 119.380175 L 279.833410 119.948714 L 293.895779 120.181897 L 294.296267 95.300748 L 293.176904 95.968105 L 288.949090 95.107486 L 288.107340 94.092524 L 286.561432 93.953617 L 281.543269 89.332776 L 280.960692 85.872514 L 281.903394 84.713613 L 281.614508 82.556527 L 282.105984 81.401652 L 280.539380 72.761901 L 279.004001 72.726670 L 279.178366 65.294135 L 278.088771 63.705092 L 277.035540 57.933403 L 277.078447 56.704377 L 275.856743 50.706209 L 276.340213 48.726615 L 274.491595 48.442761 L 269.545778 44.876138 L 268.011345 44.929486 L 266.744069 45.826343 L 264.593815 46.006519 L 261.245074 44.657711 L 260.033999 43.544106 L 259.202254 72.289482 L 250.886975 72.005360 Z ' fill='#F1EEF6' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='077' title='Lake of the Woods&amp;lt;br/&amp;gt;Number of students taken the ACT: 377&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 64.8%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e10' d='M 209.866474 182.545885 L 208.891857 208.451759 L 218.978731 208.955683 L 235.114660 209.418854 L 235.860987 187.910302 L 235.825395 183.422261 L 209.866474 182.545885 Z ' fill='#F1EEF6' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='087' title='Mahnomen&amp;lt;br/&amp;gt;Number of students taken the ACT: 660&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 62.3%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e11' d='M 158.718877 102.074668 L 159.220036 105.274020 L 158.577896 106.838859 L 160.254672 109.907390 L 159.145966 111.579026 L 159.781247 112.299739 L 158.434963 113.957256 L 158.375306 115.488938 L 159.731442 117.271270 L 159.366237 118.902147 L 159.951305 121.975449 L 158.942611 124.092507 L 159.286101 126.511523 L 157.956029 128.792216 L 158.034655 129.763734 L 180.531246 130.887727 L 190.261720 131.295281 L 202.217090 131.761419 L 209.824346 132.307853 L 221.456263 132.755235 L 235.495386 133.176754 L 236.008135 118.821701 L 235.595400 118.810669 L 235.996371 105.869865 L 225.261874 105.388864 L 216.306810 104.801804 L 204.644400 104.205147 L 197.101082 103.945626 L 191.695376 103.766214 L 171.181089 102.786826 L 158.718877 102.074668 Z ' fill='#74A9CF' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='089' title='Marshall&amp;lt;br/&amp;gt;Number of students taken the ACT: 1,125&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 70.4%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e12' d='M 209.866474 182.545885 L 178.535635 181.226872 L 170.393446 180.814653 L 169.783221 184.481686 L 169.640690 187.448479 L 170.500921 188.317172 L 169.682235 190.055510 L 170.199674 192.564984 L 169.828376 194.528023 L 170.376220 200.486069 L 169.975644 202.013383 L 170.409330 204.814561 L 169.550669 206.804556 L 202.387536 208.242009 L 208.891857 208.451759 L 209.866474 182.545885 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='107' title='Norman&amp;lt;br/&amp;gt;Number of students taken the ACT: 888&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 69.9%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e13' d='M 253.929717 242.365599 L 239.993211 242.087765 L 225.918703 241.653683 L 202.100596 240.591682 L 201.943571 247.094747 L 196.360090 246.860222 L 195.336546 272.852655 L 196.134839 272.882544 L 195.561394 285.821825 L 221.261961 286.884169 L 236.285117 287.323108 L 253.614767 287.939164 L 253.973443 274.846126 L 253.534013 274.829900 L 253.643582 268.376861 L 254.180958 248.914524 L 253.776899 248.901787 L 253.929717 242.365599 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='111' title='Otter Tail&amp;lt;br/&amp;gt;Number of students taken the ACT: 6,064&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 65.8%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e14' d='M 190.261720 131.295281 L 189.741168 142.665107 L 190.658196 142.705404 L 190.462136 147.033882 L 203.433184 147.661346 L 218.395791 148.110325 L 229.164801 148.530489 L 229.100286 150.685011 L 235.490132 151.026420 L 235.666141 144.546298 L 235.192656 144.533582 L 235.495386 133.176754 L 221.456263 132.755235 L 209.824346 132.307853 L 202.217090 131.761419 L 190.261720 131.295281 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='113' title='Pennington&amp;lt;br/&amp;gt;Number of students taken the ACT: 1,717&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 65.9%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e15' d='M 158.034655 129.763734 L 158.269126 131.444845 L 160.045802 136.505800 L 159.764397 137.229096 L 161.166252 139.035640 L 161.148603 141.418232 L 161.969289 143.786651 L 161.805741 147.036909 L 163.463439 148.949357 L 162.981089 151.467836 L 164.262510 153.693282 L 164.991544 157.316811 L 167.041799 160.676080 L 167.047624 162.815336 L 169.111508 168.271143 L 168.943035 170.355615 L 170.678454 173.934042 L 170.520066 176.844286 L 169.902889 177.608383 L 170.393446 180.814653 L 178.535635 181.226872 L 209.866474 182.545885 L 235.825395 183.422261 L 236.277131 170.477122 L 235.016063 170.434376 L 235.490132 151.026420 L 229.100286 150.685011 L 228.898052 157.169837 L 222.480290 156.966241 L 222.229539 163.474722 L 203.869111 162.853170 L 196.357433 162.482449 L 196.583053 155.999569 L 190.096320 155.695040 L 190.462136 147.033882 L 190.658196 142.705404 L 189.741168 142.665107 L 190.261720 131.295281 L 180.531246 130.887727 L 158.034655 129.763734 Z ' fill='#74A9CF' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='119' title='Polk&amp;lt;br/&amp;gt;Number of students taken the ACT: 4,063&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 70.1%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e16' d='M 253.240409 313.879665 L 233.915818 313.317225 L 220.948367 312.819388 L 220.510346 325.823177 L 221.069833 325.844771 L 220.637819 338.754117 L 233.611598 339.207987 L 246.491888 339.527816 L 252.961877 339.712146 L 253.317003 326.851713 L 252.883230 326.841694 L 253.240409 313.879665 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='121' title='Pope&amp;lt;br/&amp;gt;Number of students taken the ACT: 898&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 67.2%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e17' d='M 190.462136 147.033882 L 190.096320 155.695040 L 196.583053 155.999569 L 196.357433 162.482449 L 203.869111 162.853170 L 222.229539 163.474722 L 222.480290 156.966241 L 228.898052 157.169837 L 229.100286 150.685011 L 229.164801 148.530489 L 218.395791 148.110325 L 203.433184 147.661346 L 190.462136 147.033882 Z ' fill='#74A9CF' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='125' title='Red Lake&amp;lt;br/&amp;gt;Number of students taken the ACT: 613&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 74.6%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e18' d='M 250.886975 72.005360 L 223.694955 71.012242 L 197.769386 69.910668 L 196.850915 91.013679 L 197.717501 91.049406 L 197.101082 103.945626 L 204.644400 104.205147 L 216.306810 104.801804 L 225.261874 105.388864 L 235.996371 105.869865 L 248.868319 106.191478 L 249.261386 93.297681 L 261.740959 93.660799 L 262.091434 78.155931 L 259.241564 80.205474 L 254.824051 80.881321 L 252.384816 79.605946 L 250.730768 76.796071 L 251.031082 75.493485 L 250.886975 72.005360 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='135' title='Roseau&amp;lt;br/&amp;gt;Number of students taken the ACT: 2,314&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 66.0%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e19' d='M 220.948367 312.819388 L 208.327780 312.395761 L 195.092097 311.849185 L 194.615276 324.849908 L 195.220200 324.869221 L 194.706982 337.756791 L 201.226589 338.069889 L 220.637819 338.754117 L 221.069833 325.844771 L 220.510346 325.823177 L 220.948367 312.819388 Z ' fill='#2B8CBE' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='149' title='Stevens&amp;lt;br/&amp;gt;Number of students taken the ACT: 1,326&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 76.4%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e20' d='M 195.255457 292.310771 L 179.132553 291.574712 L 178.905215 293.137128 L 179.671230 297.270573 L 179.093666 299.779073 L 178.662154 304.784747 L 178.178852 306.539546 L 175.780772 308.926513 L 174.298097 311.871484 L 172.834694 313.163387 L 169.045135 315.222560 L 168.363195 316.110203 L 163.957257 319.214636 L 163.050066 321.921230 L 164.120376 323.443088 L 181.668258 324.305969 L 194.615276 324.849908 L 195.092097 311.849185 L 195.613891 298.815595 L 194.987748 298.791612 L 195.255457 292.310771 Z ' fill='#045A8D' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='155' title='Traverse&amp;lt;br/&amp;gt;Number of students taken the ACT: 411&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 80.7%'/>\n   <path id='svg_3c8d5ad2039c5bb3_e21' d='M 196.360090 246.860222 L 170.487916 245.734216 L 171.033814 248.247743 L 171.890488 249.694061 L 172.674246 254.675638 L 172.891478 257.631124 L 173.574458 258.211393 L 173.740704 260.423143 L 175.440275 263.521764 L 176.756765 266.966706 L 178.908886 268.484846 L 179.075346 271.896921 L 178.707477 273.646318 L 179.034801 279.224242 L 179.686913 280.584994 L 180.485233 287.036436 L 179.132553 291.574712 L 195.255457 292.310771 L 195.561394 285.821825 L 196.134839 272.882544 L 195.336546 272.852655 L 196.360090 246.860222 Z ' fill='#2B8CBE' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='167' title='Wilkin&amp;lt;br/&amp;gt;Number of students taken the ACT: 1,061&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 80.0%'/>\n  <\/g>\n  <g clip-path='url(#svg_3c8d5ad2039c5bb3_c1)'>\n   <rect x='312.13' y='155.63' width='42' height='72' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <rect x='312.13' y='213.23' width='14.4' height='14.4' fill='#F1EEF6' fill-opacity='1' stroke='none'/>\n   <rect x='312.13' y='198.83' width='14.4' height='14.4' fill='#BDC9E1' fill-opacity='1' stroke='none'/>\n   <rect x='312.13' y='184.43' width='14.4' height='14.4' fill='#74A9CF' fill-opacity='1' stroke='none'/>\n   <rect x='312.13' y='170.03' width='14.4' height='14.4' fill='#2B8CBE' fill-opacity='1' stroke='none'/>\n   <rect x='312.13' y='155.63' width='14.4' height='14.4' fill='#045A8D' fill-opacity='1' stroke='none'/>\n   <text x='328.53' y='217.81' font-size='9.6pt' font-family='Arial'>65%<\/text>\n   <text x='328.53' y='203.41' font-size='9.6pt' font-family='Arial'>70%<\/text>\n   <text x='328.53' y='189.01' font-size='9.6pt' font-family='Arial'>75%<\/text>\n   <text x='328.53' y='174.61' font-size='9.6pt' font-family='Arial'>80%<\/text>\n   <text x='149.87' y='19.22' font-size='14.4pt' font-weight='bold' font-family='Arial'>Percent of students taken ACT in county location of high school<\/text>\n  <\/g>\n <\/g>\n<\/svg>","js":null,"uid":"svg_3c8d5ad2039c5bb3","ratio":1.4,"settings":{"tooltip":{"css":".tooltip_SVGID_ { padding:5px;background:black;color:white;border-radius:2px;text-align:left; ; position:absolute;pointer-events:none;z-index:999;}","placement":"doc","opacity":0.9,"offx":10,"offy":10,"use_cursor_pos":true,"use_fill":false,"use_stroke":false,"delay_over":200,"delay_out":500},"hover":{"css":".hover_data_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_data_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_data_SVGID_ { fill:orange;stroke:black; }\nline.hover_data_SVGID_, polyline.hover_data_SVGID_ { fill:none;stroke:orange; }\nrect.hover_data_SVGID_, polygon.hover_data_SVGID_, path.hover_data_SVGID_ { fill:orange;stroke:none; }\nimage.hover_data_SVGID_ { stroke:orange; }","reactive":true,"nearest_distance":null},"hover_inv":{"css":""},"hover_key":{"css":".hover_key_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_key_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_key_SVGID_ { fill:orange;stroke:black; }\nline.hover_key_SVGID_, polyline.hover_key_SVGID_ { fill:none;stroke:orange; }\nrect.hover_key_SVGID_, polygon.hover_key_SVGID_, path.hover_key_SVGID_ { fill:orange;stroke:none; }\nimage.hover_key_SVGID_ { stroke:orange; }","reactive":true},"hover_theme":{"css":".hover_theme_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_theme_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_theme_SVGID_ { fill:orange;stroke:black; }\nline.hover_theme_SVGID_, polyline.hover_theme_SVGID_ { fill:none;stroke:orange; }\nrect.hover_theme_SVGID_, polygon.hover_theme_SVGID_, path.hover_theme_SVGID_ { fill:orange;stroke:none; }\nimage.hover_theme_SVGID_ { stroke:orange; }","reactive":true},"select":{"css":".select_data_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_data_SVGID_ { stroke:none;fill:red; }\ncircle.select_data_SVGID_ { fill:red;stroke:black; }\nline.select_data_SVGID_, polyline.select_data_SVGID_ { fill:none;stroke:red; }\nrect.select_data_SVGID_, polygon.select_data_SVGID_, path.select_data_SVGID_ { fill:red;stroke:none; }\nimage.select_data_SVGID_ { stroke:red; }","type":"multiple","only_shiny":true,"selected":[]},"select_inv":{"css":""},"select_key":{"css":".select_key_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_key_SVGID_ { stroke:none;fill:red; }\ncircle.select_key_SVGID_ { fill:red;stroke:black; }\nline.select_key_SVGID_, polyline.select_key_SVGID_ { fill:none;stroke:red; }\nrect.select_key_SVGID_, polygon.select_key_SVGID_, path.select_key_SVGID_ { fill:red;stroke:none; }\nimage.select_key_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"select_theme":{"css":".select_theme_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_theme_SVGID_ { stroke:none;fill:red; }\ncircle.select_theme_SVGID_ { fill:red;stroke:black; }\nline.select_theme_SVGID_, polyline.select_theme_SVGID_ { fill:none;stroke:red; }\nrect.select_theme_SVGID_, polygon.select_theme_SVGID_, path.select_theme_SVGID_ { fill:red;stroke:none; }\nimage.select_theme_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"zoom":{"min":1,"max":1,"duration":300,"default_on":false},"toolbar":{"position":"topright","pngname":"diagram","tooltips":null,"fixed":false,"hidden":[],"delay_over":200,"delay_out":500},"sizing":{"rescale":false,"width":1}}},"evals":[],"jsHooks":[]}</script>
+<div class="girafe html-widget html-fill-item" id="htmlwidget-1d02fe9f8109a47e5369" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-1d02fe9f8109a47e5369">{"x":{"html":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='ggiraph-svg' role='graphics-document' id='svg_91569b4130516e64' viewBox='0 0 504 360'>\n <defs id='svg_91569b4130516e64_defs'>\n  <clipPath id='svg_91569b4130516e64_c1'>\n   <rect x='0' y='0' width='504' height='360'/>\n  <\/clipPath>\n  <clipPath id='svg_91569b4130516e64_c2'>\n   <rect x='144.39' y='0' width='215.22' height='360'/>\n  <\/clipPath>\n  <clipPath id='svg_91569b4130516e64_c3'>\n   <rect x='149.87' y='28.74' width='151.3' height='325.78'/>\n  <\/clipPath>\n <\/defs>\n <g id='svg_91569b4130516e64_rootg' class='ggiraph-svg-rootg'>\n  <g clip-path='url(#svg_91569b4130516e64_c1)'>\n   <rect x='0' y='0' width='504' height='360' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.75' stroke-linejoin='round' stroke-linecap='round' class='ggiraph-svg-bg'/>\n  <\/g>\n  <g clip-path='url(#svg_91569b4130516e64_c2)'>\n   <rect x='144.39' y='0' width='215.22' height='360' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n  <\/g>\n  <g clip-path='url(#svg_91569b4130516e64_c3)'>\n   <polyline points='163.59,354.52 163.59,353.73 163.59,350.34 163.59,346.96 163.59,343.57 163.59,340.18 163.59,336.79 163.59,333.40 163.59,330.01 163.59,326.62 163.59,323.23 163.59,319.84 163.59,316.45 163.59,313.06 163.59,309.67 163.59,306.29 163.59,302.90 163.59,299.51 163.59,296.12 163.59,292.73 163.59,289.34 163.59,285.95 163.59,282.56 163.59,279.17 163.59,275.78 163.59,272.39 163.59,269.00 163.59,265.62 163.59,262.23 163.59,258.84 163.59,255.45 163.59,252.06 163.59,248.67 163.59,245.28 163.59,241.89 163.59,238.50 163.59,235.11 163.59,231.72 163.59,228.34 163.59,224.95 163.59,221.56 163.59,218.17 163.59,214.78 163.59,211.39 163.59,208.00 163.59,204.61 163.59,201.22 163.59,197.83 163.59,194.44 163.59,191.05 163.59,187.67 163.59,184.28 163.59,180.89 163.59,177.50 163.59,174.11 163.59,170.72 163.59,167.33 163.59,163.94 163.59,160.55 163.59,157.16 163.59,153.77 163.59,150.39 163.59,147.00 163.59,143.61 163.59,140.22 163.59,136.83 163.59,133.44 163.59,130.05 163.59,126.66 163.59,123.27 163.59,119.88 163.59,116.49 163.59,113.10 163.59,109.72 163.59,106.33 163.59,102.94 163.59,99.55 163.59,96.16 163.59,92.77 163.59,89.38 163.59,85.99 163.59,82.60 163.59,79.21 163.59,75.82 163.59,72.44 163.59,69.05 163.59,65.66 163.59,62.27 163.59,58.88 163.59,55.49 163.59,52.10 163.59,48.71 163.59,45.32 163.59,41.93 163.59,38.54 163.59,35.15 163.59,31.77 163.59,28.74' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='197.14,354.52 197.14,353.73 197.14,350.34 197.14,346.96 197.14,343.57 197.14,340.18 197.14,336.79 197.14,333.40 197.14,330.01 197.14,326.62 197.14,323.23 197.14,319.84 197.14,316.45 197.14,313.06 197.14,309.67 197.14,306.29 197.14,302.90 197.14,299.51 197.14,296.12 197.14,292.73 197.14,289.34 197.14,285.95 197.14,282.56 197.14,279.17 197.14,275.78 197.14,272.39 197.14,269.00 197.14,265.62 197.14,262.23 197.14,258.84 197.14,255.45 197.14,252.06 197.14,248.67 197.14,245.28 197.14,241.89 197.14,238.50 197.14,235.11 197.14,231.72 197.14,228.34 197.14,224.95 197.14,221.56 197.14,218.17 197.14,214.78 197.14,211.39 197.14,208.00 197.14,204.61 197.14,201.22 197.14,197.83 197.14,194.44 197.14,191.05 197.14,187.67 197.14,184.28 197.14,180.89 197.14,177.50 197.14,174.11 197.14,170.72 197.14,167.33 197.14,163.94 197.14,160.55 197.14,157.16 197.14,153.77 197.14,150.39 197.14,147.00 197.14,143.61 197.14,140.22 197.14,136.83 197.14,133.44 197.14,130.05 197.14,126.66 197.14,123.27 197.14,119.88 197.14,116.49 197.14,113.10 197.14,109.72 197.14,106.33 197.14,102.94 197.14,99.55 197.14,96.16 197.14,92.77 197.14,89.38 197.14,85.99 197.14,82.60 197.14,79.21 197.14,75.82 197.14,72.44 197.14,69.05 197.14,65.66 197.14,62.27 197.14,58.88 197.14,55.49 197.14,52.10 197.14,48.71 197.14,45.32 197.14,41.93 197.14,38.54 197.14,35.15 197.14,31.77 197.14,28.74' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='230.69,354.52 230.69,353.73 230.69,350.34 230.69,346.96 230.69,343.57 230.69,340.18 230.69,336.79 230.69,333.40 230.69,330.01 230.69,326.62 230.69,323.23 230.69,319.84 230.69,316.45 230.69,313.06 230.69,309.67 230.69,306.29 230.69,302.90 230.69,299.51 230.69,296.12 230.69,292.73 230.69,289.34 230.69,285.95 230.69,282.56 230.69,279.17 230.69,275.78 230.69,272.39 230.69,269.00 230.69,265.62 230.69,262.23 230.69,258.84 230.69,255.45 230.69,252.06 230.69,248.67 230.69,245.28 230.69,241.89 230.69,238.50 230.69,235.11 230.69,231.72 230.69,228.34 230.69,224.95 230.69,221.56 230.69,218.17 230.69,214.78 230.69,211.39 230.69,208.00 230.69,204.61 230.69,201.22 230.69,197.83 230.69,194.44 230.69,191.05 230.69,187.67 230.69,184.28 230.69,180.89 230.69,177.50 230.69,174.11 230.69,170.72 230.69,167.33 230.69,163.94 230.69,160.55 230.69,157.16 230.69,153.77 230.69,150.39 230.69,147.00 230.69,143.61 230.69,140.22 230.69,136.83 230.69,133.44 230.69,130.05 230.69,126.66 230.69,123.27 230.69,119.88 230.69,116.49 230.69,113.10 230.69,109.72 230.69,106.33 230.69,102.94 230.69,99.55 230.69,96.16 230.69,92.77 230.69,89.38 230.69,85.99 230.69,82.60 230.69,79.21 230.69,75.82 230.69,72.44 230.69,69.05 230.69,65.66 230.69,62.27 230.69,58.88 230.69,55.49 230.69,52.10 230.69,48.71 230.69,45.32 230.69,41.93 230.69,38.54 230.69,35.15 230.69,31.77 230.69,28.74' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='264.24,354.52 264.24,353.73 264.24,350.34 264.24,346.96 264.24,343.57 264.24,340.18 264.24,336.79 264.24,333.40 264.24,330.01 264.24,326.62 264.24,323.23 264.24,319.84 264.24,316.45 264.24,313.06 264.24,309.67 264.24,306.29 264.24,302.90 264.24,299.51 264.24,296.12 264.24,292.73 264.24,289.34 264.24,285.95 264.24,282.56 264.24,279.17 264.24,275.78 264.24,272.39 264.24,269.00 264.24,265.62 264.24,262.23 264.24,258.84 264.24,255.45 264.24,252.06 264.24,248.67 264.24,245.28 264.24,241.89 264.24,238.50 264.24,235.11 264.24,231.72 264.24,228.34 264.24,224.95 264.24,221.56 264.24,218.17 264.24,214.78 264.24,211.39 264.24,208.00 264.24,204.61 264.24,201.22 264.24,197.83 264.24,194.44 264.24,191.05 264.24,187.67 264.24,184.28 264.24,180.89 264.24,177.50 264.24,174.11 264.24,170.72 264.24,167.33 264.24,163.94 264.24,160.55 264.24,157.16 264.24,153.77 264.24,150.39 264.24,147.00 264.24,143.61 264.24,140.22 264.24,136.83 264.24,133.44 264.24,130.05 264.24,126.66 264.24,123.27 264.24,119.88 264.24,116.49 264.24,113.10 264.24,109.72 264.24,106.33 264.24,102.94 264.24,99.55 264.24,96.16 264.24,92.77 264.24,89.38 264.24,85.99 264.24,82.60 264.24,79.21 264.24,75.82 264.24,72.44 264.24,69.05 264.24,65.66 264.24,62.27 264.24,58.88 264.24,55.49 264.24,52.10 264.24,48.71 264.24,45.32 264.24,41.93 264.24,38.54 264.24,35.15 264.24,31.77 264.24,28.74' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='297.80,354.52 297.80,353.73 297.80,350.34 297.80,346.96 297.80,343.57 297.80,340.18 297.80,336.79 297.80,333.40 297.80,330.01 297.80,326.62 297.80,323.23 297.80,319.84 297.80,316.45 297.80,313.06 297.80,309.67 297.80,306.29 297.80,302.90 297.80,299.51 297.80,296.12 297.80,292.73 297.80,289.34 297.80,285.95 297.80,282.56 297.80,279.17 297.80,275.78 297.80,272.39 297.80,269.00 297.80,265.62 297.80,262.23 297.80,258.84 297.80,255.45 297.80,252.06 297.80,248.67 297.80,245.28 297.80,241.89 297.80,238.50 297.80,235.11 297.80,231.72 297.80,228.34 297.80,224.95 297.80,221.56 297.80,218.17 297.80,214.78 297.80,211.39 297.80,208.00 297.80,204.61 297.80,201.22 297.80,197.83 297.80,194.44 297.80,191.05 297.80,187.67 297.80,184.28 297.80,180.89 297.80,177.50 297.80,174.11 297.80,170.72 297.80,167.33 297.80,163.94 297.80,160.55 297.80,157.16 297.80,153.77 297.80,150.39 297.80,147.00 297.80,143.61 297.80,140.22 297.80,136.83 297.80,133.44 297.80,130.05 297.80,126.66 297.80,123.27 297.80,119.88 297.80,116.49 297.80,113.10 297.80,109.72 297.80,106.33 297.80,102.94 297.80,99.55 297.80,96.16 297.80,92.77 297.80,89.38 297.80,85.99 297.80,82.60 297.80,79.21 297.80,75.82 297.80,72.44 297.80,69.05 297.80,65.66 297.80,62.27 297.80,58.88 297.80,55.49 297.80,52.10 297.80,48.71 297.80,45.32 297.80,41.93 297.80,38.54 297.80,35.15 297.80,31.77 297.80,28.74' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='149.87,293.41 150.37,293.41 152.40,293.41 154.44,293.41 156.47,293.41 158.50,293.41 160.54,293.41 162.57,293.41 164.60,293.41 166.64,293.41 168.67,293.41 170.70,293.41 172.74,293.41 174.77,293.41 176.80,293.41 178.84,293.41 180.87,293.41 182.90,293.41 184.94,293.41 186.97,293.41 189.00,293.41 191.04,293.41 193.07,293.41 195.11,293.41 197.14,293.41 199.17,293.41 201.21,293.41 203.24,293.41 205.27,293.41 207.31,293.41 209.34,293.41 211.37,293.41 213.41,293.41 215.44,293.41 217.47,293.41 219.51,293.41 221.54,293.41 223.57,293.41 225.61,293.41 227.64,293.41 229.67,293.41 231.71,293.41 233.74,293.41 235.77,293.41 237.81,293.41 239.84,293.41 241.88,293.41 243.91,293.41 245.94,293.41 247.98,293.41 250.01,293.41 252.04,293.41 254.08,293.41 256.11,293.41 258.14,293.41 260.18,293.41 262.21,293.41 264.24,293.41 266.28,293.41 268.31,293.41 270.34,293.41 272.38,293.41 274.41,293.41 276.44,293.41 278.48,293.41 280.51,293.41 282.54,293.41 284.58,293.41 286.61,293.41 288.65,293.41 290.68,293.41 292.71,293.41 294.75,293.41 296.78,293.41 298.81,293.41 300.85,293.41 301.17,293.41' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='149.87,226.30 150.37,226.30 152.40,226.30 154.44,226.30 156.47,226.30 158.50,226.30 160.54,226.30 162.57,226.30 164.60,226.30 166.64,226.30 168.67,226.30 170.70,226.30 172.74,226.30 174.77,226.30 176.80,226.30 178.84,226.30 180.87,226.30 182.90,226.30 184.94,226.30 186.97,226.30 189.00,226.30 191.04,226.30 193.07,226.30 195.11,226.30 197.14,226.30 199.17,226.30 201.21,226.30 203.24,226.30 205.27,226.30 207.31,226.30 209.34,226.30 211.37,226.30 213.41,226.30 215.44,226.30 217.47,226.30 219.51,226.30 221.54,226.30 223.57,226.30 225.61,226.30 227.64,226.30 229.67,226.30 231.71,226.30 233.74,226.30 235.77,226.30 237.81,226.30 239.84,226.30 241.88,226.30 243.91,226.30 245.94,226.30 247.98,226.30 250.01,226.30 252.04,226.30 254.08,226.30 256.11,226.30 258.14,226.30 260.18,226.30 262.21,226.30 264.24,226.30 266.28,226.30 268.31,226.30 270.34,226.30 272.38,226.30 274.41,226.30 276.44,226.30 278.48,226.30 280.51,226.30 282.54,226.30 284.58,226.30 286.61,226.30 288.65,226.30 290.68,226.30 292.71,226.30 294.75,226.30 296.78,226.30 298.81,226.30 300.85,226.30 301.17,226.30' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='149.87,159.20 150.37,159.20 152.40,159.20 154.44,159.20 156.47,159.20 158.50,159.20 160.54,159.20 162.57,159.20 164.60,159.20 166.64,159.20 168.67,159.20 170.70,159.20 172.74,159.20 174.77,159.20 176.80,159.20 178.84,159.20 180.87,159.20 182.90,159.20 184.94,159.20 186.97,159.20 189.00,159.20 191.04,159.20 193.07,159.20 195.11,159.20 197.14,159.20 199.17,159.20 201.21,159.20 203.24,159.20 205.27,159.20 207.31,159.20 209.34,159.20 211.37,159.20 213.41,159.20 215.44,159.20 217.47,159.20 219.51,159.20 221.54,159.20 223.57,159.20 225.61,159.20 227.64,159.20 229.67,159.20 231.71,159.20 233.74,159.20 235.77,159.20 237.81,159.20 239.84,159.20 241.88,159.20 243.91,159.20 245.94,159.20 247.98,159.20 250.01,159.20 252.04,159.20 254.08,159.20 256.11,159.20 258.14,159.20 260.18,159.20 262.21,159.20 264.24,159.20 266.28,159.20 268.31,159.20 270.34,159.20 272.38,159.20 274.41,159.20 276.44,159.20 278.48,159.20 280.51,159.20 282.54,159.20 284.58,159.20 286.61,159.20 288.65,159.20 290.68,159.20 292.71,159.20 294.75,159.20 296.78,159.20 298.81,159.20 300.85,159.20 301.17,159.20' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <polyline points='149.87,92.09 150.37,92.09 152.40,92.09 154.44,92.09 156.47,92.09 158.50,92.09 160.54,92.09 162.57,92.09 164.60,92.09 166.64,92.09 168.67,92.09 170.70,92.09 172.74,92.09 174.77,92.09 176.80,92.09 178.84,92.09 180.87,92.09 182.90,92.09 184.94,92.09 186.97,92.09 189.00,92.09 191.04,92.09 193.07,92.09 195.11,92.09 197.14,92.09 199.17,92.09 201.21,92.09 203.24,92.09 205.27,92.09 207.31,92.09 209.34,92.09 211.37,92.09 213.41,92.09 215.44,92.09 217.47,92.09 219.51,92.09 221.54,92.09 223.57,92.09 225.61,92.09 227.64,92.09 229.67,92.09 231.71,92.09 233.74,92.09 235.77,92.09 237.81,92.09 239.84,92.09 241.88,92.09 243.91,92.09 245.94,92.09 247.98,92.09 250.01,92.09 252.04,92.09 254.08,92.09 256.11,92.09 258.14,92.09 260.18,92.09 262.21,92.09 264.24,92.09 266.28,92.09 268.31,92.09 270.34,92.09 272.38,92.09 274.41,92.09 276.44,92.09 278.48,92.09 280.51,92.09 282.54,92.09 284.58,92.09 286.61,92.09 288.65,92.09 290.68,92.09 292.71,92.09 294.75,92.09 296.78,92.09 298.81,92.09 300.85,92.09 301.17,92.09' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n   <path id='svg_91569b4130516e64_e1' d='M 202.387536 208.242009 L 201.906488 221.201100 L 202.904781 221.240826 L 202.232980 234.099226 L 202.100596 240.591682 L 225.918703 241.653683 L 239.993211 242.087765 L 253.929717 242.365599 L 254.145211 235.876283 L 254.550645 222.937163 L 254.135749 222.929949 L 254.548719 209.923510 L 235.114660 209.418854 L 218.978731 208.955683 L 208.891857 208.451759 L 202.387536 208.242009 Z ' fill='#F1EEF6' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='005' title='Becker&amp;lt;br/&amp;gt;Number of students taken the ACT: 3,271&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 64.0%'/>\n   <path id='svg_91569b4130516e64_e2' d='M 235.996371 105.869865 L 235.595400 118.810669 L 236.008135 118.821701 L 235.495386 133.176754 L 235.192656 144.533582 L 235.666141 144.546298 L 253.360447 145.154570 L 252.419375 146.271081 L 250.928855 149.635478 L 250.828057 152.937882 L 251.775497 154.973448 L 254.838143 156.214345 L 254.391312 169.971674 L 254.844202 171.070174 L 254.394492 190.517373 L 273.778787 191.222168 L 280.341334 191.343863 L 293.219429 191.473973 L 293.255229 189.015237 L 293.568871 178.446039 L 293.507745 166.251381 L 293.674467 159.096915 L 293.956193 146.126564 L 293.667052 146.126383 L 293.941457 131.652199 L 293.895779 120.181897 L 279.833410 119.948714 L 255.026285 119.380175 L 255.335074 106.398409 L 248.868319 106.191478 L 235.996371 105.869865 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='007' title='Beltrami&amp;lt;br/&amp;gt;Number of students taken the ACT: 4,624&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 66.4%'/>\n   <path id='svg_91569b4130516e64_e3' d='M 169.550669 206.804556 L 170.632259 210.267617 L 170.098325 212.662187 L 170.374348 216.215108 L 169.555299 216.642431 L 169.758204 220.262424 L 170.900705 221.189524 L 171.265581 223.313501 L 172.803490 224.413242 L 171.867351 225.943642 L 171.817881 229.394081 L 170.397358 231.550724 L 170.394835 234.721200 L 171.376686 235.485350 L 171.064159 238.855236 L 169.960787 242.096112 L 170.487916 245.734216 L 196.360090 246.860222 L 201.943571 247.094747 L 202.100596 240.591682 L 202.232980 234.099226 L 202.904781 221.240826 L 201.906488 221.201100 L 202.387536 208.242009 L 169.550669 206.804556 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='027' title='Clay&amp;lt;br/&amp;gt;Number of students taken the ACT: 6,617&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 67.0%'/>\n   <path id='svg_91569b4130516e64_e4' d='M 235.490132 151.026420 L 235.016063 170.434376 L 236.277131 170.477122 L 235.825395 183.422261 L 235.860987 187.910302 L 235.114660 209.418854 L 254.548719 209.923510 L 254.893451 197.036778 L 254.226395 197.010238 L 254.394492 190.517373 L 254.844202 171.070174 L 254.391312 169.971674 L 254.838143 156.214345 L 251.775497 154.973448 L 250.828057 152.937882 L 250.928855 149.635478 L 252.419375 146.271081 L 253.360447 145.154570 L 235.666141 144.546298 L 235.490132 151.026420 Z ' fill='#F1EEF6' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='029' title='Clearwater&amp;lt;br/&amp;gt;Number of students taken the ACT: 877&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 62.2%'/>\n   <path id='svg_91569b4130516e64_e5' d='M 253.614767 287.939164 L 236.285117 287.323108 L 221.261961 286.884169 L 220.821357 299.843856 L 221.381884 299.862887 L 220.948367 312.819388 L 233.915818 313.317225 L 253.240409 313.879665 L 253.263433 312.799833 L 253.631879 300.912971 L 253.242852 300.902966 L 253.614767 287.939164 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='041' title='Douglas&amp;lt;br/&amp;gt;Number of students taken the ACT: 4,499&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 69.9%'/>\n   <path id='svg_91569b4130516e64_e6' d='M 221.261961 286.884169 L 195.561394 285.821825 L 195.255457 292.310771 L 194.987748 298.791612 L 195.613891 298.815595 L 195.092097 311.849185 L 208.327780 312.395761 L 220.948367 312.819388 L 221.381884 299.862887 L 220.821357 299.843856 L 221.261961 286.884169 Z ' fill='#74A9CF' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='051' title='Grant&amp;lt;br/&amp;gt;Number of students taken the ACT: 943&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 74.3%'/>\n   <path id='svg_91569b4130516e64_e7' d='M 254.394492 190.517373 L 254.226395 197.010238 L 254.893451 197.036778 L 254.548719 209.923510 L 254.135749 222.929949 L 254.550645 222.937163 L 254.145211 235.876283 L 260.569046 235.988154 L 273.394551 236.408854 L 279.903998 236.575368 L 280.257030 223.661600 L 279.989966 223.656145 L 280.543568 197.865168 L 280.140825 197.857692 L 280.341334 191.343863 L 273.778787 191.222168 L 254.394492 190.517373 Z ' fill='#F1EEF6' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='057' title='Hubbard&amp;lt;br/&amp;gt;Number of students taken the ACT: 1,496&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 62.5%'/>\n   <path id='svg_91569b4130516e64_e8' d='M 197.101082 103.945626 L 197.717501 91.049406 L 196.850915 91.013679 L 197.769386 69.910668 L 173.120829 68.710894 L 157.360386 67.852341 L 156.749101 70.360358 L 156.897510 71.792101 L 158.297243 76.722598 L 159.423203 78.942292 L 158.957166 81.520200 L 160.037071 83.753530 L 160.149801 86.643931 L 162.327327 91.969380 L 162.383735 93.581769 L 161.207803 96.330968 L 159.517344 98.377486 L 159.462425 100.270903 L 158.718877 102.074668 L 171.181089 102.786826 L 191.695376 103.766214 L 197.101082 103.945626 Z ' fill='#74A9CF' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='069' title='Kittson&amp;lt;br/&amp;gt;Number of students taken the ACT: 596&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 72.2%'/>\n   <path id='svg_91569b4130516e64_e9' d='M 250.886975 72.005360 L 251.031082 75.493485 L 250.730768 76.796071 L 252.384816 79.605946 L 254.824051 80.881321 L 259.241564 80.205474 L 262.091434 78.155931 L 261.740959 93.660799 L 249.261386 93.297681 L 248.868319 106.191478 L 255.335074 106.398409 L 255.026285 119.380175 L 279.833410 119.948714 L 293.895779 120.181897 L 294.296267 95.300748 L 293.176904 95.968105 L 288.949090 95.107486 L 288.107340 94.092524 L 286.561432 93.953617 L 281.543269 89.332776 L 280.960692 85.872514 L 281.903394 84.713613 L 281.614508 82.556527 L 282.105984 81.401652 L 280.539380 72.761901 L 279.004001 72.726670 L 279.178366 65.294135 L 278.088771 63.705092 L 277.035540 57.933403 L 277.078447 56.704377 L 275.856743 50.706209 L 276.340213 48.726615 L 274.491595 48.442761 L 269.545778 44.876138 L 268.011345 44.929486 L 266.744069 45.826343 L 264.593815 46.006519 L 261.245074 44.657711 L 260.033999 43.544106 L 259.202254 72.289482 L 250.886975 72.005360 Z ' fill='#F1EEF6' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='077' title='Lake of the Woods&amp;lt;br/&amp;gt;Number of students taken the ACT: 377&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 64.8%'/>\n   <path id='svg_91569b4130516e64_e10' d='M 209.866474 182.545885 L 208.891857 208.451759 L 218.978731 208.955683 L 235.114660 209.418854 L 235.860987 187.910302 L 235.825395 183.422261 L 209.866474 182.545885 Z ' fill='#F1EEF6' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='087' title='Mahnomen&amp;lt;br/&amp;gt;Number of students taken the ACT: 660&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 62.3%'/>\n   <path id='svg_91569b4130516e64_e11' d='M 158.718877 102.074668 L 159.220036 105.274020 L 158.577896 106.838859 L 160.254672 109.907390 L 159.145966 111.579026 L 159.781247 112.299739 L 158.434963 113.957256 L 158.375306 115.488938 L 159.731442 117.271270 L 159.366237 118.902147 L 159.951305 121.975449 L 158.942611 124.092507 L 159.286101 126.511523 L 157.956029 128.792216 L 158.034655 129.763734 L 180.531246 130.887727 L 190.261720 131.295281 L 202.217090 131.761419 L 209.824346 132.307853 L 221.456263 132.755235 L 235.495386 133.176754 L 236.008135 118.821701 L 235.595400 118.810669 L 235.996371 105.869865 L 225.261874 105.388864 L 216.306810 104.801804 L 204.644400 104.205147 L 197.101082 103.945626 L 191.695376 103.766214 L 171.181089 102.786826 L 158.718877 102.074668 Z ' fill='#74A9CF' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='089' title='Marshall&amp;lt;br/&amp;gt;Number of students taken the ACT: 1,125&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 70.4%'/>\n   <path id='svg_91569b4130516e64_e12' d='M 209.866474 182.545885 L 178.535635 181.226872 L 170.393446 180.814653 L 169.783221 184.481686 L 169.640690 187.448479 L 170.500921 188.317172 L 169.682235 190.055510 L 170.199674 192.564984 L 169.828376 194.528023 L 170.376220 200.486069 L 169.975644 202.013383 L 170.409330 204.814561 L 169.550669 206.804556 L 202.387536 208.242009 L 208.891857 208.451759 L 209.866474 182.545885 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='107' title='Norman&amp;lt;br/&amp;gt;Number of students taken the ACT: 888&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 69.9%'/>\n   <path id='svg_91569b4130516e64_e13' d='M 253.929717 242.365599 L 239.993211 242.087765 L 225.918703 241.653683 L 202.100596 240.591682 L 201.943571 247.094747 L 196.360090 246.860222 L 195.336546 272.852655 L 196.134839 272.882544 L 195.561394 285.821825 L 221.261961 286.884169 L 236.285117 287.323108 L 253.614767 287.939164 L 253.973443 274.846126 L 253.534013 274.829900 L 253.643582 268.376861 L 254.180958 248.914524 L 253.776899 248.901787 L 253.929717 242.365599 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='111' title='Otter Tail&amp;lt;br/&amp;gt;Number of students taken the ACT: 6,064&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 65.8%'/>\n   <path id='svg_91569b4130516e64_e14' d='M 190.261720 131.295281 L 189.741168 142.665107 L 190.658196 142.705404 L 190.462136 147.033882 L 203.433184 147.661346 L 218.395791 148.110325 L 229.164801 148.530489 L 229.100286 150.685011 L 235.490132 151.026420 L 235.666141 144.546298 L 235.192656 144.533582 L 235.495386 133.176754 L 221.456263 132.755235 L 209.824346 132.307853 L 202.217090 131.761419 L 190.261720 131.295281 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='113' title='Pennington&amp;lt;br/&amp;gt;Number of students taken the ACT: 1,717&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 65.9%'/>\n   <path id='svg_91569b4130516e64_e15' d='M 158.034655 129.763734 L 158.269126 131.444845 L 160.045802 136.505800 L 159.764397 137.229096 L 161.166252 139.035640 L 161.148603 141.418232 L 161.969289 143.786651 L 161.805741 147.036909 L 163.463439 148.949357 L 162.981089 151.467836 L 164.262510 153.693282 L 164.991544 157.316811 L 167.041799 160.676080 L 167.047624 162.815336 L 169.111508 168.271143 L 168.943035 170.355615 L 170.678454 173.934042 L 170.520066 176.844286 L 169.902889 177.608383 L 170.393446 180.814653 L 178.535635 181.226872 L 209.866474 182.545885 L 235.825395 183.422261 L 236.277131 170.477122 L 235.016063 170.434376 L 235.490132 151.026420 L 229.100286 150.685011 L 228.898052 157.169837 L 222.480290 156.966241 L 222.229539 163.474722 L 203.869111 162.853170 L 196.357433 162.482449 L 196.583053 155.999569 L 190.096320 155.695040 L 190.462136 147.033882 L 190.658196 142.705404 L 189.741168 142.665107 L 190.261720 131.295281 L 180.531246 130.887727 L 158.034655 129.763734 Z ' fill='#74A9CF' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='119' title='Polk&amp;lt;br/&amp;gt;Number of students taken the ACT: 4,063&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 70.1%'/>\n   <path id='svg_91569b4130516e64_e16' d='M 253.240409 313.879665 L 233.915818 313.317225 L 220.948367 312.819388 L 220.510346 325.823177 L 221.069833 325.844771 L 220.637819 338.754117 L 233.611598 339.207987 L 246.491888 339.527816 L 252.961877 339.712146 L 253.317003 326.851713 L 252.883230 326.841694 L 253.240409 313.879665 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='121' title='Pope&amp;lt;br/&amp;gt;Number of students taken the ACT: 898&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 67.2%'/>\n   <path id='svg_91569b4130516e64_e17' d='M 190.462136 147.033882 L 190.096320 155.695040 L 196.583053 155.999569 L 196.357433 162.482449 L 203.869111 162.853170 L 222.229539 163.474722 L 222.480290 156.966241 L 228.898052 157.169837 L 229.100286 150.685011 L 229.164801 148.530489 L 218.395791 148.110325 L 203.433184 147.661346 L 190.462136 147.033882 Z ' fill='#74A9CF' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='125' title='Red Lake&amp;lt;br/&amp;gt;Number of students taken the ACT: 613&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 74.6%'/>\n   <path id='svg_91569b4130516e64_e18' d='M 250.886975 72.005360 L 223.694955 71.012242 L 197.769386 69.910668 L 196.850915 91.013679 L 197.717501 91.049406 L 197.101082 103.945626 L 204.644400 104.205147 L 216.306810 104.801804 L 225.261874 105.388864 L 235.996371 105.869865 L 248.868319 106.191478 L 249.261386 93.297681 L 261.740959 93.660799 L 262.091434 78.155931 L 259.241564 80.205474 L 254.824051 80.881321 L 252.384816 79.605946 L 250.730768 76.796071 L 251.031082 75.493485 L 250.886975 72.005360 Z ' fill='#BDC9E1' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='135' title='Roseau&amp;lt;br/&amp;gt;Number of students taken the ACT: 2,314&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 66.0%'/>\n   <path id='svg_91569b4130516e64_e19' d='M 220.948367 312.819388 L 208.327780 312.395761 L 195.092097 311.849185 L 194.615276 324.849908 L 195.220200 324.869221 L 194.706982 337.756791 L 201.226589 338.069889 L 220.637819 338.754117 L 221.069833 325.844771 L 220.510346 325.823177 L 220.948367 312.819388 Z ' fill='#2B8CBE' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='149' title='Stevens&amp;lt;br/&amp;gt;Number of students taken the ACT: 1,326&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 76.4%'/>\n   <path id='svg_91569b4130516e64_e20' d='M 195.255457 292.310771 L 179.132553 291.574712 L 178.905215 293.137128 L 179.671230 297.270573 L 179.093666 299.779073 L 178.662154 304.784747 L 178.178852 306.539546 L 175.780772 308.926513 L 174.298097 311.871484 L 172.834694 313.163387 L 169.045135 315.222560 L 168.363195 316.110203 L 163.957257 319.214636 L 163.050066 321.921230 L 164.120376 323.443088 L 181.668258 324.305969 L 194.615276 324.849908 L 195.092097 311.849185 L 195.613891 298.815595 L 194.987748 298.791612 L 195.255457 292.310771 Z ' fill='#045A8D' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='155' title='Traverse&amp;lt;br/&amp;gt;Number of students taken the ACT: 411&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 80.7%'/>\n   <path id='svg_91569b4130516e64_e21' d='M 196.360090 246.860222 L 170.487916 245.734216 L 171.033814 248.247743 L 171.890488 249.694061 L 172.674246 254.675638 L 172.891478 257.631124 L 173.574458 258.211393 L 173.740704 260.423143 L 175.440275 263.521764 L 176.756765 266.966706 L 178.908886 268.484846 L 179.075346 271.896921 L 178.707477 273.646318 L 179.034801 279.224242 L 179.686913 280.584994 L 180.485233 287.036436 L 179.132553 291.574712 L 195.255457 292.310771 L 195.561394 285.821825 L 196.134839 272.882544 L 195.336546 272.852655 L 196.360090 246.860222 Z ' fill='#2B8CBE' fill-opacity='1' fill-rule='evenodd' stroke='#D9D9D9' stroke-opacity='1' stroke-width='0.43' stroke-linejoin='round' stroke-linecap='butt' data-id='167' title='Wilkin&amp;lt;br/&amp;gt;Number of students taken the ACT: 1,061&amp;lt;br/&amp;gt;Percent of students in the county taken ACT: 80.0%'/>\n  <\/g>\n  <g clip-path='url(#svg_91569b4130516e64_c1)'>\n   <rect x='312.13' y='155.63' width='42' height='72' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <rect x='312.13' y='213.23' width='14.4' height='14.4' fill='#F1EEF6' fill-opacity='1' stroke='none'/>\n   <rect x='312.13' y='198.83' width='14.4' height='14.4' fill='#BDC9E1' fill-opacity='1' stroke='none'/>\n   <rect x='312.13' y='184.43' width='14.4' height='14.4' fill='#74A9CF' fill-opacity='1' stroke='none'/>\n   <rect x='312.13' y='170.03' width='14.4' height='14.4' fill='#2B8CBE' fill-opacity='1' stroke='none'/>\n   <rect x='312.13' y='155.63' width='14.4' height='14.4' fill='#045A8D' fill-opacity='1' stroke='none'/>\n   <text x='328.53' y='217.81' font-size='9.6pt' font-family='Arial'>65%<\/text>\n   <text x='328.53' y='203.41' font-size='9.6pt' font-family='Arial'>70%<\/text>\n   <text x='328.53' y='189.01' font-size='9.6pt' font-family='Arial'>75%<\/text>\n   <text x='328.53' y='174.61' font-size='9.6pt' font-family='Arial'>80%<\/text>\n   <text x='149.87' y='19.22' font-size='14.4pt' font-weight='bold' font-family='Arial'>Percent of students taken ACT in county location of high school<\/text>\n  <\/g>\n <\/g>\n<\/svg>","js":null,"uid":"svg_91569b4130516e64","ratio":1.4,"settings":{"tooltip":{"css":".tooltip_SVGID_ { padding:5px;background:black;color:white;border-radius:2px;text-align:left; ; position:absolute;pointer-events:none;z-index:9999;}","placement":"doc","opacity":0.9,"offx":10,"offy":10,"use_cursor_pos":true,"use_fill":false,"use_stroke":false,"delay_over":200,"delay_out":500},"hover":{"css":".hover_data_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_data_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_data_SVGID_ { fill:orange;stroke:black; }\nline.hover_data_SVGID_, polyline.hover_data_SVGID_ { fill:none;stroke:orange; }\nrect.hover_data_SVGID_, polygon.hover_data_SVGID_, path.hover_data_SVGID_ { fill:orange;stroke:none; }\nimage.hover_data_SVGID_ { stroke:orange; }","reactive":true,"nearest_distance":null},"hover_inv":{"css":""},"hover_key":{"css":".hover_key_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_key_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_key_SVGID_ { fill:orange;stroke:black; }\nline.hover_key_SVGID_, polyline.hover_key_SVGID_ { fill:none;stroke:orange; }\nrect.hover_key_SVGID_, polygon.hover_key_SVGID_, path.hover_key_SVGID_ { fill:orange;stroke:none; }\nimage.hover_key_SVGID_ { stroke:orange; }","reactive":true},"hover_theme":{"css":".hover_theme_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_theme_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_theme_SVGID_ { fill:orange;stroke:black; }\nline.hover_theme_SVGID_, polyline.hover_theme_SVGID_ { fill:none;stroke:orange; }\nrect.hover_theme_SVGID_, polygon.hover_theme_SVGID_, path.hover_theme_SVGID_ { fill:orange;stroke:none; }\nimage.hover_theme_SVGID_ { stroke:orange; }","reactive":true},"select":{"css":".select_data_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_data_SVGID_ { stroke:none;fill:red; }\ncircle.select_data_SVGID_ { fill:red;stroke:black; }\nline.select_data_SVGID_, polyline.select_data_SVGID_ { fill:none;stroke:red; }\nrect.select_data_SVGID_, polygon.select_data_SVGID_, path.select_data_SVGID_ { fill:red;stroke:none; }\nimage.select_data_SVGID_ { stroke:red; }","type":"multiple","only_shiny":true,"selected":[]},"select_inv":{"css":""},"select_key":{"css":".select_key_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_key_SVGID_ { stroke:none;fill:red; }\ncircle.select_key_SVGID_ { fill:red;stroke:black; }\nline.select_key_SVGID_, polyline.select_key_SVGID_ { fill:none;stroke:red; }\nrect.select_key_SVGID_, polygon.select_key_SVGID_, path.select_key_SVGID_ { fill:red;stroke:none; }\nimage.select_key_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"select_theme":{"css":".select_theme_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_theme_SVGID_ { stroke:none;fill:red; }\ncircle.select_theme_SVGID_ { fill:red;stroke:black; }\nline.select_theme_SVGID_, polyline.select_theme_SVGID_ { fill:none;stroke:red; }\nrect.select_theme_SVGID_, polygon.select_theme_SVGID_, path.select_theme_SVGID_ { fill:red;stroke:none; }\nimage.select_theme_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"zoom":{"min":1,"max":1,"duration":300,"default_on":false},"toolbar":{"position":"topright","pngname":"diagram","tooltips":null,"fixed":false,"hidden":[],"delay_over":200,"delay_out":500},"sizing":{"rescale":false,"width":1}}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 
@@ -909,239 +914,243 @@ Chi^2 =  64.38107     d.f. =  2     p =  1.046713e-14
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
+      return false;
     }
-    return false;
-  }
-  const onCopySuccess = function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
       }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
         }
       }
       return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
-  });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-    clipboardModal.on('success', onCopySuccess);
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-    const config = {
-      allowHTML: true,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start',
-    };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
         }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
         }
-        return container.innerHTML
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
       } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
     }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
           }
         } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
+            const note = htmlDoc.querySelector('main.content');
             if (note !== null) {
-              const html = processXRef(id, note);
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -1149,185 +1158,161 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             instance.show();
           });
         }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+      }, function(instance) {
       });
     }
-  }
-});
-</script>
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 </div> <!-- /content -->
 
 

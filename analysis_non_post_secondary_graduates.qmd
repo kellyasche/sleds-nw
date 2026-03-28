@@ -1,0 +1,1372 @@
+---
+title: "Non-post-secondary graduates"
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(sf)
+library(ggrepel)
+library(scales)
+library(shiny)
+library(shinycssloaders)
+library(ggiraph)
+library(kableExtra)
+library(rmapshaper)
+library(cowplot)
+library(DT)
+library(htmlwidgets)
+library(RColorBrewer)
+library(readxl)
+library(janitor)
+library(lubridate)
+library(systemfonts)
+reset_font_cache()
+library(ggtext)
+library(gmodels)
+library(fastDummies)
+library(car)
+library(glmnet)
+library(glmnetUtils)
+library(pscl)
+library(sjPlot)
+library(ggforce)
+library(rpart)
+library(rpart.plot)
+library(tidymodels)
+library(caret)
+library(themis)
+library(ranger)
+library(openxlsx)
+```
+
+```{r themes and shapefiles, include=FALSE}
+theme_bar <- theme_bw() +
+  theme(panel.grid.major = element_line(color = "grey70", linewidth  = 0.1),
+        panel.grid.minor = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_text(face = "bold"),
+        panel.border = element_blank(),
+        legend.background = element_rect(fill = "transparent", color = "transparent"),
+        legend.key = element_rect(fill = "transparent"),
+        legend.key.size = unit(1, "lines"),
+        legend.margin = margin(0,0,0,0),
+        legend.title = element_blank(),
+        legend.text = element_text(margin = margin(l = 2)),
+        text = element_text(family = "Arial") ,
+        plot.title.position = "plot",
+        plot.title = element_text(face = "bold"))
+
+theme_line <- theme_bw() +
+  theme(legend.background = element_rect(fill = "transparent", color = "transparent"),
+        legend.key = element_rect(fill = "transparent"),
+        legend.text = element_text(margin = margin(l = 2)),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_line(color = "grey70", linewidth = 0.1),
+        axis.ticks = element_blank(),
+        axis.text = element_text(face = "bold"),
+        panel.border = element_blank(),
+        legend.margin = margin(0,0,0,0),
+        legend.key.size = unit(1, "lines"),
+        text = element_text(family = "Arial") ,
+        plot.title.position = "plot",
+        plot.title = element_text(face = "bold"))
+
+
+theme_sf <- theme_bw() +
+  theme(axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks=element_blank(),
+        panel.background = element_blank(),
+        panel.grid.major = element_line(color = "white"),
+        panel.border = element_blank(),
+        legend.title = element_blank(),
+        legend.text = element_text(margin = margin(l = 2)),
+        legend.margin = margin(0,0,0,0),
+        legend.key.size = unit(1, "lines"),
+        text = element_text(family = "Arial") ,
+        plot.title.position = "plot",
+        plot.title = element_text(face = "bold"))
+
+regions <- read_csv("/Users/kellyasche/Library/CloudStorage/GoogleDrive-kasche@ruralmn.org/My Drive/Data Prep/R Projects/Join docs/county_regions.csv") %>%
+    select(5,6) %>%
+    unique() %>%
+    mutate(edr = str_replace(edr, "  ", " "),
+           planning.region = str_replace(planning.region, " Minnesota", ""),
+           planning.region = fct_relevel(planning.region, "Northwest", "Northeast", "Central", "Seven County Mpls-St Paul", "Southwest", "Southeast"),
+           edr = fct_relevel(edr, "EDR 1 - Northwest", "EDR 2 - Headwaters", "EDR 3 - Arrowhead", "EDR 4 - West Central", "EDR 5 - North Central", "EDR 6E- Southwest Central", "EDR 6W- Upper Minnesota Valley", "EDR 7E- East Central", "EDR 7W- Central", "EDR 8 - Southwest", "EDR 9 - South Central", "EDR 10 - Southeast", "EDR 11 - 7 County Twin Cities", "Minnesota"))
+
+counties.regions <- read_csv("/Users/kellyasche/Library/CloudStorage/GoogleDrive-kasche@ruralmn.org/My Drive/Data Prep/R Projects/Join docs/county_regions.csv") %>%
+  rename(mif = `MIF Region`) %>%
+  mutate(countyfp = formatC(countyfp, width = 3, flag = "0"),
+         Name = str_to_title(Name),
+         Name = str_replace(Name, "Q", "q"),
+         Name = str_replace(Name, "Of The", "of the"),
+         Name = str_replace(Name, "Mcleod", "McLeod"),
+         Dem_Desc = ifelse(Name == "Minnesota", "Minnesota", Dem_Desc) ,
+         edr = str_replace(edr, "  ", " "),
+         planning.region = str_replace(planning.region, " Minnesota", ""),
+         planning.region = fct_relevel(planning.region, "Northwest", "Northeast", "Central", "Seven County Mpls-St Paul", "Southwest", "Southeast"),
+         edr = fct_relevel(edr, "EDR 1 - Northwest", "EDR 2 - Headwaters", "EDR 3 - Arrowhead", "EDR 4 - West Central", "EDR 5 - North Central", "EDR 6E- Southwest Central", "EDR 6W- Upper Minnesota Valley", "EDR 7E- East Central", "EDR 7W- Central", "EDR 8 - Southwest", "EDR 9 - South Central", "EDR 10 - Southeast", "EDR 11 - 7 County Twin Cities", "Minnesota"),
+         Dem_Desc = fct_relevel(Dem_Desc, "Entirely rural", "Town/rural mix", "Urban/town/rural mix", "Entirely urban"))
+
+counties.regions.1 <- counties.regions %>%
+  mutate(statefp = "27",
+         project.pr = ifelse(edr %in% c("EDR 1 - Northwest", "EDR 2 - Headwaters", "EDR 4 - West Central"), "Northwest",
+                             ifelse(edr == "EDR 3 - Arrowhead", "Northeast",
+                                    ifelse(edr %in% c("EDR 5 - North Central", "EDR 7E- East Central", "EDR 7W- Central"), "Central",
+                                           ifelse(edr %in% c("EDR 6E- Southwest Central", "EDR 6W- Upper Minnesota Valley", "EDR 8 - Southwest"), "Southwest",
+                                                  ifelse(edr %in% c("EDR 9 - South Central", "EDR 10 - Southeast"), "Southern", as.character(planning.region)))))),
+         project.pr = fct_relevel(project.pr, "Northwest", "Northeast", "Central", "Seven County Mpls-St Paul", "Southwest", "Southern"))
+
+
+color.ruca <- c("Entirely rural" = "#009933", "Town/rural mix" = "#99CC33", "Urban/town/rural mix" = "#CC9966", "Entirely urban" = "#754C29", "Minnesota" = "black")
+
+color.pr <- c("Northwest" = 	"#4575b4", "Northeast" = "grey", "Central" = "#fee090", "Seven County Mpls-St Paul" = "#d73027", "Southwest" = "#91bfdb", "Southeast" = "#fc8d59", "Minnesota" = "black")
+
+color.edr <- c("EDR 1 - Northwest" = "#b3cde3", "EDR 2 - Headwaters" = "#8c96c6", "EDR 3 - Arrowhead" = "#fe9929", "EDR 4 - West Central" = "#8856a7", "EDR 5 - North Central" = "#810f7c", "EDR 6E- Southwest Central" = "#e5f5f9", "EDR 6W- Upper Minnesota Valley" = "#bdc9e1", "EDR 7E- East Central" = "#99d8c9", "EDR 7W- Central" = "#2ca25f", "EDR 8 - Southwest" = "#74a9cf", "EDR 9 - South Central" = "#0570b0", "EDR 10 - Southeast" = "#d7301f", "EDR 11 - 7 County Twin Cities" = "#d8b365", "Minnesota" = "black")
+
+color.edr.simple <- c("EDR 1" = "#b3cde3", "EDR 2" = "#8c96c6", "EDR 3" = "#fe9929", "EDR 4" = "#8856a7", "EDR 5" = "#810f7c", "EDR 6E" = "#e5f5f9", "EDR 6W" = "#bdc9e1", "EDR 7E" = "#99d8c9", "EDR 7W" = "#2ca25f", "EDR 8" = "#74a9cf", "EDR 9" = "#0570b0", "EDR 10" = "#d7301f", "EDR 11" = "#d8b365", "Minnesota" = "black")
+
+color.pr.edr <- c ("Northwest" = "#4575b4","Northeast" = "#e0f3f8", "Central" = "#fee090", "Seven County Mpls-St Paul" = "#d73027", "Southwest" = "#91bfdb", "Southeast" = "#fc8d59", "Minnesota" = "black", "EDR 1 - Northwest" = "#b3cde3", "EDR 2 - Headwaters" = "#8c96c6", "EDR 3 - Arrowhead" = "#fe9929", "EDR 4 - West Central" = "#8856a7", "EDR 5 - North Central" = "#810f7c", "EDR 6E- Southwest Central" = "#e5f5f9", "EDR 6W- Upper Minnesota Valley" = "#bdc9e1", "EDR 7E- East Central" = "#99d8c9", "EDR 7W- Central" = "#2ca25f", "EDR 8 - Southwest" = "#74a9cf", "EDR 9 - South Central" = "#0570b0", "EDR 10 - Southeast" = "#d7301f", "EDR 11 - 7 County Twin Cities" = "#d8b365")
+
+mn_counties <- st_read("/Users/kellyasche/Library/CloudStorage/GoogleDrive-kasche@ruralmn.org/My Drive/Data Prep/R Projects/Shapefiles/County shapefiles/MNCounties_MNDOT.shp", quiet = TRUE) %>%
+  ms_simplify(keep = .01, keep_shapes = TRUE) %>%
+  rename(countyfp = FIPS_CODE)
+```
+
+```{r master}
+master.original <- read_csv("Data/SLEDS/Masters/After analysis/Master-after-ct.csv") %>%
+  mutate(ps.grad.InstitutionSector = ifelse(ps.grad.InstitutionSector == "1", "Public, 4-year", as.character(ps.grad.InstitutionSector)),
+         ps.grad.InstitutionSector = ifelse(ps.grad.InstitutionSector == "4", "Public, 2-year", as.character(ps.grad.InstitutionSector)),
+         ps.grad.InstitutionSector = ifelse(ps.grad.InstitutionSector == "11", "Other", as.character(ps.grad.InstitutionSector)),
+         ps.grad.location = ifelse(ps.grad.location == "PS grad EDR", "PS grad region", ps.grad.location),
+         highest.cred.level = as.factor(highest.cred.level))
+
+kable(names(master.original))
+
+kable(head(master.original))
+```
+
+# Define the subset
+
+One of the aspects noticed during analysis is the percentage of individuals that never graduated college that also had meaningful employment in the region. The table below shows that 54% of the high school graduates in Northwest Minnesota never graduated college.
+
+```{r}
+data <- master.original %>%
+  filter(ps.grad != "Attending ps") %>%
+  group_by(ps.grad) %>%
+  summarize(n = n()) %>%
+  ungroup() %>%
+  mutate(pct = n / sum(n))
+
+datatable(data, class = "cell-border stripe", filter = "top", rownames = FALSE,
+          options = list(columnDefs = list(list(className = "dt-center", targets = 1:2)))) %>%
+  formatCurrency(2, "", digits = 0) %>%
+  formatPercentage(3, digits = 1)
+
+
+```
+
+We are going to examine, more closely, this 56% of the population and see if there are patterns in which they end up in different employment outcomes 1-, 5- and 10-years after graduating high school.
+
+<br>
+
+# Employment outcomes distribution
+
+The following tables provide the percentage of non-college graduates that were categorized in the various employment outcomes at 1-, 5-, and 10-years after graduating high school.
+
+## Distribution of Employment Outcomes for Non-College Graduates
+
+Among Northwest Minnesota's 32,039 non-college completers, workforce participation patterns shift substantially in the years following high school graduation. In the first year after high school, the largest share of non-completers fall into the "not meaningful employment" category (32.7%), meaning they have some Minnesota employment but have not yet reached the 1,000-hour threshold with a single employer. A notable portion — about one in five (20.5%) — are still attending post-secondary in year one, a reminder that non-completion is often a delayed outcome rather than an immediate one. Regional meaningful employment accounts for 18.3% in year one, while just 4.1% have established meaningful employment outside the region but within Minnesota. Nearly a quarter (24.3%) have no Minnesota employment record and are not attending school, suggesting early detachment from both education and the regional labor market.
+
+By year five, the post-secondary attendance rate drops sharply to just 4.5%, confirming that most of those who were still enrolled in year one have since exited. Regional meaningful employment holds relatively steady at 25.1%, suggesting the NW region retains a consistent core of its non-completing workforce over time. The share with no Minnesota employment record and not attending post-secondary grows notably — from 24.3% to 37.6% — which is perhaps the most concerning trend in the data. Meanwhile, the "not meaningful" employment category shrinks from 32.7% to 24.0%, indicating some individuals are either transitioning into meaningful employment or exiting the Minnesota labor market altogether.
+
+At the 10-year mark, the "no MN employment record, not attending PS" category becomes the single largest group at 45.8%, a striking figure that suggests nearly half of non-completers have drifted away from the Minnesota labor market within a decade of finishing high school. Regional meaningful employment declines to 24.1%, and meaningful employment outside the region but within Minnesota sits at 10.6%. The "not meaningful" category falls further to 19.6%. The overall trajectory tells a concerning story: while a portion of non-completers do establish stable regional employment, a growing share over time appear to exit the Minnesota workforce entirely — whether through out-of-state employment, labor force non-participation, or other pathways not captured in the data. Given that Northwest Minnesota borders North Dakota, some cross-border employment likely accounts for a portion of this group, but the scale of the trend suggests that labor force detachment is a meaningful driver as well.
+
+::: panel-tabset
+## 1 year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(ps.grad == "No") %>%
+  filter(grad.year.1 != "After 2023") %>%
+  group_by(grad.year.1) %>%
+  summarize(n = n()) %>%
+  ungroup %>%
+  mutate(pct = n / sum(n)) 
+
+datatable(data, class = "cell-border stripe", filter = "top", rownames = FALSE,
+          options = list(columnDefs = list(list(className = "dt-center", targets = 1:2)))) %>%
+  formatCurrency(2, "", digits = 0) %>%
+  formatPercentage(3, digits = 1)
+```
+
+## 5 years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(ps.grad == "No") %>%
+  filter(grad.year.5 != "After 2023") %>%
+  group_by(grad.year.5) %>%
+  summarize(n = n()) %>%
+  ungroup %>%
+  mutate(pct = n / sum(n)) 
+
+datatable(data, class = "cell-border stripe", filter = "top", rownames = FALSE,
+          options = list(columnDefs = list(list(className = "dt-center", targets = 1:2)))) %>%
+  formatCurrency(2, "", digits = 0) %>%
+  formatPercentage(3, digits = 1)
+```
+
+## 10 years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(ps.grad == "No") %>%
+  filter(grad.year.10 != "After 2023") %>%
+  group_by(grad.year.10) %>%
+  summarize(n = n()) %>%
+  ungroup %>%
+  mutate(pct = n / sum(n)) 
+
+datatable(data, class = "cell-border stripe", filter = "top", rownames = FALSE,
+          options = list(columnDefs = list(list(className = "dt-center", targets = 1:2)))) %>%
+  formatCurrency(2, "", digits = 0) %>%
+  formatPercentage(3, digits = 1)
+
+```
+:::
+
+This analysis is going explore relationships and patterns of the portion of this population that found meaningful employment in the region vs. other employment outcomes.
+
+<br>
+
+# Methodology
+
+The above tables show the importance of understanding how non-college grads are navigating their post-high school pathways with a significant portion of them being disconnected from the regional workforce. To better understand these pathways, we will explore the relationships between independent variables (Demographic, High school characteristics, and High school accomplishments) along with workforce outcomes at 1-, 5- and 10-years after graduating high school.
+
+Since we provided the descriptive statistics above, we now need to analyze which factors relate most strongly to outcomes, and then see if we can use those factors to build a predictive model.
+
+For exploring the relationships we will do the following;
+
+-   For **categorical predictors** (e.g., Race/Ethnicity, Economic status, CTE achievement, PSEO participation), use cross-tabs with Cramer’s V and chi-square.
+-   For **continuous predictors** (e.g., MCA scores, total CTE courses, county-level variables), use ANOVA to compare means across the employment states.
+-   Run these analyses separately for grad.year.1, grad.year.5, grad.year.10 to see how relationships shift over time.
+
+<br>
+
+# Independent variables
+
+We are going to continue using the variables that we have used throughout this project.
+
+-   **Demographic:** `RaceEthnicity`, `economic.status`, `SpecialEdStatus`, `Gender`
+-   **High school characteristics:** `Dem_Desc`, `edr`, `avg.unemp.rate`, `avg.wages.pct.state`
+-   **High school accomplishments:** `pseo.participant`, `cte.achievement`, `total.cte.courses.taken`, `MCA.M`, `MCA.R`, `MCA.S`
+-   **Post-secondary**: `attended.ps`
+
+<br>
+
+# Relationships
+
+We will first explore the relationships between the independent variables and the 1-, 5- and 10-year outcomes.
+
+## Demographics
+
+### Summary
+
+Across the four demographic variables examined, none emerge as strong predictors of workforce outcomes for non-college completers in Northwest Minnesota. Cramér's V values are consistently in the negligible-to-weak range across all time points, suggesting that demographic characteristics alone explain relatively little of the variation in where non-completers end up in the workforce.
+
+Key takeaways:
+
+-   **Special education status** is the strongest demographic predictor, but only at year 1 (V = 0.162), where it primarily reflects the much lower post-secondary attendance rates among special ed students and higher rates of early labor market disconnection. Its influence fades substantially by years 5 and 10
+-   **Economic status** follows a similar pattern — most relevant at year 1 (V = 0.125) and diminishing over time — suggesting it shapes early transitions more than long-term workforce attachment
+-   **Gender** is the most stable predictor across time (V = 0.072–0.080), with males consistently more likely to achieve regional meaningful employment and females more likely to land in not meaningful employment, likely reflecting the industry composition of the NW region
+-   **Race/ethnicity** shows the weakest and most inconsistent associations (V = 0.048–0.056), though notable distributional differences exist for smaller racial/ethnic groups, particularly in the "no MN employment record" category by year 10
+
+Overall, demographic variables appear to matter most in the immediate post-high school period and become less predictive over time, with the exception of gender which maintains a modest but consistent association throughout.
+
+<br>
+
+### `RaceEthnicity`
+
+Cramér's V is negligible at all three time points (0.048–0.056), meaning race/ethnicity explains very little variation in workforce outcomes for this group despite being statistically significant. Key patterns worth noting:
+
+-   White and American Indian non-completers have the highest rates of regional meaningful employment at years 5 and 10 (\~25% each)
+-   Asian/PI, Black, and Hispanic non-completers are substantially overrepresented in the "no MN employment record" category, particularly by year 10 (63%, 53%, and 58% respectively vs. 45% for White)
+-   Small cell sizes for non-White groups warrant caution in interpretation
+
+*Tracking note: Weak predictor. Negligible Cramér's V across all time points.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  filter(RaceEthnicity != "Unknown")
+
+tab_xtab(var.row = data$grad.year.1,
+         var.col = data$RaceEthnicity,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  filter(RaceEthnicity != "Unknown") %>%
+  select(grad.year.1, RaceEthnicity) 
+
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  filter(RaceEthnicity != "Unknown")
+
+tab_xtab(var.row = data$grad.year.5,
+         var.col = data$RaceEthnicity,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  filter(RaceEthnicity != "Unknown") %>%
+  select(grad.year.5, RaceEthnicity) 
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  filter(RaceEthnicity != "Unknown")
+
+tab_xtab(var.row = data$grad.year.10,
+         var.col = data$RaceEthnicity,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  filter(RaceEthnicity != "Unknown") %>%
+  select(grad.year.10, RaceEthnicity) 
+```
+:::
+
+<br>
+
+### `economic.status`
+
+The relationship between economic disadvantage and workforce outcomes is weak-to-negligible across all three time points, with Cramér's V declining from 0.125 at year 1 to 0.084 at year 5 and 0.066 at year 10. While statistically significant at all points, the practical explanatory power is limited and fades over time.
+
+Key patterns worth noting:
+
+-   At year 1, economically disadvantaged students (status = 1) are notably less likely to be attending post-secondary (15.7% vs. 25.1%) and more likely to be in the "not meaningful" employment category (36.3% vs. 29.2%), suggesting earlier entry into the labor market
+-   By year 5, disadvantaged students show slightly higher rates of "not meaningful" employment (27.1% vs. 21.1%) but otherwise similar distributions across outcomes
+-   By year 10, differences largely converge, with the "no MN employment record" category being the dominant outcome for both groups (\~44-48%)
+-   The declining Cramér's V over time suggests economic status is more relevant to early post-high school transitions than to long-term workforce attachment
+
+*Tracking note: Weak predictor, strongest at year 1 and fading over time.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.1,
+         var.col = data$economic.status,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  select(grad.year.1, economic.status) 
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.5,
+         var.col = data$economic.status,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  select(grad.year.5, economic.status) 
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.10,
+         var.col = data$economic.status,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  select(grad.year.10, economic.status) 
+```
+:::
+
+<br>
+
+### `SpecialEdStatus`
+
+**Special Education Status**
+
+Similar to economic status, the relationship between special education status and workforce outcomes is statistically significant at all three time points but weakens considerably over time, with Cramér's V declining from 0.162 at year 1 to 0.086 at year 5 and 0.069 at year 10. Year 1 shows the strongest practical association of any demographic variable seen so far.
+
+Key patterns worth noting:
+
+-   At year 1, the most striking difference is in post-secondary attendance — non-special ed students are more than twice as likely to still be attending post-secondary (23.9% vs. 9.6%), reflecting the lower college-going rates among special education students
+-   Special ed students are also more likely to have no MN employment record at year 1 (31.7% vs. 22.0%), suggesting earlier and more pronounced disconnection from both education and the labor market
+-   By year 5, distributions converge substantially across most categories, with the notable exception of "not meaningful" employment where special ed students remain elevated (28.1% vs. 22.7%)
+-   By year 10, differences are small, with special ed students slightly more likely to fall in the "not meaningful" category (23.4% vs. 18.4%) and slightly less likely to have meaningful MN employment (7.9% vs. 11.4%)
+-   The sharp decline in Cramér's V mirrors the economic status pattern — special education status is most consequential in the immediate post-high school period
+
+*Tracking note: Moderate predictor at year 1 (strongest demographic variable so far), fading to weak by years 5 and 10.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.1,
+         var.col = data$SpecialEdStatus,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  select(grad.year.1, SpecialEdStatus) 
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.5,
+         var.col = data$SpecialEdStatus,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  select(grad.year.5, SpecialEdStatus) 
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.10,
+         var.col = data$SpecialEdStatus,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No") %>%
+  select(grad.year.10, SpecialEdStatus) 
+```
+:::
+
+<br>
+
+### `Gender`
+
+**Gender**
+
+The relationship between gender and workforce outcomes is statistically significant but weak across all three time points, with Cramér's V remaining relatively stable (0.072–0.080). Unlike economic and special education status, the association does not fade meaningfully over time.
+
+Key patterns worth noting:
+
+-   Males are more likely to achieve regional meaningful employment at all three time points (19.5% vs. 16.7% at year 1, 27.3% vs. 22.1% at year 5, 26.4% vs. 21.0% at year 10), likely reflecting the male-dominated industries prevalent in the NW region such as agriculture and manufacturing
+-   Females are consistently more likely to fall in the "not meaningful" employment category at all three time points (36.1% vs. 30.2% at year 1, 27.3% vs. 21.5% at year 5, 22.3% vs. 17.5% at year 10)
+-   Rates of "no MN employment record" are similar between genders across all time points, suggesting labor force detachment is not strongly gendered in this population
+-   The stability of the Cramér's V over time distinguishes gender from the other demographic variables, suggesting a persistent structural difference in workforce outcomes rather than a transitional one
+
+*Tracking note: Weak but stable predictor across all time points. Most consistent demographic variable examined so far.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.1,
+         var.col = data$Gender,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.5,
+         var.col = data$Gender,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.10,
+         var.col = data$Gender,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+:::
+
+<br>
+
+## High school characteristics
+
+### Summary
+
+Across the four high school characteristic variables examined, none emerge as strong predictors of workforce outcomes for non-college completers, with Cramér's V values and ANOVA effect sizes remaining in the negligible-to-weak range. However, some meaningful patterns emerge when looking at the nature of the relationships rather than just their magnitude.
+
+Key takeaways:
+
+-   **Dem_Desc** is the strongest variable in this group, with Cramér's V strengthening over time (0.087 to 0.108) and a clear and consistent pattern — entirely urban non-completers are substantially more likely to have no MN employment record and less likely to achieve regional meaningful employment across all three time points
+-   **EDR** is the weakest variable in this group (V = 0.055–0.063), adding little beyond what Dem_Desc already captures. The most notable EDR finding is the elevated "no MN employment record" rate in EDR 1 (Northwest), likely reflecting North Dakota cross-border employment
+-   **Average unemployment rate** produces the most interesting and counterintuitive finding in this group — individuals with no MN employment record consistently come from the lowest unemployment counties, pointing strongly to cross-border employment rather than labor force detachment for at least a portion of this group
+-   **Average wages as a percent of state average** tells a similar story to unemployment rate but with smaller effect sizes, further supporting the geographic border interpretation rather than adding independent signal
+
+Overall, high school characteristics explain less variation in workforce outcomes than might be expected. The most actionable finding is the urban/rural distinction captured by Dem_Desc, and the geographic labor market context captured by the county-level economic variables, both of which point to place-based dynamics shaping long-term workforce trajectories for non-completers.
+
+<br>
+
+### `Dem_Desc` 
+
+The relationship between community type and workforce outcomes is weak but the most consistent of the high school characteristic variables so far, with Cramér's V rising from 0.087 at year 1 to 0.108 at both years 5 and 10. It is statistically significant across all time points.
+
+Key patterns worth noting:
+
+-   Entirely urban non-completers stand out consistently across all time points, showing the lowest rates of regional meaningful employment (10.7% at year 1, 13.3% at year 5, 11.2% at year 10) and the highest rates of "no MN employment record" (36.3% at year 1, 56.2% at year 5, 66.6% at year 10)
+-   Town/rural mix students show the highest rates of regional meaningful employment across all three time points (20.1%, 27.6%, and 26.2%), consistent with the regional labor market being predominantly rural in character
+-   Entirely rural and urban/town/rural mix students fall between these two extremes and follow patterns closer to the overall average
+-   The strengthening Cramér's V over time suggests that community type becomes a more meaningful differentiator of long-term workforce outcomes as careers develop
+
+*Tracking note: Weak-to-moderate predictor, strengthening over time. Entirely urban non-completers show the most distinctive pattern.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.1,
+         var.col = data$Dem_Desc,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.5,
+         var.col = data$Dem_Desc,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.10,
+         var.col = data$Dem_Desc,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+:::
+
+<br>
+
+### `edr` 
+
+The relationship between EDR and workforce outcomes is statistically significant but negligible across all three time points, with Cramér's V ranging from 0.055 to 0.063. Differences across the three EDRs are modest and do not follow a strong or consistent pattern over time.
+
+Key patterns worth noting:
+
+-   EDR 1 (Northwest) has the highest rate of "no MN employment record" at year 5 (40.7%), which may reflect cross-border employment in North Dakota given its geographic location
+-   EDR 2 (Headwaters) shows slightly higher rates of "not meaningful" employment at years 1 and 5 (35.4% and 26.8%) compared to the other two EDRs
+-   EDR 4 (West Central) is the largest EDR by population and tracks closely to the overall averages across all time points
+-   Regional meaningful employment rates are broadly similar across all three EDRs at every time point, suggesting that within Northwest Minnesota, EDR location is not a strong differentiator of regional workforce attachment
+
+*Tracking note: Weak predictor. Negligible Cramér's V across all time points. Less informative than Dem_Desc for capturing geographic differences.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.1,
+         var.col = data$edr,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.5,
+         var.col = data$edr,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.10,
+         var.col = data$edr,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+:::
+
+<br>
+
+### `avg.unemp.rate`
+
+The county-level average unemployment rate shows a statistically significant relationship with workforce outcomes across all three time points, though the practical interpretation is more nuanced than a simple Cramér's V allows. The Tukey post-hoc tests reveal a consistent and meaningful pattern: individuals with no MN employment record come from counties with notably lower unemployment rates than other groups.
+
+Key patterns worth noting:
+
+-   Across all three time points, the "no MN employment record" group consistently comes from counties with the lowest average unemployment rates, significantly lower than both meaningful employment groups and the "not meaningful" group
+-   This counterintuitive finding likely reflects the North Dakota border effect — individuals from lower-unemployment northwestern counties may be crossing the border for work rather than being detached from the labor force
+-   The gap between "no MN employment record" and "meaningful emp region" is the largest and most consistent difference across all time points, growing from -0.221 at year 1 to -0.417 at year 10
+-   Meaningful employment groups (both regional and MN) do not differ significantly from each other at any time point, suggesting county unemployment rate does not strongly differentiate between types of employed outcomes
+-   The pattern strengthens over time, suggesting that geographic labor market context becomes more relevant to long-term workforce trajectories
+
+*Tracking note: Moderate predictor with a distinctive and counterintuitive pattern. The "no MN employment record" group's lower unemployment context is the most notable finding and warrants attention in interpretation.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(avg.unemp.rate ~ grad.year.1, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+
+
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(avg.unemp.rate ~ grad.year.5, data = data)
+
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(avg.unemp.rate ~ grad.year.10, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+```
+:::
+
+<br>
+
+### `avg.wages.pct.state`
+
+The relationship between county-level wages (as a percent of the state average) and workforce outcomes is statistically significant across all three time points but the effect sizes are very small in practical terms. The Tukey results reveal modest but consistent patterns around the "no MN employment record" group.
+
+Key patterns worth noting:
+
+-   The most consistent finding across all time points is that the "no MN employment record" group comes from counties with lower wages relative to the state average, significantly lower than the meaningful employment region group at years 1 and 5
+-   This mirrors the unemployment rate finding — individuals from lower-wage counties on the NW border are more likely to have no MN employment record, reinforcing the cross-border employment interpretation
+-   The differences between outcome groups are very small in magnitude (typically 0.004–0.010 percentage points of state average wages), suggesting county wage levels have limited practical influence on individual workforce outcomes
+-   By year 10, the pattern weakens further, with only the "not meaningful" group showing significantly lower county wages compared to meaningful MN employment
+-   Unlike unemployment rate, county wages do not consistently differentiate between the meaningful employment categories at any time point
+
+*Tracking note: Weak predictor with very small effect sizes. Directionally consistent with the unemployment rate findings but less pronounced. Both county-level economic variables point to the same geographic pattern around the "no MN employment record" group.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(avg.wages.pct.state ~ grad.year.1, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(avg.wages.pct.state ~ grad.year.5, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(avg.wages.pct.state ~ grad.year.10, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+
+```
+:::
+
+<br>
+
+## High school accomplishments
+
+### Summary
+
+Across the six high school accomplishment variables examined, this group shows the strongest and most consistent associations with workforce outcomes seen so far, though Cramér's V values and effect sizes still fall in the weak-to-moderate range. Two distinct patterns emerge — one centered on regional workforce attachment and one centered on academic proficiency and out-of-region mobility.
+
+Key takeaways:
+
+-   **CTE achievement** and **total CTE courses taken** are the most policy-relevant predictors in this group, showing stable associations across all three time points and a clear dose-response relationship — greater CTE engagement consistently predicts higher rates of regional meaningful employment and lower rates of labor market disconnection. Importantly, CTE's influence appears to be specifically on *regional* attachment rather than broader MN workforce participation
+-   **MCA Math, Reading, and Science** tell a remarkably consistent story across all three subjects and all three time points — higher academic proficiency is associated with meaningful MN employment *outside* the region rather than regional attachment. This suggests that academically stronger non-completers are more likely to find employment elsewhere in Minnesota rather than anchoring to the NW region
+-   **PSEO participation** is most relevant at year 1, where it predicts continued post-secondary attendance and lower rates of early labor market disconnection, but its influence largely dissipates by years 5 and 10
+-   All three MCA scores are highly consistent with each other, suggesting a composite measure would be appropriate in modeling to reduce redundancy
+-   The large amount of missing data for MCA Science is a limitation worth flagging in any write-up
+
+Overall, high school accomplishments are the strongest predictor group examined so far, with CTE variables and MCA scores providing complementary but distinct signals — CTE pointing toward regional retention and academic proficiency pointing toward out-of-region mobility.
+
+<br>
+
+### `pseo.participant`
+
+The relationship between PSEO participation and workforce outcomes is statistically significant but weakens considerably over time, with Cramér's V declining from 0.121 at year 1 to 0.050 at year 5 and 0.062 at year 10. The year 1 association is the most meaningful, driven primarily by differences in post-secondary attendance and labor market disconnection.
+
+Key patterns worth noting:
+
+-   At year 1, PSEO participants are much more likely to still be attending post-secondary (26.5% vs. 15.9%), which makes sense given that PSEO exposure increases the likelihood of continued college enrollment even among eventual non-completers
+-   PSEO participants are notably less likely to have no MN employment record at year 1 (19.5% vs. 26.5%), suggesting early college exposure provides some short-term protection against labor market disconnection
+-   By year 5, distributions converge substantially across nearly all outcome categories, with only modest differences remaining
+-   By year 10, the only meaningful difference is that PSEO participants show slightly higher rates of meaningful MN employment (14.3% vs. 9.7%), but regional meaningful employment rates are nearly identical between the two groups
+-   Note that the total N is notably smaller for this variable, likely due to missing PSEO data for some individuals
+
+*Tracking note: Weak-to-moderate predictor at year 1, fading to negligible by years 5 and 10. Effect is driven largely by continued post-secondary attendance rather than long-term workforce differences.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.1,
+         var.col = data$pseo.participant,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.5,
+         var.col = data$pseo.participant,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.10,
+         var.col = data$pseo.participant,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+:::
+
+<br>
+
+### `cte.achievement`
+
+The relationship between CTE achievement and workforce outcomes is statistically significant and notably stable across all three time points, with Cramér's V remaining in a narrow range (0.067–0.076). While the overall association is weak, the directional patterns are among the most consistent and interpretable seen so far.
+
+Key patterns worth noting:
+
+-   CTE concentrators and completers show the highest rates of regional meaningful employment at all three time points (21.5%, 29.0%, and 27.1%), compared to CTE participants (16.5%, 24.2%, 22.9%) and no CTE students (12.4%, 17.8%, 17.9%), suggesting a clear dose-response relationship between CTE engagement and regional workforce attachment
+-   The "no MN employment record" category shows the inverse pattern — no CTE students are most likely to be disconnected from the MN labor market at all three time points (29.5%, 43.1%, 51.6%), compared to CTE concentrators (22.3%, 34.6%, 42.4%)
+-   Meaningful MN employment rates are nearly identical across all three CTE categories at every time point, suggesting CTE's influence is specifically on *regional* attachment rather than broader MN workforce participation
+-   The stability of Cramér's V over time — unlike most other variables examined — suggests CTE achievement has a lasting rather than transitional relationship with workforce outcomes
+
+*Tracking note: Weak but the most stable predictor examined so far. The consistent dose-response pattern across time points and the specificity to regional employment make this a variable of particular interest.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.1,
+         var.col = data$cte.achievement,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.5,
+         var.col = data$cte.achievement,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.10,
+         var.col = data$cte.achievement,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+:::
+
+<br>
+
+### `total.cte.courses.taken`
+
+The number of CTE courses taken shows a statistically significant relationship with workforce outcomes across all three time points, with a clear and consistent pattern — regional meaningful employment is associated with higher CTE course-taking, while the "no MN employment record" group consistently takes fewer courses than the regional employment group.
+
+Key patterns worth noting:
+
+-   At all three time points, the meaningful employment region group has significantly more CTE courses than every other outcome group, with differences of roughly 1.2 courses compared to the attending PS group at years 1 and 5 and 0.8 courses compared to meaningful MN employment at year 10
+-   The "no MN employment record" group consistently takes significantly fewer CTE courses than the meaningful employment region group across all time points (differences of -1.45 at year 1, -1.09 at year 5, and -0.81 at year 10), mirroring the CTE achievement findings
+-   The gap between regional meaningful employment and no MN employment record narrows over time, suggesting that CTE course-taking becomes a slightly less distinctive differentiator of these two groups as careers develop
+-   The "not meaningful" employment group also takes significantly fewer courses than the regional meaningful employment group at all time points, though the gap is smaller than for the no MN employment record group
+
+*Tracking note: Consistent predictor across all time points. Reinforces the CTE achievement findings — more CTE engagement is associated with stronger regional workforce attachment.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(total.cte.courses.taken ~ grad.year.1, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(total.cte.courses.taken ~ grad.year.5, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(total.cte.courses.taken ~ grad.year.10, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+```
+:::
+
+<br>
+
+### `MCA.M`
+
+MCA Math scores show a statistically significant relationship with workforce outcomes across all three time points, with a pattern that becomes clearer and stronger over time. The most notable finding is that higher math proficiency is consistently associated with meaningful MN employment outside the region rather than regional employment, aligning with the full-population findings.
+
+Key patterns worth noting:
+
+-   At year 1, all employed and attending groups score significantly higher on MCA Math than the "no MN employment record" group, but differences among the employed categories are small and mostly non-significant
+-   By year 5, a clearer hierarchy emerges — the meaningful MN employment group scores significantly higher than all other groups, including the meaningful regional employment group (diff = -0.191), suggesting that higher math proficiency is associated with employment outside the region
+-   By year 10, this pattern is most pronounced — meaningful MN employment has the highest math scores, significantly higher than both regional employment (-0.366) and no MN employment record (-0.160), while the "not meaningful" group scores lowest overall
+-   The "no MN employment record" group scores significantly higher than the "not meaningful" group at year 10 (-0.234), suggesting this group is not uniformly low-skill and further supporting the cross-border employment interpretation
+-   The strengthening pattern over time suggests math proficiency becomes an increasingly meaningful differentiator of workforce trajectories as careers develop
+
+*Tracking note: Moderate predictor that strengthens over time. Notable for the direction of its effect — higher math scores point toward out-of-region MN employment rather than regional attachment.*
+
+::: panel-tabset
+#### 1-year after graduating
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(MCA.M ~ grad.year.1, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(MCA.M ~ grad.year.5, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(MCA.M ~ grad.year.10, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+```
+:::
+
+<br>
+
+### `MCA.R`
+
+MCA Reading scores show a statistically significant relationship with workforce outcomes across all three time points, with a pattern that closely mirrors MCA Math but with some notable differences. The most distinctive feature is the dominant effect of post-secondary attendance at year 1 and the increasingly clear hierarchy around meaningful MN employment by years 5 and 10.
+
+Key patterns worth noting:
+
+-   At year 1, the attending PS group scores substantially higher on reading than all other groups, with differences of roughly 0.30–0.34 across all outcome categories, none of which differ significantly from each other — suggesting that among non-completers who are no longer in school, reading proficiency does not strongly differentiate workforce outcomes in the short term
+-   By year 5, a clearer pattern emerges — the meaningful MN employment group scores highest, significantly above regional employment (-0.190), no MN employment record (-0.090), and not meaningful employment (-0.203), again pointing to higher reading proficiency being associated with out-of-region rather than regional workforce attachment
+-   By year 10, this hierarchy is most pronounced — meaningful MN employment scores significantly higher than all other groups, while the "no MN employment record" group scores significantly higher than the "not meaningful" group (-0.212), again supporting the cross-border employment interpretation
+-   The pattern across all three MCA scores is becoming consistent — higher academic proficiency points toward MN employment outside the region rather than regional attachment
+
+*Tracking note: Moderate predictor strengthening over time. Pattern mirrors MCA Math — higher scores associate with out-of-region MN employment rather than regional workforce attachment.*
+
+::: panel-tabset
+#### 1-year after graduating
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(MCA.R ~ grad.year.1, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(MCA.R ~ grad.year.5, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(MCA.R ~ grad.year.10, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+```
+:::
+
+<br>
+
+### `MCA.S`
+
+MCA Science scores show a statistically significant relationship with workforce outcomes across all three time points, with a pattern highly consistent with MCA Math and Reading. However, MCA Science has notably more missing data (6,426 deleted at year 1, 5,849 at year 5, and 5,219 at year 10), which warrants some caution in interpretation.
+
+Key patterns worth noting:
+
+-   At year 1, the attending PS group again scores substantially higher than all other groups (differences of 0.24–0.30), while the four non-attending outcome groups do not differ significantly from each other — the same pattern seen in MCA Reading
+-   By year 5, the meaningful MN employment group scores highest, significantly above regional employment (-0.140) and not meaningful employment (-0.170), again pointing to higher science proficiency being associated with out-of-region workforce attachment
+-   By year 10, the hierarchy is consistent with the other MCA scores — meaningful MN employment scores highest, followed by no MN employment record, then regional employment and not meaningful employment, with the "no MN employment record" group scoring significantly higher than "not meaningful" (0.199)
+-   The pattern across all three MCA subjects is now fully consistent — higher academic proficiency is associated with MN employment outside the region, while regional meaningful employment sits in the middle of the distribution
+
+*Tracking note: Moderate predictor consistent with MCA Math and Reading. The large amount of missing data is a limitation. All three MCA scores tell the same story and could reasonably be reduced to a composite in modeling.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(MCA.S ~ grad.year.1, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(MCA.S ~ grad.year.5, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+summary <- aov(MCA.S ~ grad.year.10, data = data)
+
+summary
+
+anova_df <- broom::tidy(summary)
+
+TukeyHSD(summary)
+
+tukey_df <- broom::tidy(TukeyHSD(summary))
+```
+:::
+
+<br>
+
+## Post-secondary
+
+### `ps.attended` 
+
+Post-secondary attendance shows the most dramatic pattern of any variable examined, with Cramér's V collapsing from a strong 0.639 at year 1 to a moderate 0.244 at year 5 and a negligible 0.032 at year 10. This trajectory tells a clear and important story about the role of post-secondary exposure for non-completers over time.
+
+Key patterns worth noting:
+
+-   At year 1, the association is driven almost entirely by the mechanical relationship between attending post-secondary and the "attending PS" outcome category — those who ever attended PS are still enrolled at year 1 (51.9%), while those who never attended are distributed across the employment categories
+-   Among those who never attended PS, the "no MN employment record" (33.7%) and "not meaningful" (41.1%) categories dominate at year 1, compared to much lower rates for those who did attend (10.0% and 19.8% respectively), suggesting that any post-secondary exposure provides meaningful short-term labor market protection
+-   By year 5, differences narrow considerably but those who never attended PS remain more likely to have no MN employment record (40.8% vs. 33.7%) and less likely to still be attending (0% vs. 9.9%)
+-   By year 10, distributions are nearly identical between the two groups across all outcome categories, with a negligible Cramér's V of 0.032, indicating that any post-secondary attendance effect has fully dissipated for non-completers in the long run
+
+*Tracking note: Strongest predictor at year 1 by a wide margin, but effect is largely mechanical and dissipates almost entirely by year 10. Most important for understanding short-term transitions rather than long-term workforce attachment.*
+
+::: panel-tabset
+#### 1-year after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.1 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.1,
+         var.col = data$attended.ps,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+```
+
+#### 5-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.5 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.5,
+         var.col = data$attended.ps,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+
+#### 10-years after graduation
+
+```{r}
+data <- master.original %>%
+  filter(grad.year.10 != "After 2023") %>%
+  filter(ps.grad == "No")
+
+tab_xtab(var.row = data$grad.year.10,
+         var.col = data$attended.ps,
+         show.exp = TRUE,
+         show.col.prc = TRUE)
+
+```
+:::
+
+<br>
+
+# Overall Summary — Non-College Completer Workforce Participation Analysis
+
+Across all four variable groups and three time points, a coherent picture emerges of what drives workforce participation outcomes for Northwest Minnesota's non-college completers. No single variable dominates across all time points, but several consistent patterns and a clear hierarchy of predictors emerge.
+
+## Strongest Predictors
+
+**Attended post-secondary** is the strongest statistical predictor at year 1 (V = 0.639) by a considerable margin, but its influence is largely mechanical — it captures whether someone is still enrolled — and dissipates almost entirely by year 10 (V = 0.032). It is most useful for understanding short-term transitions rather than long-term workforce trajectories.
+
+**CTE achievement and total CTE courses taken** are the most practically important and policy-relevant predictors across the full time horizon. Unlike most other variables, CTE's association with workforce outcomes is stable across all three time points and specifically tied to regional meaningful employment — more CTE engagement consistently predicts higher regional attachment and lower labor market disconnection. This makes CTE the strongest durable predictor of regional workforce outcomes in this analysis.
+
+### Moderate Predictors
+
+**MCA scores (Math, Reading, and Science)** tell a consistent and notable story — higher academic proficiency among non-completers is associated with meaningful MN employment *outside* the region rather than regional attachment. This pattern strengthens over time and is highly consistent across all three subjects, suggesting a composite measure would be appropriate in modeling. The direction of this effect is particularly important — academically stronger non-completers appear to be more mobile rather than more regionally anchored.
+
+**Special education status** is the strongest demographic predictor but only at year 1 (V = 0.162), where it captures early labor market disconnection and lower post-secondary attendance. Its influence fades substantially by years 5 and 10.
+
+**Dem_Desc** is the strongest high school characteristics variable, with a stable and strengthening association over time (V = 0.087–0.108). Entirely urban non-completers are consistently the most disconnected from the MN labor market, while town/rural mix students show the strongest regional employment rates.
+
+### Weaker but Notable Predictors
+
+**Average county unemployment rate** produces a counterintuitive but important finding — individuals with no MN employment record consistently come from the lowest unemployment counties, pointing strongly to cross-border North Dakota employment rather than pure labor force detachment for at least a portion of this group. This finding has meaningful implications for how the "no MN employment record" category should be interpreted throughout this analysis.
+
+**Gender** shows a modest but stable association (V = 0.072–0.080) with males more likely to achieve regional meaningful employment across all time points, likely reflecting the male-dominated industries prevalent in the NW region.
+
+**Economic status** and **PSEO participation** are most relevant at year 1 and fade considerably over time, suggesting they shape early transitions more than long-term workforce trajectories.
+
+**Race/ethnicity** and **EDR** are the weakest predictors throughout, with negligible Cramér's V values at all time points, though notable distributional differences exist for smaller racial and ethnic groups in the "no MN employment record" category.
+
+### Key Themes for Modeling
+
+Three themes stand out for the next stage of analysis:
+
+-   **CTE engagement is the most consistent regional retention mechanism** — it should be a central variable in any predictive model of regional workforce attachment
+-   **Academic proficiency predicts out-of-region mobility**, not regional attachment — MCA scores point away from the region and a composite measure is appropriate to reduce redundancy
+-   **The "no MN employment record" category requires careful interpretation** — county unemployment rate findings suggest cross-border employment is a meaningful driver for a portion of this group, particularly in EDR 1, which complicates any model that treats this category as uniform labor force detachment
