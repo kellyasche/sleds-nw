@@ -1,6 +1,9 @@
 project:
   type: website
   output-dir: docs
+  
+execute:
+  freeze: auto
 
 
 website:
@@ -57,6 +60,11 @@ website:
             href: analysis_non_post_secondary_graduates.qmd
           - text: Further analysis on non-college grads
             href: analysis_non_college_deeper.qmd
+          - text: Multivariate Confirmation Analysis on non-college grads - Logistic Regression
+            href: analysis_multivariate_confirmation_non_college_grads.qmd
+      - text: Summary of the three pathways
+        href: summary_pathways.qmd
+
         
 
 

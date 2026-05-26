@@ -1,0 +1,128 @@
+---
+title: "The pathways"
+editor: visual
+---
+
+# Pathways After High School: Workforce Trajectories of Northwest Minnesota's High School Graduates
+
+## Executive Summary
+
+Northwest Minnesota's high school graduates follow divergent paths after graduation — and those paths have profound consequences for the region's workforce. Of the approximately 57,200 high school graduates in the 2008–2018 cohorts, 44% completed a postsecondary credential and 56% did not. That divide matters enormously. Among college completers, where and how a credential was earned — particularly graduating from a 2-year public institution within the region — is the single strongest associate of sustained regional employment. Among non-completers, the picture is more complex and more concerning: only about 10% maintain consistent workforce attachment across their first five post-high school years, while nearly 60% are persistently disconnected from meaningful employment for four or five of those years.
+
+Across both groups, one variable stands out for its consistent, durable, and policy-relevant association with regional workforce attachment: Career and Technical Education. CTE engagement is associated with stronger regional employment outcomes for both completers and non-completers, across all time points examined, and net of demographic and contextual variables. It is the clearest and most actionable lever identified in this analysis.
+
+The findings also point to structural challenges that no single policy can fully address. Racial and ethnic disparities in workforce outcomes persist across all specifications and all groups. The gender gap in regional employment — with females consistently less likely to achieve meaningful regional attachment — is structural and tied to the industry composition of the region. And for non-completers, the scale of persistent disconnection suggests a workforce challenge that is both widespread and deeply entrenched.
+
+<br>
+
+## Part I: The College Completion Divide
+
+### Who Completes College — and Who Doesn't
+
+The decision to attend and complete college is not random. The analysis of postsecondary pathways among Northwest Minnesota's high school graduates reveals clear and consistent patterns in who earns a credential and who does not.
+
+Academic readiness and early college exposure are the strongest associates of postsecondary completion. Students who participated in PSEO — taking college courses while still in high school — are dramatically more likely to complete a postsecondary credential and far more likely to earn a bachelor's degree. Higher ACT scores and stronger MCA proficiency in math, reading, and science are strongly associated with completion, and these differences intensify at the bachelor's level. Economic disadvantage is strongly associated with lower completion rates: students eligible for free or reduced-price lunch are far less likely to earn a credential, and the gap widens at higher attainment levels. Students who received special education services are significantly less likely to complete postsecondary education. Racial and ethnic disparities are substantial — American Indian, Black, and Hispanic students are far more likely to not complete postsecondary education, while White and Asian/PI students are more likely to earn bachelor's degrees.
+
+Geography plays a modest but real role. Students from more rural communities — particularly town/rural mix communities — are somewhat less likely to attend and complete 4-year programs, and more likely to follow 2-year pathways when they do attend. The type of institution matters: students graduating from 2-year public institutions within the region show very different workforce trajectories than those graduating from 4-year institutions, particularly those located outside the region.
+
+### What Shapes Where Completers End Up
+
+For those who do complete a postsecondary credential, the full-population multivariate analysis identifies postsecondary geography and institutional embeddedness as the dominant mechanisms shaping long-term regional employment.
+
+Graduating from a 2-year public institution within the region is associated with approximately 110% higher odds of sustained regional employment compared to individuals who did not graduate from postsecondary — more than doubling the likelihood of remaining stably employed in the region. Graduating from a 4-year public institution within the region is associated with roughly 58% higher odds. In contrast, graduating from a 4-year institution outside the region is associated with approximately 31% lower odds of sustained regional employment, reflecting a clear outward mobility pathway.
+
+CTE engagement retains a robust independent association with regional employment even after controlling for credential level and graduation location. CTE concentrators and completers show approximately 60% higher odds of sustained regional employment relative to students with no CTE participation — net of all other variables. This suggests that structured career pathways in high school function as a direct workforce alignment mechanism that operates alongside, and independently of, postsecondary credentials.
+
+Academic readiness — while strongly associated with postsecondary completion — primarily shapes outcomes through the postsecondary pathway itself. Higher MCA scores and ACT performance increase the likelihood of completing college and where that credential is earned, but once postsecondary factors are accounted for, these measures add little independent information about regional workforce attachment.
+
+The practical implication is clear: for college completers, staying close to home matters. Students who earn credentials from regionally embedded institutions — particularly community and technical colleges — are the most likely to anchor to the Northwest Minnesota workforce. Four-year pathways, especially outside the region, are more closely associated with outward mobility. This is not a problem unique to Northwest Minnesota, but it has real consequences for a region that needs to retain its educated workforce.
+
+<br>
+
+## Part II: Non-Completers Who Find Their Footing
+
+### The Work-First Population
+
+Just over half of Northwest Minnesota's high school graduates — approximately 32,039 individuals from the 2008–2018 cohorts — did not complete a postsecondary credential. This group is not monolithic. A meaningful subset finds stable regional workforce attachment despite not finishing college. At year 5, approximately 25% of non-completers are achieving meaningful regional employment, defined as 1,000 or more hours with a single employer within Northwest Minnesota. By year 10, that figure holds at about 24%, suggesting that those who do attach to the regional labor market tend to stay attached.
+
+Understanding what distinguishes this work-first subgroup is essential for workforce development planning. The analysis points to several consistent factors.
+
+### What Associates With Regional Workforce Attachment Among Non-Completers
+
+**CTE engagement is the most consistent and durable associate across all analyses.** CTE concentrators and completers achieve meaningful regional employment at substantially higher rates at every time point: 21.5% at year 1, 29.0% at year 5, and 27.1% at year 10, compared to 12.4%, 17.8%, and 17.9% respectively for students with no CTE involvement. In the multivariate confirmation analysis, CTE concentrators and completers show approximately 70% higher odds of meaningful regional employment at year 1 and 51% higher odds at year 10, net of demographics, community type, and local economic conditions. CTE participants — those who took CTE courses but did not reach concentrator or completor status — show intermediate rates throughout, confirming a dose-response relationship where more CTE engagement produces stronger regional workforce attachment. Critically, this is the only variable that retains a consistently positive association with regional employment across all three time points and all three model specifications.
+
+**Community type shapes early and long-term outcomes.** Non-completers from town/rural mix communities — the largest geographic subgroup — show the highest regional employment rates consistently: 20.1% at year 1, 27.6% at year 5, and 26.2% at year 10. In the multivariate analysis, town/rural mix students show approximately 33% higher odds of regional employment at year 1 compared to entirely rural students, a finding that holds after controlling for preparation and economic context. These communities appear to offer the most accessible on-ramps to regional employment for non-completers, likely reflecting proximity to the agricultural, construction, and manufacturing industries that drive the regional economy.
+
+**Gender is a structural divide.** Males are consistently more likely to achieve meaningful regional employment across all time points — 19.5% at year 1, 27.3% at year 5, and 26.4% at year 10, compared to 16.7%, 22.1%, and 21.0% for females. In the multivariate analysis, females show approximately 19% lower odds of regional employment at year 1, a gap that is persistent and only partially explained by differences in preparation or post-secondary attendance. This reflects the male-dominated industry composition of the NW region — agriculture, construction, manufacturing, and transportation — and represents a structural feature of the regional labor market rather than individual-level differences.
+
+**Post-secondary attendance provides early but not lasting benefits.** Non-completers who attended some post-secondary — even without finishing — show substantially better early outcomes, with approximately 69% higher odds of regional employment at year 1 compared to those who never enrolled. However, this advantage dissipates by year 5 and reverses modestly by year 10, when post-secondary attenders show slightly lower regional employment odds than non-attenders. The early benefit likely reflects the transition period — those attending college are still in the region and engaged with the labor market part-time — while the longer-term reversal suggests that post-secondary exposure, even incomplete, is associated with broader labor market mobility over time.
+
+**Academic proficiency points outward, not regionally.** Higher MCA math scores among non-completers are not associated with greater regional workforce attachment — in fact, by year 10 they are associated with lower regional employment odds (approximately 13% lower per unit increase). This is one of the more counterintuitive but important findings: academically stronger non-completers are more likely to find employment elsewhere in Minnesota than to anchor to the regional workforce. The practical implication is that regional workforce retention among non-completers is not primarily an academic preparation challenge — it is a career alignment and labor market structure challenge.
+
+<br>
+
+## Part III: Non-Completers at Risk — Disconnection, Persistence, and What Drives It
+
+### The Scale of the Problem
+
+The work-first subgroup — those who find meaningful regional employment — is a minority of the non-completer population. The majority face a far more challenging trajectory. Examining workforce participation annually across the first five years after high school, only 10.6% of non-completers maintain consistent workforce attachment across all five years. At the other extreme, 58.2% are persistently disconnected — absent from meaningful employment in four or five of their first five post-high school years. An additional 11.8% are broadly disconnected (three of five years) and 19.4% are intermittently disconnected (one or two years).
+
+This rate of persistent disconnection — 58.2% — is notably higher than what has been observed in other Minnesota regions, where rates typically range from 40% to 55%. Several factors likely contribute to Northwest Minnesota's elevated rate: the seasonal nature of major industries in the region, which makes it difficult to consistently reach the 1,000-hour single-employer threshold even for individuals who are working; the region's border with North Dakota, which means some individuals working across the state line are counted as having no Minnesota employment record; and the lower post-secondary participation rates that characterize more rural regions.
+
+The annual trajectory reinforces the severity of the challenge. The share of non-completers with no Minnesota employment record grows steadily from 32.9% at year 1 to 40.7% by year 5 — the dominant and growing category at every time point. In-region marginal employment (present but below the meaningful threshold) declines from 33.9% to 21.5% over the same period. This trajectory reflects a gradual sorting process in which a modest share stabilizes into meaningful employment while a growing majority drifts further from the Minnesota labor market.
+
+### A Note on the "No MN Employment Record" Category
+
+A consistent and important finding throughout this analysis is that individuals with no Minnesota employment record do not fit a simple profile of labor force detachment. Across multiple independent analyses, this group comes from counties with lower unemployment rates than those with marginal employment, scores higher on academic readiness measures than the marginal employment group, and skews more male and more urban than might be expected for a disengaged population. This pattern strongly suggests that a meaningful portion of this group is employed across the border in North Dakota rather than genuinely absent from the labor market. Northwest Minnesota's location along the North Dakota border makes cross-border employment a real and plausible explanation for a subset of this category. The disconnection rates reported here should therefore be understood as a ceiling estimate of true labor force detachment — the actual share of non-completers who are genuinely disengaged from the labor market is likely somewhat lower, though the scale of the challenge remains substantial.
+
+### What Drives Persistent Disconnection
+
+The persistence analysis examines which characteristics are associated with spending four or five of the first five post-high school years in disconnected status. Across all variables examined, the associations are modest in magnitude — no single characteristic strongly predicts persistent disconnection — but a consistent hierarchy of factors emerges.
+
+**CTE engagement is the strongest and most durable associate of lower disconnection.** CTE concentrators and completers have a persistent disconnection rate of 54.0%, compared to 59.6% for CTE participants and 65.8% for students with no CTE involvement — an 11.8 percentage point spread from most to least engaged. Both total CTE courses taken and CTE achievement category tell the same story: every additional unit of CTE engagement is associated with lower persistent disconnection, in a clear and statistically significant gradient across all comparison groups. This is the most actionable finding in the persistence analysis.
+
+**Never attending post-secondary is the strongest single distinguisher of local underutilization.** Among non-completers who do have some marginal employment, those who never attended post-secondary at all are the most heavily concentrated in in-region marginal employment — present in the local labor market but unable to reach meaningful workforce attachment. Approximately 68% of this locally underutilized group never set foot in a post-secondary institution. Even brief post-secondary exposure appears to provide some protection against this particular form of disconnection, suggesting that strategies to keep non-traditional students engaged in post-secondary — even temporarily — may have real labor market benefits.
+
+**Gender is the most consistent demographic divide.** Females are persistently disconnected at a rate of 61.8% compared to 55.6% for males — a 6.2 percentage point gap that is the largest demographic difference in the persistence analysis. This reflects the same structural feature of the regional labor market identified throughout: the industries most accessible to non-completers in Northwest Minnesota skew heavily male, leaving female non-completers with fewer pathways to meaningful regional employment.
+
+**Urban non-completers face a dramatically elevated risk.** Entirely urban non-completers — those who graduated from high schools in more urban communities within the region — have a persistent disconnection rate of 77.5%, nearly 25 percentage points above the overall rate. This is the single most striking finding in the persistence analysis and one that is consistent and growing across all time points examined. Urban non-completers are dramatically less likely to achieve any form of consistent workforce attachment and substantially more likely to have no Minnesota employment record. By year 10, 66.6% of entirely urban non-completers have no Minnesota employment record, compared to 40.3% for town/rural mix students.
+
+**Racial and ethnic disparities are present but modest overall — with important exceptions.** Race and ethnicity show negligible overall associations with disconnection persistence, driven largely by the dominance of White students in the dataset. However, the within-group patterns are notable: Asian/PI, Black, and Hispanic non-completers have persistent disconnection rates 10 to 14 percentage points higher than White students (70.3%, 70.3%, and 71.2% respectively vs. 57.1%). American Indian non-completers show a different pattern — persistent disconnection rates similar to White students but a distinctive tendency toward local underutilization rather than complete labor market absence. Small cell sizes for non-White groups warrant caution, but these disparities are consistent and directionally meaningful.
+
+**Economic disadvantage and special education status matter early but fade.** Economic disadvantage and special education status show their strongest associations in the immediate post-high school period — both are associated with higher disconnection rates at year 1 — but these associations largely dissipate by years 5 and 10. This suggests these factors shape the initial transition out of high school more than the long-term trajectory of workforce attachment.
+
+### Three Types of Disconnection
+
+Disaggregating the disconnected population into three refined categories — no Minnesota employment record, in-region marginal employment, and other disconnected employment — reveals that these groups have meaningfully different profiles and likely represent different underlying challenges.
+
+The **no Minnesota employment record group** is the largest and fastest-growing category. As described above, this group's profile — lower unemployment counties, higher academic scores, more male, more urban — is more consistent with cross-border employment or broader labor market mobility than with pure disengagement. They are not the least- skilled or most disadvantaged of the three groups; they are largely absent from Minnesota's data systems, for reasons that may include North Dakota employment, out-of-state migration, federal employment, or genuine labor force non-participation.
+
+The **in-region marginal employment group** represents the clearest case of local underutilization. These individuals are present in the regional labor market but unable to reach the threshold of meaningful employment. They have the lowest academic readiness scores of any group by years 4 and 5, the highest rate of never having attended post-secondary, the most rural backgrounds, and the highest concentration of American Indian and special education students. Their profile points toward skill gaps, employer mismatch, and barriers to full-time employment within the region. This is arguably the most actionable subgroup for regional workforce development — they are here, they are working, but they are not achieving stability.
+
+The **other disconnected employment group** is the most heterogeneous, combining out-of-region marginal workers, multi-employer workers, and workers with unclassified employment patterns. They are more likely to be economically disadvantaged, more likely to be Black or Hispanic, and show lower CTE engagement than the in-region marginal group. Their fragmented employment patterns suggest precarious work arrangements rather than a single coherent labor market story.
+
+### The Multivariate Picture at 10 Years
+
+The multivariate confirmation analysis for non-completers — examining sustained regional employment across three models at years 1, 5, and 10 — reinforces and extends the bivariate findings while adding important nuance about how mechanisms shift over time.
+
+At year 1, the dominant associates are CTE engagement (approximately 70% higher odds for concentrators/completers, net of all other variables) and post-secondary attendance (approximately 69% higher odds). Community type is already significant: urban non-completers show approximately 40% lower odds of regional employment. Gender and special education status are both significant, reflecting the structural features of early labor market entry.
+
+By year 5, CTE retains its dominance while post-secondary attendance dissipates entirely. The urban penalty grows to approximately 53% lower odds. Racial and ethnic disparities — particularly for Black, Hispanic, and Asian/PI non-completers — are broader and stronger than at year 1, suggesting these gaps widen rather than narrow as careers develop.
+
+By year 10, the picture shifts further. CTE remains the only preparation variable with a consistently positive association (approximately 51% higher odds for concentrators/completers). Academic proficiency has become a significant negative associate — higher MCA math scores are associated with approximately 14% lower odds of regional employment per unit increase, confirming that academically stronger non-completers are increasingly likely to find employment outside the region over time. Post-secondary attendance has reversed direction, now associated with slightly lower regional employment odds. And for the first time, local labor market conditions emerge as significant: higher county unemployment is associated with approximately 11% higher odds of regional employment per unit increase, and higher county wages relative to the state average are associated with approximately 113% higher odds — both consistent with a constrained mobility interpretation in which stronger local economies and limited outside opportunities anchor workers to the region.
+
+<br>
+
+## What This Means for Northwest Minnesota
+
+The analysis as a whole tells a story about two fundamentally different risks facing Northwest Minnesota's workforce — and a common thread running through both.
+
+For college completers, the risk is outward mobility. The most academically prepared students, those who complete 4-year degrees, and those who earn credentials outside the region are systematically less likely to return to or remain in Northwest Minnesota's labor market. The regional workforce pipeline that does work — 2-year public credentials earned locally, CTE-aligned careers, regional institutional embeddedness — is real and meaningful, but it serves a narrower slice of the population than the region likely needs.
+
+For non-completers, the risk is disconnection. The majority of the 32,039 non-completers in this analysis spend most of their first five post-high school years outside of meaningful employment. The sorting process is rapid — most of the divergence between those who attach and those who don't occurs in the first three years after high school — and the consequences appear to be lasting. By year 10, 45.8% of non-completers have no Minnesota employment record, a figure that has grown steadily since year 1.
+
+Through both of these distinct challenges, CTE emerges as the single most consistent and durable associate of regional workforce attachment. It is associated with higher completion rates, higher rates of regional employment among completers, stronger workforce attachment among non-completers, lower persistent disconnection, and better quality disconnection (less severe, more locally proximate) when disconnection does occur. This consistency across every analytic phase of the study — bivariate relationships, persistence analysis, refined disconnection categories, and multivariate confirmation — makes CTE the clearest policy lever identified in the analysis.
+
+The urban penalty is the analysis's most urgent geographic finding. Entirely urban non-completers are dramatically more disconnected than their rural and mixed-community peers — and the gap grows over time rather than closing. This concentration of risk in urban communities within the region warrants targeted attention from both education and workforce development systems.
+
+Finally, the persistent racial and ethnic disparities observed across all groups and all analyses — disparities that survive adjustment for preparation, community type, economic context, and labor market conditions — point to structural inequities that extend beyond the mechanisms captured in this data. Addressing these disparities will require more than adjustments to CTE programming or postsecondary pathways; it requires direct attention to the systemic barriers that prevent equitable workforce outcomes for American Indian, Black, Hispanic, and Asian/PI residents of Northwest Minnesota.

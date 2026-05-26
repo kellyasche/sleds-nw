@@ -53,3 +53,4 @@ rsconnect/
 
 
 **/*.quarto_ipynb
+.positai
